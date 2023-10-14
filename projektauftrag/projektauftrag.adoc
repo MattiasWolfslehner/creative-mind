@@ -1,4 +1,4 @@
-= Creative-Minds Projektauftrag
+= Creative-Mind Projektauftrag
 Stevan Vlajic
 1.0.0, {docdate}
 //:toc-placement!:  // prevents the generation of the doc at this position, so it can be printed afterwards
@@ -7,14 +7,18 @@ Stevan Vlajic
 :toc: left
 :experimental:
 
-
 == Projektbezeichnung
-Creative-Minds
+Creative-Mind
 
 == Ausgangssituation
 Immer mehr Projekte werden im 21. Jahrhundert digital abgewickelt und der Arbeitsaufwand analoge Planungen zu digitalisieren ist hoch und zeitlich ineffizient, daher auch teuer. +
 Immer mehr Firmen bieten Möglichkeiten an, im Home-Office zu arbeiten, daher ist die möglich von gemeinsamen, analogen, Erzeugen von Projektideen  eingeschränkt bis nicht möglich. +
 Internationale Firmen haben Projektteams in unterschiedlichen ländern, daher ist die gemeinsame Ideenfindung erschwert.
+
+== Termine
+* Projektstart: 11.10.2023
+* Projektende: Project-Award
+
 
 
 == Projektteam
