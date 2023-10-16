@@ -11,14 +11,14 @@ Stevan Vlajic
 Creative-Mind
 
 == Ausgangssituation
-Immer mehr Projekte werden im 21. Jahrhundert digital abgewickelt und der Arbeitsaufwand analoge Planungen zu digitalisieren ist hoch und zeitlich ineffizient, daher auch teuer. +
-Immer mehr Firmen bieten Möglichkeiten an, im Home-Office zu arbeiten, daher ist die möglich von gemeinsamen, analogen, Erzeugen von Projektideen  eingeschränkt bis nicht möglich. +
-Internationale Firmen haben Projektteams in unterschiedlichen ländern, daher ist die gemeinsame Ideenfindung erschwert.
+Immer mehr Projekte werden im 21. Jahrhundert digital abgewickelt. Der Arbeitsaufwand analoge Planungen anschließend zu digitalisieren ist hoch und dieser Vorgang ist zeitlich ineffizient und somit auch kostspielig. +
+Immer mehr Firmen bieten Möglichkeiten an, im Home-Office zu arbeiten. Es gibt aufgrund der Globalisierung auch immer mehr Firmen, die international agieren. +
+Aufgrund dieser Tatsachen wird die gemeinsame Zusammenabeit erschwert, welche beispielsweise für die Ideenfindung in der Projektplanung nötig ist.
 
 == Kritische Erfolgsfaktoren
-* Kein Langzeitausfall von >= 2 Mitgliedern
-* Ausreichende technologische Kenntnisse
-* Stetige Kommunikation mit dem Projektauftraggeber
+* kein Langzeitausfall von >= 2 Mitgliedern
+* ausreichende technologische Kenntnisse
+* stetige Kommunikation mit dem Projektauftraggeber
 * Erweiterbarkeit des Projektes (auch in Bezug auf Server)
 * Daten persistenz
 
@@ -26,20 +26,19 @@ Internationale Firmen haben Projektteams in unterschiedlichen ländern, daher is
 * Projektstart: 11.10.2023
 * Projektende: Project-Award
 
-
 === Meilensteine
 * Δ Projektplanung abgeschlossen (Pflichtenheft...)
-* Δ Systemarchitektur definiert (Welche Datenbank, welcher REST-Provider, Welches Framework...)
-* Δ Zu implementierende Kreativitätstechniken fertig definiert
-* Δ Raumsystem fertig implementieren
+* Δ Systemarchitektur definiert (Welche Datenbank, welcher REST-Provider, welches Framework...)
+* Δ zu implementierende Kreativitätstechniken definiert
+* Δ Raumsystem implementieren
 * Δ Datenbankdesign abgeschlossen
-* Δ Klassendesign fertig modelliert
-* Δ Figma Wireframes erstellt
-* Δ Figma Wireframes erstellt
+* Δ Klassendesign modelliert
+* Δ Figma wireframes erstellt
+* Δ Figma wireframes erstellt
 * Δ Programmierarbeiten abgeschlossen
-* Δ Unit-Tests erfolgreich durchgeführt
-* Δ Integrations-Tests erfolgreich durchgeführt
-* Δ Qualitätssicherung abgeschlossen(Patches, Bug-Fixes)
+* Δ Unit-Tests erstellt
+* Δ Integrations-Tests erstellt
+* Δ Qualitätssicherung abgeschlossen (Patches, Bug-Fixes)
 * Δ Projektdokumentation abgeschlossen
 * Δ Letztes Projektreview und letzt Projektbewertung abgeschlossen
 
@@ -59,7 +58,6 @@ Internationale Firmen haben Projektteams in unterschiedlichen ländern, daher is
 == Kosten & Ressourcen
 * Oracle-Cloud-Server(Hosting): Gratis
 * Kiste Bier 24-Stück: 25.90€/Sprint
-
 
 == Projektauftraggeber
 * Prof. Christian Aberger
