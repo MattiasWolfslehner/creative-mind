@@ -61,11 +61,11 @@ Aufgrund dieser Tatsachen wird die gemeinsame Zusammenabeit erschwert, welche be
 * Prof. David Klewein
 
 == Projektteam
-* Jonas Fröller (Entwickler)
-* Stevan Vlajic (Scrum-Master)
-* Mattias Wolfslehner (Product-Owner/Communicator)
-* Christoph Ursprung (Entwickler)
-* Isabell Schnalzenberger (Entwickler)
+* https://github.com/jonasfroeller[Jonas Fröller] (Entwickler)
+* https://github.com/stevan06v[Stevan Vlajic] (Scrum-Master)
+* https://github.com/MattiasWolfslehner[Mattias Wolfslehner] (Product-Owner/Communicator)
+* https://github.com/GitChrisHTL[Christoph Ursprung] (Entwickler)
+* https://github.com/schnalzenberger0502[Isabell Schnalzenberger] (Entwickler)
 
 == Unterschriften
 
