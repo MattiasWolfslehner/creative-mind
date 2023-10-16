@@ -34,7 +34,6 @@ Aufgrund dieser Tatsachen wird die gemeinsame Zusammenabeit erschwert, welche be
 * Δ Datenbankdesign abgeschlossen
 * Δ Klassendesign modelliert
 * Δ Figma wireframes erstellt
-* Δ Figma wireframes erstellt
 * Δ Programmierarbeiten abgeschlossen
 * Δ Unit-Tests erstellt
 * Δ Integrations-Tests erstellt
