@@ -15,11 +15,55 @@ Immer mehr Projekte werden im 21. Jahrhundert digital abgewickelt und der Arbeit
 Immer mehr Firmen bieten Möglichkeiten an, im Home-Office zu arbeiten, daher ist die möglich von gemeinsamen, analogen, Erzeugen von Projektideen  eingeschränkt bis nicht möglich. +
 Internationale Firmen haben Projektteams in unterschiedlichen ländern, daher ist die gemeinsame Ideenfindung erschwert.
 
+== Kritische Erfolgsfaktoren
+* Kein Langzeitausfall von >= 2 Mitgliedern
+* Ausreichende technologische Kenntnisse
+* Stetige Kommunikation mit dem Projektauftraggeber
+* Erweiterbarkeit des Projektes (auch in Bezug auf Server)
+* Daten persistenz
+
 == Termine
 * Projektstart: 11.10.2023
 * Projektende: Project-Award
 
 
+=== Meilensteine
+* Δ Projektplanung abgeschlossen (Pflichtenheft...)
+* Δ Systemarchitektur definiert (Welche Datenbank, welcher REST-Provider, Welches Framework...)
+* Δ Zu implementierende Kreativitätstechniken fertig definiert
+* Δ Raumsystem fertig implementieren
+* Δ Datenbankdesign abgeschlossen
+* Δ Klassendesign fertig modelliert
+* Δ Figma Wireframes erstellt
+* Δ Figma Wireframes erstellt
+* Δ Programmierarbeiten abgeschlossen
+* Δ Unit-Tests erfolgreich durchgeführt
+* Δ Integrations-Tests erfolgreich durchgeführt
+* Δ Qualitätssicherung abgeschlossen(Patches, Bug-Fixes)
+* Δ Projektdokumentation abgeschlossen
+* Δ Letztes Projektreview und letzt Projektbewertung abgeschlossen
+
+== Projektziele & Nicht Ziele
+
+* Ziel ist:
+** die Umsetzung eines...
+** v
+** v
+** v
+
+* Folgendes soll das Projekt nicht erfüllen,
+* Kein Ziel ist:
+** f
+** f
+
+== Kosten & Ressourcen
+* Oracle-Cloud-Server(Hosting): Gratis
+* Kiste Bier 24-Stück: 25.90€/Sprint
+
+
+== Projektauftraggeber
+* Prof. Christian Aberger
+* Prof. David Klewein
 
 == Projektteam
 * Jonas Fröller (Entwickler)
@@ -29,4 +73,9 @@ Internationale Firmen haben Projektteams in unterschiedlichen ländern, daher is
 * Isabell Schnalzenberger (Entwickler)
 
 
+== Unterschriften
 
+Unterschrift (Prof. Aberger):
+
+
+Unterschrift (Prof. Klewein):
