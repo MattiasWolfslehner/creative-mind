@@ -47,10 +47,8 @@ Aufgrund dieser Tatsachen wird die gemeinsame Zusammenabeit erschwert, welche be
 ** die Umsetzung eines...
 ** v
 ** v
-** v
 
 * Folgendes soll das Projekt nicht erfüllen,
-* Kein Ziel ist:
 ** f
 ** f
 
@@ -69,10 +67,12 @@ Aufgrund dieser Tatsachen wird die gemeinsame Zusammenabeit erschwert, welche be
 * Christoph Ursprung (Entwickler)
 * Isabell Schnalzenberger (Entwickler)
 
-
 == Unterschriften
 
-Unterschrift (Prof. Aberger):
+Unterschrift (Prof. Aberger): +
+  +
+  +
 
-
-Unterschrift (Prof. Klewein):
+Unterschrift (Prof. Klewein): +
+  +
+  +
