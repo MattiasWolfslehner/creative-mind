@@ -7,12 +7,16 @@ Stevan Vlajic
 :toc: left
 :experimental:
 
-== Projektbezeichnung Creative-Mind
+== Projektbezeichnung 
 
-Ausgangssituation
-Immer mehr Projekte werden im 21. Jahrhundert digital abgewickelt. Der Arbeitsaufwand analoge Planungen anschließend zu digitalisieren ist hoch und dieser Vorgang ist zeitlich ineffizient und somit auch kostspielig.
-+ Immer mehr Firmen bieten Möglichkeiten an, im Home-Office zu arbeiten. Es gibt aufgrund der Globalisierung auch immer mehr Firmen, die international agieren.
-+ Aufgrund dieser Tatsachen wird die gemeinsame Zusammenarbeit erschwert, welche beispielsweise für die Ideenfindung in der Projektplanung nötig ist.
+Creative-Mind
+
+== Ausgangssituation
+* Immer mehr Projekte werden im 21. Jahrhundert digital abgewickelt. Der Arbeitsaufwand analoge Planungen anschließend zu digitalisieren ist hoch und dieser Vorgang ist zeitlich ineffizient und somit auch kostspielig.
+
+* Immer mehr Firmen bieten Möglichkeiten an, im Home-Office zu arbeiten. Es gibt aufgrund der Globalisierung auch immer mehr Firmen, die international agieren.
+
+* Aufgrund dieser Tatsachen wird die gemeinsame Zusammenarbeit erschwert, welche beispielsweise für die Ideenfindung in der Projektplanung nötig ist.
 
 == Kritische Erfolgsfaktoren 
 * Kein Langzeitausfall von >= 2 Mitgliedern
