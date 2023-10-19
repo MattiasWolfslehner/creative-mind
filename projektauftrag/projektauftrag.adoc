@@ -52,8 +52,52 @@ Aufgrund dieser Tatsachen wird die gemeinsame Zusammenabeit erschwert, welche be
 ** f
 ** f
 
+== Projekthauptaufgaben
+
+* Konzeptentwicklung:
+** Tech-Stack definiton
+** ERD-Modellierung 
+** Class-Diagram Modellierung
+** Modellierung von serverseitiger Socket-Raum Architektur
+** Modellierung von clientside-Socket-Kommunikationsarchitektur
+
+* Anwendungsentwicklung:
+** Implementierung vom Class-Diagram
+** Implementierung vom ERD
+** Serverseitige Socket-Room-Implementierung
+** Implementierung clientside
+Socket-Kommunikationsarchitektur
+
+* Benutzeroberflächendesign:
+** Logoentwicklung
+** Definition von zu verwenden Icons & Front-End libraries
+** Konzeptionelle Wireframeentwicklung via Figma
+** Konkrete Wireframeimplementierung
+
+* Inhaltserstellung:
+** Definition von zu implementierenden Kreativitätstechniken
+** Integration von den definierten Kreativtätstechniken
+
+* Gamification-Elemente: (Endnutzer dazu bewegen Creative-Mind zu nutzen)
+** Elemente richtig strukturieren und einbinden
+** Spielerische Elemente einbinden
+
+* Deployment:
+** Konkrete Deploymentserver definieren
+** Deploymentserver einrichten
+** Front-End mit Domain verknüpfen -> Productionready
+** Mit dem Projekt in die Production gehen
+
+* Last Steps: 
+** Productionfähigkeit vom Projekt gewährleisten
+*** Projekt muss zum Zeitpunkt Abschlusspräsentation vorführbar sein
+** Projektpräsentation vorbereiten
+
+
+
 == Kosten & Ressourcen
-* Oracle-Cloud-Server(Hosting): Gratis
+* Oracle-Cloud-Server(Hosting): Gratis / LeoCloud
+* Domain: 12.90/Jahr
 * Kiste Bier 24-Stück: 25.90€/Sprint
 
 == Projektauftraggeber
