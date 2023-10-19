@@ -43,14 +43,11 @@ Aufgrund dieser Tatsachen wird die gemeinsame Zusammenabeit erschwert, welche be
 
 == Projektziele & Nicht Ziele
 
-* Ziel ist:
-** die Umsetzung eines...
-** v
-** v
+* Ziel:
+** Einfache, effektive zusammenarbeit ohne hohe Latenz in einer online sandbox um mithilfe von Kreativitätstechniken gemeinsam mit anderen schnell Ideen sammeln zu können.
 
-* Folgendes soll das Projekt nicht erfüllen,
-** f
-** f
+* Das Ziel des Projektes ist NICHT:
+** Eine allrounder web app als Endprodukt, überfüllt mit halbfertigen features.
 
 == Kosten & Ressourcen
 * Oracle-Cloud-Server(Hosting): Gratis
