@@ -44,7 +44,7 @@ Aufgrund dieser Tatsachen wird die gemeinsame Zusammenabeit erschwert, welche be
 == Projektziele & Nicht Ziele
 
 * Ziel:
-** Einfache, effektive zusammenarbeit ohne hohe Latenz in einer online sandbox um mithilfe von Kreativitätstechniken gemeinsam mit anderen schnell Ideen sammeln zu können.
+** Einfache, effektive Zusammenarbeit ohne hohe Latenz in einer online sandbox um mithilfe von Kreativitätstechniken gemeinsam mit anderen schnell Ideen sammeln zu können.
 
 * Das Ziel des Projektes ist NICHT:
 ** Eine allrounder web app als Endprodukt, überfüllt mit halbfertigen features.
