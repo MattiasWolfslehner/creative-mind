@@ -102,11 +102,11 @@ Creative-Mind
 * Prof. David Klewein
 
 == Projektteam
-* [Jonas Fröller](https://github.com/jonasfroeller) (Entwickler)
-* [Stevan Vlajic](https://github.com/stevan06v) (Scrum-Master)
-* [Mattias Wolfslehner](https://github.com/MattiasWolfslehner) (Product-Owner/Communicator)
-* [Christoph Ursprung](https://github.com/GitChrisHTL) (Entwickler)
-* [Isabell Schnalzenberger](https://github.com/schnalzenberger0502) (Entwickler)
+* https://github.com/jonasfroeller[Jonas Fröller] (Entwickler)
+* https://github.com/stevan06v[Stevan Vlajic] (Scrum-Master)
+* https://github.com/MattiasWolfslehner[Mattias Wolfslehner] (Product-Owner/Communicator)
+* https://github.com/GitChrisHTL[Christoph Ursprung] (Entwickler)
+* https://github.com/schnalzenberger0502[Isabell Schnalzenberger] (Entwickler)
 
 == Unterschriften 
 
