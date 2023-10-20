@@ -27,17 +27,5 @@ Stevan Vlajic
 
 
 === Graphische Darstellung der sozialen Umfeldanalyse
-[plantuml, mindmap, svg]
-....
-@startmindmap
-* Creative-Mind
-** positiv
-*** Projektteam
-*** Auftraggeber->Scrum Master
-*** Expertenkontakt
-** negativ
-*** Technologieeinschrenkung durch den Projektauftraggeber
-** neutral
-*** Konkurenz
-@endmindmap
-....
+
+image:./img/einflussfaktoren.png[]
