@@ -1,5 +1,6 @@
+const sendButton = document.getElementById('sendButton');
 
-createRoom.addEventListener('sendButton', ()=> {
+sendButton.addEventListener('click', ()=> {
     const newIdea = document.getElementById('ideaInput').value;
     //fetch: send data to route
 
