@@ -1,7 +1,6 @@
 package com.creative_mind.services;
 import com.creative_mind.model.Idea;
 import jakarta.enterprise.context.ApplicationScoped;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,7 +18,6 @@ public class IdeaCsvService {
 
     public IdeaCsvService setCsvFilePath(String csvFileName)
     {
-
         this.fileName = csvFileName;
 
         String CSV_PATH_PREFIX = "data/ideas/csv";

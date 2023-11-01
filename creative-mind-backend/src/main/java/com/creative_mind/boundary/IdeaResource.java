@@ -1,6 +1,7 @@
 package com.creative_mind.boundary;
 
 import com.creative_mind.model.Idea;
+import com.creative_mind.model.User;
 import com.creative_mind.repository.IdeaRepository;
 import com.creative_mind.services.IdeaCsvService;
 import jakarta.inject.Inject;
@@ -11,6 +12,7 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.logging.annotations.Pos;
 
 import java.awt.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,36 +27,58 @@ public class IdeaResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/list")
+    @Path("/uuids")
     public Response getIdeas() {
-        return Response.ok(ideaRepository.getIdeas()).build();
+        return Response.ok(ideaRepository.getAllUUIDS()).build();
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addIdea(Idea idea) {
-        this.ideaRepository.insert(idea);
-        return Response.ok(ideaRepository.getIdeas()).build();
-    }
 
-    @POST
-    @Path("/sync")
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addIdeaList(List<Idea> idea) {
-        this.ideaRepository.overrideList(idea);
-        return Response.ok(ideaRepository.getIdeas()).build();
+    @Path("/{userId}/list")
+    public Response getIdeas(@PathParam("userId") String uuid) {
+        return Response.ok(ideaRepository.getIdeas(uuid)).build();
     }
 
     @GET
-    @Path("/download/csv")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/register")
+    public Response register() {
+
+        User user = new User();
+
+        this.ideaRepository.register(user.getUuid());
+
+        return Response.ok(user).build();
+    }
+
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{userId}")
+    public Response addIdea(@PathParam("userId") String uuid, Idea idea) {
+        this.ideaRepository.insert(uuid, idea);
+        return Response.ok(ideaRepository.getIdeas(uuid)).build();
+    }
+
+    @POST
+    @Path("/{userId}/sync")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addIdeaList(@PathParam("userId") String uuid, LinkedList<Idea> ideas) {
+        this.ideaRepository.overrideList(uuid, ideas);
+        return Response.ok(ideaRepository.getIdeas(uuid)).build();
+    }
+
+    @GET
+    @Path("/{userId}/download/csv")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response downloadCSV(){
+    public Response downloadCSV(@PathParam("userId") String uuid){
 
         byte[] fileBytes = this.ideaCsvService
                 .setCsvFilePath(UUID.randomUUID().toString())
-                .createCSVFile(this.ideaRepository.getIdeas())
+                .createCSVFile(this.ideaRepository.getIdeas(uuid))
                 .getCsvFileBytes();
 
         String contentDisposition = "attachment; filename=" + this.ideaCsvService.getFileName();

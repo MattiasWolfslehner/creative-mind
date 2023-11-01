@@ -6,15 +6,16 @@ import jakarta.persistence.Id;
 public class Idea {
 
     private int id = 0;
-    static int instanceCounter = 0;
     private String content;
 
-    public Idea() {
-        this.id = instanceCounter++;
-    }
+    public Idea() {}
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
     }
 
     public String getContent() {
