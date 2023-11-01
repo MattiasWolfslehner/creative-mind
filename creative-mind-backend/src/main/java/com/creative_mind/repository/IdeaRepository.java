@@ -25,7 +25,7 @@ public class IdeaRepository {
         return this.ideas;
     }
 
-    public LinkedList<Idea>  getIdeas(){
+    public LinkedList<Idea> getIdeas(){
         return this.ideas;
     }
 
