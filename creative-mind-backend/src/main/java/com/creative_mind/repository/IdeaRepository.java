@@ -4,6 +4,7 @@ import com.creative_mind.model.Idea;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.LinkedList;
+import java.util.List;
 
 @ApplicationScoped
 public class IdeaRepository {
@@ -15,6 +16,12 @@ public class IdeaRepository {
 
     public LinkedList<Idea> insert(Idea idea){
         this.ideas.add(idea);
+        return this.ideas;
+    }
+
+    public LinkedList<Idea> insertList(List<Idea> ideaList){
+        this.ideas.clear();
+        this.ideas.addAll(ideaList);
         return this.ideas;
     }
 
