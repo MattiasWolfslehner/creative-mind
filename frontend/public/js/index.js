@@ -4,13 +4,13 @@ sendButton.addEventListener('click', ()=> {
     const newIdea = document.getElementById('ideaInput').value;
     //fetch: send data to route
 
-    fetch('http://localhost:8080/api/idea/',{
+    fetch('http://localhost:8080/api/ideas/',{
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
           method: "POST",
-          body: JSON.stringify({text: newIdea})
+          body: JSON.stringify({content: newIdea})
     })
     .then((response) => {
         return response.json()
