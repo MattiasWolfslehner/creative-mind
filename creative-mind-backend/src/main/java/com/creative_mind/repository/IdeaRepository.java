@@ -19,7 +19,7 @@ public class IdeaRepository {
         return this.ideas;
     }
 
-    public LinkedList<Idea> insertList(List<Idea> ideaList){
+    public LinkedList<Idea> overrideList(List<Idea> ideaList){
         this.ideas.clear();
         this.ideas.addAll(ideaList);
         return this.ideas;

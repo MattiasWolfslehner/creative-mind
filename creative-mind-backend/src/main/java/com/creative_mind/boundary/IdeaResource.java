@@ -36,7 +36,7 @@ public class IdeaResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addIdeaList(List<Idea> idea) {
-        this.ideaRepository.insertList(idea);
+        this.ideaRepository.overrideList(idea);
         return Response.ok(ideaRepository.getIdeas()).build();
     }
 
