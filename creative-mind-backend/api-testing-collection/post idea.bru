@@ -1,0 +1,17 @@
+meta {
+  name: post idea
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:8080/api/ideas/{user-id}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "content": "test"
+  }
+}
