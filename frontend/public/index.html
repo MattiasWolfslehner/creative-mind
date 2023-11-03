@@ -1,14 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <script type="module" src="js/index.js" defer></script>
+
+    <title>Document</title>
 </head>
+
 <body>
-    <input type="text" id="ideaInput" name="Write your idea here please"><br>
-    <button id="sendButton">Send</button>
-    
+    <header>
+        <h1>Creative Mind</h1>
+    </header>
+
+    <main class="container">
+        <form id="register-form" method="get">
+            <button id="register" type="submit">registrieren</button>
+        </form>
+
+        <form id="idea-form" method="post" class="hidden">
+            <input type="text" id="idea" name="idea" placeholder="your idea...">
+            <button id="add-idea" type="submit">hinzufügen</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>content</th>
+                </tr>
+            </thead>
+            <tbody id="ideas">
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        © 2020 Creative Mind <br>
+        <a href="https://github.com/Stevan06v/creative-mind">Github</a>
+    </footer>
 </body>
+
 </html>

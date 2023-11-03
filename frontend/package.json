@@ -1,17 +1,28 @@
 {
-  "name": "frontend",
   "version": "1.0.0",
-  "description": "",
+  "name": "creative-mind-frontend",
+  "description": "HTL-ITP project to plan projects with creative techniques together.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Stevan06v/creative-mind"
+  },
+  "author": "Stevan Vlajic, Mattias Wolfslehner, Christoph Ursprung, Isabell Schnalzenberger, Jonas Fröller",
+  "license": "ISC",
+  "private": true,
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "nodemon app.js",
+    "dev": "npm run start",
+    "pretty": "prettier --single-quote --no-bracket-spacing --bracket-same-line --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,css,scss}\""
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "nodemon": "^3.0.1"
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.3"
   }
 }

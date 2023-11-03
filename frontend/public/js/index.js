@@ -1,27 +1,114 @@
-const sendButton = document.getElementById('sendButton');
+import {localStorageAction} from './store.js';
+const registerForm = document.getElementById('register-form');
+const ideaForm = document.getElementById('idea-form');
+let uuid = null;
+let ideas = [];
 
-sendButton.addEventListener('click', ()=> {
-    const newIdea = document.getElementById('ideaInput').value;
-    //fetch: send data to route
+// register
+registerForm.addEventListener('submit', async function (event) {
+  event.preventDefault();
 
-    fetch('http://localhost:8080/api/idea/',{
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          method: "POST",
-          body: JSON.stringify({text: newIdea})
+  const uuid = await localStorageAction.load('cm-uuid');
+  if (uuid && uuid.length > 0) {
+    updateUI();
+    return;
+  }
+
+  const action = 'http://localhost:8080/api/ideas/register';
+
+  fetch(action, {
+    headers: {
+      Accept: 'application/json',
+    },
+  })
+    .then((response) => {
+      return response.json();
     })
     .then((response) => {
-        return response.json()
-    })
-    //write Ideas to list
-    .then((data)=>{
-        console.log(data);
-    })
-    .catch((err)=>{
-        console.log(err);
-    })
+      const uuid = response.uuid;
 
-})
+      localStorageAction.save('cm-uuid', uuid);
+      updateUI();
+    });
+});
 
+function updateUI() {
+  ideaForm.classList.toggle('hidden');
+  registerForm.classList.toggle('hidden');
+}
+
+// add idea
+ideaForm.addEventListener('submit', function (event) {
+  event.preventDefault();
+
+  const action = 'http://localhost:8080/api/ideas/' + uuid;
+  const formData = new FormData(event.target);
+  const content = formData.get('idea');
+
+  fetch(action, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify({content: content}),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((response) => {
+      console.log(response);
+      getIdeas();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+// fetch ideas
+window.addEventListener('DOMContentLoaded', async function () {
+  const uuid = await localStorageAction.load('cm-uuid');
+
+  if (uuid && uuid.length > 0) {
+    updateUI();
+  }
+
+  getIdeas();
+});
+
+async function getIdeas() {
+  uuid = await localStorageAction.load('cm-uuid');
+  const action = `http://localhost:8080/api/ideas/${uuid}/list`;
+
+  fetch(action, {
+    headers: {
+      Accept: 'application/json',
+    },
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      ideas = data;
+      let ideaRows = '';
+
+      ideas.forEach((idea) => {
+        ideaRows += `<tr>
+        <td>
+          ${idea.id}
+        </td>
+        <td>
+          ${idea.content}
+        </td>
+      </tr>`;
+      });
+
+      document.getElementById('ideas').innerHTML = ideaRows;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+// TODO: download csv file
