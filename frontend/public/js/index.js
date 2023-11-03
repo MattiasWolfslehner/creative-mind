@@ -1,6 +1,8 @@
 import {localStorageAction} from './store.js';
 const registerForm = document.getElementById('register-form');
 const ideaForm = document.getElementById('idea-form');
+const downloadCsvBtn = document.getElementById('download-csv')
+const restPort = 8080;
 let uuid = null;
 let ideas = [];
 
@@ -14,7 +16,7 @@ registerForm.addEventListener('submit', async function (event) {
     return;
   }
 
-  const action = 'http://localhost:8080/api/ideas/register';
+  const action = `http://localhost:${restPort}/api/ideas/register`;
 
   fetch(action, {
     headers: {
@@ -35,13 +37,15 @@ registerForm.addEventListener('submit', async function (event) {
 function updateUI() {
   ideaForm.classList.toggle('hidden');
   registerForm.classList.toggle('hidden');
+  // sets csv-download-link
+  setDownloadButton()
 }
 
 // add idea
 ideaForm.addEventListener('submit', function (event) {
   event.preventDefault();
 
-  const action = 'http://localhost:8080/api/ideas/' + uuid;
+  const action = `http://localhost:${restPort}/api/ideas/` + uuid;
   const formData = new FormData(event.target);
   const content = formData.get('idea');
 
@@ -78,7 +82,7 @@ window.addEventListener('DOMContentLoaded', async function () {
 
 async function getIdeas() {
   uuid = await localStorageAction.load('cm-uuid');
-  const action = `http://localhost:8080/api/ideas/${uuid}/list`;
+  const action = `http://localhost:${restPort}/api/ideas/${uuid}/list`;
 
   fetch(action, {
     headers: {
@@ -111,4 +115,14 @@ async function getIdeas() {
     });
 }
 
-// TODO: download csv file
+async function setDownloadButton(){
+  uuid = await localStorageAction.load('cm-uuid');
+
+  console.log(`UUID (button): ${uuid}`);
+
+  const href = `http://localhost:${restPort}/api/ideas/${uuid}/download/csv`;
+  const fileName = `${Date.now()}.csv`
+
+  downloadCsvBtn.href = href
+  downloadCsvBtn.download = fileName
+}
