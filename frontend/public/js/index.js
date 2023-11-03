@@ -37,6 +37,8 @@ registerForm.addEventListener('submit', async function (event) {
 function updateUI() {
   ideaForm.classList.toggle('hidden');
   registerForm.classList.toggle('hidden');
+  // sets csv-download-link
+  setDownloadButton()
 }
 
 // add idea
@@ -75,18 +77,8 @@ window.addEventListener('DOMContentLoaded', async function () {
     updateUI();
   }
 
-  setDownloadButton();
   getIdeas();
 });
-
-async function setDownloadButton(){
-  uuid = await localStorageAction.load('cm-uuid');
-  const href = `http://localhost:${restPort}/api/ideas/${uuid}/download/csv`;
-  const fileName = `${Date.now()}.csv`
-
-  downloadCsvBtn.href = href
-  downloadCsvBtn.download = fileName
-}
 
 async function getIdeas() {
   uuid = await localStorageAction.load('cm-uuid');
@@ -121,4 +113,16 @@ async function getIdeas() {
     .catch((error) => {
       console.log(error);
     });
+}
+
+async function setDownloadButton(){
+  uuid = await localStorageAction.load('cm-uuid');
+
+  console.log(`UUID (button): ${uuid}`);
+
+  const href = `http://localhost:${restPort}/api/ideas/${uuid}/download/csv`;
+  const fileName = `${Date.now()}.csv`
+
+  downloadCsvBtn.href = href
+  downloadCsvBtn.download = fileName
 }
