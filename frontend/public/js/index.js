@@ -39,6 +39,19 @@ function updateUI() {
   ideaForm.classList.toggle('hidden');
   registerForm.classList.toggle('hidden');
 
+  /* hovering over copy button */
+  var copyButton = document.getElementById("copy-uuid-button");
+  var cmUuid = document.getElementById("cm-uuid");
+
+  copyButton.addEventListener("mouseenter", function() {
+    cmUuid.style.display = "block";
+    cmUuid.innerHTML = localStorage.getItem("cm-uuid").replace(`"`, ``).replace(`"`,``)
+  });
+
+  copyButton.addEventListener("mouseleave", function() {
+    cmUuid.style.display = "none";
+  });
+
   /* copy uuid */
   document.getElementById("copy-uuid-button").addEventListener("click", () =>{
     var cmUuid = localStorage.getItem("cm-uuid").replace(`"`, ``).replace(`"`,``)
