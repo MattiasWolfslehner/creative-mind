@@ -18,20 +18,19 @@ import java.util.UUID;
 
 @Path("/api/ideas")
 public class IdeaResource {
-
     @Inject
     IdeaRepository ideaRepository;
     @Inject
     IdeaCsvService ideaCsvService;
 
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/uuids")
     public Response getIdeas() {
-        return Response.ok(ideaRepository.getAllUUIDS()).build();
+        return Response
+                .ok(ideaRepository.getAllUUIDS())
+                .build();
     }
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -52,14 +51,15 @@ public class IdeaResource {
         return Response.ok(user).build();
     }
 
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{userId}")
     public Response addIdea(@PathParam("userId") String uuid, Idea idea) {
         this.ideaRepository.insert(uuid, idea);
-        return Response.ok(ideaRepository.getIdeas(uuid)).build();
+        return Response
+                .ok(ideaRepository.getIdeas(uuid))
+                .build();
     }
 
     @POST

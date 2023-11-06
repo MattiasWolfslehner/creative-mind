@@ -30,6 +30,7 @@ registerForm.addEventListener('submit', async function (event) {
       const uuid = response.uuid;
 
       localStorageAction.save('cm-uuid', uuid);
+
       updateUI();
     });
 });
@@ -37,6 +38,22 @@ registerForm.addEventListener('submit', async function (event) {
 function updateUI() {
   ideaForm.classList.toggle('hidden');
   registerForm.classList.toggle('hidden');
+
+  /* copy uuid */
+  document.getElementById("copy-uuid-button").addEventListener("click", () =>{
+    var cmUuid = localStorage.getItem("cm-uuid").replace(`"`, ``).replace(`"`,``)
+
+    if (cmUuid) {
+      navigator.clipboard.writeText(cmUuid)
+      .then(() => {
+        alert("cm-uuid copied into clipboard!")
+      })
+      .catch((err) => {
+        console.error("Something went wrongl: " + err)
+      })
+    }
+  })
+
   // sets csv-download-link
   setDownloadButton()
 }
@@ -126,3 +143,4 @@ async function setDownloadButton(){
   downloadCsvBtn.href = href
   downloadCsvBtn.download = fileName
 }
+
