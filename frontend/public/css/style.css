@@ -25,3 +25,33 @@ body footer {
 .hidden {
   display: none;
 }
+
+/* copy uid button */
+.button-container {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+}
+
+#copy-uuid-button {
+  background-color: var(--background-color);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#cm-uuid {
+  display: none;
+  position: fixed;
+  bottom: 13%;
+  right: 3%;
+  background-color: var(--background-color);
+  padding: 10px;
+  border: 1px solid #fff;
+  border-radius: 5px;
+}
+
+#copy-uuid-button:hover + #cm-uuid {
+  display: block;
+}

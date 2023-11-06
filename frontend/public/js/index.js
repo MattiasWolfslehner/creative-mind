@@ -126,3 +126,16 @@ async function setDownloadButton(){
   downloadCsvBtn.href = href
   downloadCsvBtn.download = fileName
 }
+
+/* copy uuid */
+document.getElementById("copy-uuid-button").addEventListener("click", function() {
+  var cmUuid = localStorage.getItem("cm-uuid")
+
+  if (cmUuid) {
+    navigator.clipboard.writeText(cmUuid).then(function() {
+      alert("cm-uuid copied into clipboard!")
+    }).catch(function(err) {
+      console.error("Something went wrongl: " + err)
+    })
+  }
+})
