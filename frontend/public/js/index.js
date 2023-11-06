@@ -2,6 +2,9 @@ import {localStorageAction} from './store.js';
 const registerForm = document.getElementById('register-form');
 const ideaForm = document.getElementById('idea-form');
 const downloadCsvBtn = document.getElementById('download-csv')
+const copyButton = document.getElementById("copy-uuid-button");
+const cmUuidElement = document.getElementById("cm-uuid");
+
 const restPort = 8080;
 let uuid = null;
 let ideas = [];
@@ -38,11 +41,20 @@ registerForm.addEventListener('submit', async function (event) {
 function updateUI() {
   ideaForm.classList.toggle('hidden');
   registerForm.classList.toggle('hidden');
+  var cmUuid = localStorage.getItem("cm-uuid").replace(`"`, ``).replace(`"`,``)
+
+
+  copyButton.addEventListener("mouseenter", () => {
+    cmUuidElement.style.display = "block";
+    cmUuidElement.innerHTML = cmUuid
+  });
+
+  copyButton.addEventListener("mouseleave", () => {
+    cmUuidElement.style.display = "none";
+  });
 
   /* copy uuid */
   document.getElementById("copy-uuid-button").addEventListener("click", () =>{
-    var cmUuid = localStorage.getItem("cm-uuid").replace(`"`, ``).replace(`"`,``)
-
     if (cmUuid) {
       navigator.clipboard.writeText(cmUuid)
       .then(() => {

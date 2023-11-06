@@ -41,17 +41,17 @@ body footer {
   cursor: pointer;
 }
 
+#copy-uuid-button:hover + #cm-uuid {
+  display: block;
+}
+
 #cm-uuid {
   display: none;
   position: fixed;
-  bottom: 13%;
-  right: 3%;
+  bottom: 7%;
+  right: 10%;
   background-color: var(--background-color);
   padding: 10px;
   border: 1px solid #fff;
   border-radius: 5px;
-}
-
-#copy-uuid-button:hover + #cm-uuid {
-  display: block;
 }
