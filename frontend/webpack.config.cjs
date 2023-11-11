@@ -1,7 +1,17 @@
 // webpack.config.cjs for JS and JSON (default), TS, HTML, CSS, SCSS, TailwindCSS
 // https://webpack.js.org
 
+var glob = require('glob');
 const path = require('path');
+
+const components = glob
+  .globSync('./public/lib/components/**.ts')
+  .reduce(function (obj, el) {
+    obj[path.parse(el).name] = `./${el}`;
+    return obj;
+  }, {});
+
+console.log('components', components);
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -26,11 +36,12 @@ module.exports = {
     // start bundling from here
     home: './public/lib/script/pages/index.js',
     docs: './public/lib/script/pages/docs.js',
+    ...components,
   },
   output: {
     // bundle to this location
     path: path.resolve(__dirname, 'dist'),
-    filename: devMode ? 'bundle.[name].js' : 'bundle.[name].[contenthash].js',
+    filename: 'bundle.[name].js',
   },
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
