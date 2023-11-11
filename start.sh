@@ -9,4 +9,3 @@ cd ..
 # start the fronend
 cd ./frontend
 bash ./start.sh &
-

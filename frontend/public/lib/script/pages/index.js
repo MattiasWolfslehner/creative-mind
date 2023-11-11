@@ -1,9 +1,13 @@
-import {localStorageAction} from './store.js';
+import '../../style/main.css';
+import '../../style/style.scss';
+
+import {localStorageAction} from '../actions/store.ts';
+
 const registerForm = document.getElementById('register-form');
 const ideaForm = document.getElementById('idea-form');
-const downloadCsvBtn = document.getElementById('download-csv')
-const copyButton = document.getElementById("copy-uuid-button");
-const cmUuidElement = document.getElementById("cm-uuid");
+const downloadCsvBtn = document.getElementById('download-csv');
+const copyButton = document.getElementById('copy-uuid-button');
+const cmUuidElement = document.getElementById('cm-uuid');
 
 const restPort = 8080;
 let uuid = null;
@@ -41,33 +45,36 @@ registerForm.addEventListener('submit', async function (event) {
 function updateUI() {
   ideaForm.classList.toggle('hidden');
   registerForm.classList.toggle('hidden');
-  var cmUuid = localStorage.getItem("cm-uuid").replace(`"`, ``).replace(`"`,``)
+  var cmUuid = localStorage
+    .getItem('cm-uuid')
+    .replace(`"`, ``)
+    .replace(`"`, ``);
 
-
-  copyButton.addEventListener("mouseenter", () => {
-    cmUuidElement.style.display = "block";
-    cmUuidElement.innerHTML = cmUuid
+  copyButton.addEventListener('mouseenter', () => {
+    cmUuidElement.style.display = 'block';
+    cmUuidElement.innerHTML = cmUuid;
   });
 
-  copyButton.addEventListener("mouseleave", () => {
-    cmUuidElement.style.display = "none";
+  copyButton.addEventListener('mouseleave', () => {
+    cmUuidElement.style.display = 'none';
   });
 
   /* copy uuid */
-  document.getElementById("copy-uuid-button").addEventListener("click", () =>{
+  document.getElementById('copy-uuid-button').addEventListener('click', () => {
     if (cmUuid) {
-      navigator.clipboard.writeText(cmUuid)
-      .then(() => {
-        alert("cm-uuid copied into clipboard!")
-      })
-      .catch((err) => {
-        console.error("Something went wrongl: " + err)
-      })
+      navigator.clipboard
+        .writeText(cmUuid)
+        .then(() => {
+          alert('cm-uuid copied into clipboard!');
+        })
+        .catch((err) => {
+          console.error('Something went wrongl: ' + err);
+        });
     }
-  })
+  });
 
   // sets csv-download-link
-  setDownloadButton()
+  setDownloadButton();
 }
 
 // add idea
@@ -144,15 +151,14 @@ async function getIdeas() {
     });
 }
 
-async function setDownloadButton(){
+async function setDownloadButton() {
   uuid = await localStorageAction.load('cm-uuid');
 
   console.log(`UUID (button): ${uuid}`);
 
   const href = `http://localhost:${restPort}/api/ideas/${uuid}/download/csv`;
-  const fileName = `${Date.now()}.csv`
+  const fileName = `${Date.now()}.csv`;
 
-  downloadCsvBtn.href = href
-  downloadCsvBtn.download = fileName
+  downloadCsvBtn.href = href;
+  downloadCsvBtn.download = fileName;
 }
-
