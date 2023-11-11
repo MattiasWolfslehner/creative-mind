@@ -1,10 +1,10 @@
 export class localStorageAction {
-  static async save(name: string, data: any): Promise<void> {
-    console.log('data', data);
+  static async save<T>(name: string, data: T): Promise<void> {
     localStorage.setItem(name, JSON.stringify(data));
   }
 
-  static async load(name: string): Promise<any> {
-    return JSON.parse(localStorage.getItem(name));
+  static async load<T>(name: string): Promise<T | null> {
+    const storedData = localStorage.getItem(name);
+    return storedData ? JSON.parse(storedData) : null;
   }
 }
