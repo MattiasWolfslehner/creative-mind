@@ -15,6 +15,7 @@ console.log('components', components);
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const devMode = process.env.NODE_ENV !== 'production';
 
@@ -71,6 +72,14 @@ module.exports = {
       filename: devMode ? '[name].css' : '[name].[contenthash].css',
       chunkFilename: devMode ? '[id].css' : '[id].[contenthash].css',
     }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'public/static'),
+          to: path.resolve(__dirname, 'dist/static')
+        }
+      ]
+    })
   ],
   module: {
     // loaders, so that webpack understands more than JavaScript and JSON
