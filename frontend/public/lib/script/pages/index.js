@@ -72,9 +72,6 @@ function updateUI() {
         });
     }
   });
-
-  // sets csv-download-link
-  setDownloadButton();
 }
 
 // add idea
@@ -151,14 +148,28 @@ async function getIdeas() {
     });
 }
 
-async function setDownloadButton() {
-  uuid = await localStorageAction.load('cm-uuid');
+downloadCsvBtn.addEventListener('click', downloadFile);
+
+async function downloadFile() {
+  const uuid = await localStorageAction.load('cm-uuid');
 
   console.log(`UUID (button): ${uuid}`);
 
   const href = `http://localhost:${restPort}/api/ideas/${uuid}/download/csv`;
-  const fileName = `${Date.now()}.csv`;
+  const fileName = `ideas-${Date.now()}`;
 
-  downloadCsvBtn.href = href;
-  downloadCsvBtn.download = fileName;
+  const response = await fetch(href);
+  const blob = await response.blob();
+
+  const suggestedFileName = prompt('Gib einen Dateinamen ein:', fileName);
+
+  if (suggestedFileName) {
+    const downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = suggestedFileName + '.csv';
+    
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  }
 }
