@@ -1,24 +1,25 @@
 import '../../style/main.css';
 import '../../style/style.scss';
+import '../types'
 
-import {localStorageAction} from '../actions/store.ts';
+import { localStorageAction } from '../actions/store';
 
-const registerForm = document.getElementById('register-form');
-const ideaForm = document.getElementById('idea-form');
-const downloadCsvBtn = document.getElementById('download-csv');
-const copyButton = document.getElementById('copy-uuid-button');
-const cmUuidElement = document.getElementById('cm-uuid');
+const registerForm = document.getElementById('register-form') as HTMLFormElement;
+const ideaForm = document.getElementById('idea-form') as HTMLFormElement;
+const downloadCsvBtn = document.getElementById('download-csv') as HTMLAnchorElement;
+const copyButton = document.getElementById('copy-uuid-button') as HTMLButtonElement;
+const cmUuidElement = document.getElementById('cm-uuid') as HTMLElement;
 
 const restPort = 8080;
-let uuid = null;
-let ideas = [];
+let uuid: string | null = null;
+let ideas: Idea[] = [];
 
 // register
 registerForm.addEventListener('submit', async function (event) {
   event.preventDefault();
 
-  const uuid = await localStorageAction.load('cm-uuid');
-  if (uuid && uuid.length > 0) {
+  const storedUuid: string | null = await localStorageAction.load('cm-uuid');
+  if (storedUuid && storedUuid.length > 0) {
     updateUI();
     return;
   }
@@ -30,13 +31,11 @@ registerForm.addEventListener('submit', async function (event) {
       Accept: 'application/json',
     },
   })
+    .then((response) => response.json())
     .then((response) => {
-      return response.json();
-    })
-    .then((response) => {
-      const uuid = response.uuid;
+      const generatedUuid = response.uuid;
 
-      localStorageAction.save('cm-uuid', uuid);
+      localStorageAction.save('cm-uuid', generatedUuid);
 
       updateUI();
     });
@@ -45,22 +44,23 @@ registerForm.addEventListener('submit', async function (event) {
 function updateUI() {
   ideaForm.classList.toggle('hidden');
   registerForm.classList.toggle('hidden');
-  var cmUuid = localStorage
-    .getItem('cm-uuid')
-    .replace(`"`, ``)
-    .replace(`"`, ``);
+  const cmUuid = localStorage.getItem('cm-uuid')?.replace(`"`, '').replace(`"`, '');
 
   copyButton.addEventListener('mouseenter', () => {
-    cmUuidElement.style.display = 'block';
-    cmUuidElement.innerHTML = cmUuid;
+    if (cmUuidElement) {
+      cmUuidElement.style.display = 'block';
+      cmUuidElement.innerHTML = cmUuid || '';
+    }
   });
 
   copyButton.addEventListener('mouseleave', () => {
-    cmUuidElement.style.display = 'none';
+    if (cmUuidElement) {
+      cmUuidElement.style.display = 'none';
+    }
   });
 
   /* copy uuid */
-  document.getElementById('copy-uuid-button').addEventListener('click', () => {
+  copyButton.addEventListener('click', () => {
     if (cmUuid) {
       navigator.clipboard
         .writeText(cmUuid)
@@ -68,7 +68,7 @@ function updateUI() {
           alert('cm-uuid copied into clipboard!');
         })
         .catch((err) => {
-          console.error('Something went wrongl: ' + err);
+          console.error('Something went wrong: ' + err);
         });
     }
   });
@@ -79,8 +79,8 @@ ideaForm.addEventListener('submit', function (event) {
   event.preventDefault();
 
   const action = `http://localhost:${restPort}/api/ideas/` + uuid;
-  const formData = new FormData(event.target);
-  const content = formData.get('idea');
+  const formData = new FormData(event.target as HTMLFormElement);
+  const content: string | null = formData.get('idea') as string | null;
 
   fetch(action, {
     headers: {
@@ -88,11 +88,9 @@ ideaForm.addEventListener('submit', function (event) {
       'Content-Type': 'application/json',
     },
     method: 'POST',
-    body: JSON.stringify({content: content}),
+    body: JSON.stringify({ content: content }),
   })
-    .then((response) => {
-      return response.json();
-    })
+    .then((response) => response.json())
     .then((response) => {
       console.log(response);
       getIdeas();
@@ -104,9 +102,9 @@ ideaForm.addEventListener('submit', function (event) {
 
 // fetch ideas
 window.addEventListener('DOMContentLoaded', async function () {
-  const uuid = await localStorageAction.load('cm-uuid');
+  const storedUuid: string | null =  await localStorageAction.load('cm-uuid');
 
-  if (uuid && uuid.length > 0) {
+  if (storedUuid && storedUuid.length > 0) {
     updateUI();
   }
 
@@ -122,15 +120,13 @@ async function getIdeas() {
       Accept: 'application/json',
     },
   })
-    .then((response) => {
-      return response.json();
-    })
+    .then((response) => response.json())
     .then((data) => {
       console.log(data);
       ideas = data;
       let ideaRows = '';
 
-      ideas.forEach((idea) => {
+      ideas.map((idea) => {
         ideaRows += `<tr>
         <td>
           ${idea.id}
@@ -141,7 +137,10 @@ async function getIdeas() {
       </tr>`;
       });
 
-      document.getElementById('ideas').innerHTML = ideaRows;
+      const ideasTable = document.getElementById('ideas');
+      if (ideasTable) {
+        ideasTable.innerHTML = ideaRows;
+      }
     })
     .catch((error) => {
       console.log(error);
