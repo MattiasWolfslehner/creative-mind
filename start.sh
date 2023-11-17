@@ -1,7 +1,7 @@
-#!bin/bash
+#!/bin/bash
 
 # start the backend
-cd ./creative-mind-backend
+cd ./backend
 bash ./start.sh &
 
 cd ..

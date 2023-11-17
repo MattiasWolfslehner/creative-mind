@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 # remove node_moduels -> if there
 rm -rf ./node_modules
