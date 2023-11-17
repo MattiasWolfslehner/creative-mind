@@ -1,7 +1,11 @@
 // webpack.config.cjs for JS and JSON (default), TS, HTML, CSS, SCSS, TailwindCSS
 // https://webpack.js.org
 
-var glob = require('glob');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExecaPlugin = require("execa-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
+const glob = require('glob');
 const path = require('path');
 
 const components = glob
@@ -11,16 +15,11 @@ const components = glob
     return obj;
   }, {});
 
-console.log('components', components);
-
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-
-const devMode = process.env.NODE_ENV !== 'production';
+const DEV_MODE = process.env.NODE_ENV !== 'production';
+const BUILD_DOCS = process.env.BUILD_DOCS === 'true' || false;
 
 module.exports = {
-  mode: devMode ? 'development' : 'production', // development, production(default) or none
+  mode: DEV_MODE ? 'development' : 'production', // development, production(default) or none
   devServer: {
     static: {
       directory: path.join(__dirname, 'public'),
@@ -32,11 +31,10 @@ module.exports = {
     compress: true,
     port: 9000,
   },
-  devtool: devMode ? 'inline-source-map' : false,
+  devtool: DEV_MODE ? 'inline-source-map' : false,
   entry: {
     // start bundling from here
     home: './public/lib/script/pages/index.js',
-    docs: './public/lib/script/pages/docs.js',
     ...components,
   },
   output: {
@@ -62,21 +60,27 @@ module.exports = {
       template: 'public/routes/index.html',
       chunks: ['home'], // only include the 'home' chunk
     }),
-    new HtmlWebpackPlugin({
-      filename: 'docs.html',
-      template: 'public/routes/docs.html',
-      chunks: ['docs'], // only include the 'docs' chunk
-    }),
     new MiniCssExtractPlugin({
       // minifies css and splits it
-      filename: devMode ? '[name].css' : '[name].[contenthash].css',
-      chunkFilename: devMode ? '[id].css' : '[id].[contenthash].css',
+      filename: DEV_MODE ? '[name].css' : '[name].[contenthash].css',
+      chunkFilename: DEV_MODE ? '[id].css' : '[id].[contenthash].css',
     }),
-    new CopyPlugin({
+    new CopyPlugin({ // TODO: add component library
       patterns: [
         {
           from: path.resolve(__dirname, 'public/static'),
-          to: path.resolve(__dirname, 'dist/static')
+          to: path.resolve(__dirname, 'dist')
+        }
+      ]
+    }),
+    BUILD_DOCS && new ExecaPlugin({
+      onBeforeRun: [
+        {
+          args: [],
+          cmd: "node build-docs.cjs",
+          options: {
+            cwd: process.cwd()
+          }
         }
       ]
     })
@@ -84,21 +88,6 @@ module.exports = {
   module: {
     // loaders, so that webpack understands more than JavaScript and JSON
     rules: [
-      {
-        // Docs
-        test: /\.md$/,
-        use: [
-          {
-            loader: 'html-loader',
-          },
-          {
-            loader: 'markdown-loader',
-            options: {
-              // https://marked.js.org/using_advanced#options
-            },
-          },
-        ],
-      },
       {
         // static assets (Images, Fonts, etc.)
         test: /\.(png|jpg|gif|svg|eot|ttf|woff)$/,
@@ -117,7 +106,7 @@ module.exports = {
         // SCSS/SASS
         test: /\.s[ac]ss$/i,
         use: [
-          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          DEV_MODE ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
           'sass-loader',
         ],
@@ -126,7 +115,7 @@ module.exports = {
         // CSS
         test: /\.css$/i, // type to transform
         use: [
-          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          DEV_MODE ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
           {
             loader: 'postcss-loader', // TailwindCSS, Autoprefixer, etc. (postcss.config.cjs)
