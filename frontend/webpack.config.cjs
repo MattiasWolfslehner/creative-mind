@@ -3,7 +3,7 @@
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExecaPlugin = require("execa-webpack-plugin");
+const ExecaPlugin = require('execa-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const glob = require('glob');
 const path = require('path');
@@ -65,25 +65,27 @@ module.exports = {
       filename: DEV_MODE ? '[name].css' : '[name].[contenthash].css',
       chunkFilename: DEV_MODE ? '[id].css' : '[id].[contenthash].css',
     }),
-    new CopyPlugin({ // TODO: add component library
+    new CopyPlugin({
+      // TODO: add component library
       patterns: [
         {
           from: path.resolve(__dirname, 'public/static'),
-          to: path.resolve(__dirname, 'dist')
-        }
-      ]
+          to: path.resolve(__dirname, 'dist'),
+        },
+      ],
     }),
-    BUILD_DOCS && new ExecaPlugin({
-      onBeforeRun: [
-        {
-          args: [],
-          cmd: "node build-docs.cjs",
-          options: {
-            cwd: process.cwd()
-          }
-        }
-      ]
-    })
+    BUILD_DOCS &&
+      new ExecaPlugin({
+        onBeforeRun: [
+          {
+            args: [],
+            cmd: 'node build-docs.cjs',
+            options: {
+              cwd: process.cwd(),
+            },
+          },
+        ],
+      }),
   ],
   module: {
     // loaders, so that webpack understands more than JavaScript and JSON
