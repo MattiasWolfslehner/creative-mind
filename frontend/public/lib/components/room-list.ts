@@ -7,16 +7,6 @@ import '../style/main.css';
 import '../style/style.scss';
 
 
-export class MyEvent extends Event {
-
-  protected message: string|null;
-  constructor(message: string|null) {
-    super('my-event');
-    this.message = message;
-  }
-
-}
-
 @customElement('room-list')
 export class RoomList extends LitElement {
 
@@ -28,11 +18,11 @@ export class RoomList extends LitElement {
 
     // some example rooms
     let r: Room = {
-      cmuuid : "77642b38-0c8f-4685-93b7-8847bf443ce0"
+      cmuuid : '77642b38-0c8f-4685-93b7-8847bf443ce0'
     };
     this.rooms.push(r);
     r = {
-      cmuuid : "4970bda3-9cbb-4508-972b-1c4a754ad268"
+      cmuuid : '4970bda3-9cbb-4508-972b-1c4a754ad268'
     };
     this.rooms.push(r);
   }
@@ -46,11 +36,12 @@ export class RoomList extends LitElement {
     return 'done';
   }
 
-  private async _roomJoined(e: Event) {
-    console.log(e.target);
-    const event = new MyEvent('...');
+  // dispatch the received button click as a "join-the-room" event
+  private async _roomJoined(room:string) {
+    const event = new CustomEvent<string>('room-joined', {detail: room});
     this.dispatchEvent(event);
   }
+
   override render() {
     return html`
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
@@ -66,15 +57,12 @@ export class RoomList extends LitElement {
       ${this.rooms.map(i => html`
       <tr>
         <td>${i.cmuuid}</td>
-        <td><button id="_room_${i.cmuuid}" @click="${this._roomJoined}">Join</button></td>
+        <td><button id="_room_${i.cmuuid}" @click="${() => this._roomJoined(i.cmuuid)}">Join</button></td>
       </tr>
       `)}
     </tbody>
   </table>
   `;
-
-
-//      col.innerHTML = `<p></p><button onclick="${this._roomJoined}">Join</button></p>`;
   }
 }
 
