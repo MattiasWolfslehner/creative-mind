@@ -18,9 +18,8 @@ export class IdeaList extends LitElement {
   public async setIdeas(ideas: Idea[]) {
     // Set a property, triggering an update
     this.ideas = ideas;
-
+    // re-render after update
     this.requestUpdate();
-
     // ...do other stuff...
     return 'done';
   }
