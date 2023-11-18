@@ -1,13 +1,19 @@
 import '../../style/main.css';
 import '../../style/style.scss';
-import '../types'
+import '../types';
 
-import { localStorageAction } from '../actions/store';
+import {localStorageAction} from '../actions/store';
 
-const registerForm = document.getElementById('register-form') as HTMLFormElement;
+const registerForm = document.getElementById(
+  'register-form',
+) as HTMLFormElement;
 const ideaForm = document.getElementById('idea-form') as HTMLFormElement;
-const downloadCsvBtn = document.getElementById('download-csv') as HTMLAnchorElement;
-const copyButton = document.getElementById('copy-uuid-button') as HTMLButtonElement;
+const downloadCsvBtn = document.getElementById(
+  'download-csv',
+) as HTMLAnchorElement;
+const copyButton = document.getElementById(
+  'copy-uuid-button',
+) as HTMLButtonElement;
 const cmUuidElement = document.getElementById('cm-uuid') as HTMLElement;
 
 const restPort = 8080;
@@ -44,7 +50,10 @@ registerForm.addEventListener('submit', async function (event) {
 function updateUI() {
   ideaForm.classList.toggle('hidden');
   registerForm.classList.toggle('hidden');
-  const cmUuid = localStorage.getItem('cm-uuid')?.replace(`"`, '').replace(`"`, '');
+  const cmUuid = localStorage
+    .getItem('cm-uuid')
+    ?.replace(`"`, '')
+    .replace(`"`, '');
 
   copyButton.addEventListener('mouseenter', () => {
     if (cmUuidElement) {
@@ -88,7 +97,7 @@ ideaForm.addEventListener('submit', function (event) {
       'Content-Type': 'application/json',
     },
     method: 'POST',
-    body: JSON.stringify({ content: content }),
+    body: JSON.stringify({content: content}),
   })
     .then((response) => response.json())
     .then((response) => {
@@ -102,7 +111,7 @@ ideaForm.addEventListener('submit', function (event) {
 
 // fetch ideas
 window.addEventListener('DOMContentLoaded', async function () {
-  const storedUuid: string | null =  await localStorageAction.load('cm-uuid');
+  const storedUuid: string | null = await localStorageAction.load('cm-uuid');
 
   if (storedUuid && storedUuid.length > 0) {
     updateUI();
@@ -166,7 +175,7 @@ async function downloadFile() {
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(blob);
     downloadLink.download = suggestedFileName + '.csv';
-    
+
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);

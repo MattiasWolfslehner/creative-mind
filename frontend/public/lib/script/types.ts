@@ -1,12 +1,12 @@
 interface Idea {
-    id: number,
-    content: string
+  id: number;
+  content: string;
 }
 
 interface Room {
-    cmuuid: string
+  cmuuid: string;
 }
 
 interface User {
-    id: number
+  id: number;
 }
