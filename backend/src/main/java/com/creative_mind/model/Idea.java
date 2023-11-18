@@ -1,24 +1,29 @@
 package com.creative_mind.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+@Entity
 public class Idea {
-
-    private int id = 0;
+    @Id
+    @GeneratedValue
+    private int id;
+    @Column(name="content")
     private String content;
 
-    public Idea() {}
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private BrainwritingRoom brainwritingRoom;
+
+    public Idea() {
+
+    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id){
-        this.id = id;
-    }
-
     public String getContent() {
         return content;
     }
+
 }

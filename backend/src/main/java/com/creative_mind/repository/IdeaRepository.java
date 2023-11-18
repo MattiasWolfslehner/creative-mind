@@ -1,4 +1,4 @@
-package com.creative_mind.repository;
+/*package com.creative_mind.repository;
 
 import com.creative_mind.model.Idea;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -57,3 +57,4 @@ public class IdeaRepository {
     }
 
 }
+*/

@@ -1,14 +1,15 @@
 package com.creative_mind.services;
+
 import com.creative_mind.model.Idea;
+import com.opencsv.CSVWriter;
 import jakarta.enterprise.context.ApplicationScoped;
-import java.io.File;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
-import com.opencsv.CSVWriter;
 
 @ApplicationScoped
 public class IdeaCsvService {

@@ -1,0 +1,17 @@
+meta {
+  name: ADD ROOM
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:8080/api/rooms/create
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+   "type": "brainwritingroom"
+  }
+}

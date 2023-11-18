@@ -1,0 +1,19 @@
+meta {
+  name: ADD PARTICIPATION
+  type: http
+  seq: 11
+}
+
+post {
+  url: http://localhost:8080/api/participations/participate
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "roomType":"brainwritingroom",
+    "roomId": "860b40e4-4872-42da-80f4-8ef05e49a4be",
+    "memberId":"0a5e4376-8f94-4841-ba0b-0ac1c176d081"
+  }
+}
