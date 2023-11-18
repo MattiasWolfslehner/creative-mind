@@ -18,11 +18,11 @@ export class RoomList extends LitElement {
 
     // some example rooms
     let r: Room = {
-      cmuuid : '77642b38-0c8f-4685-93b7-8847bf443ce0'
+      cmuuid : 'd79ed48c-b089-43f1-9fa6-d49b7029b69e'
     };
     this.rooms.push(r);
     r = {
-      cmuuid : '4970bda3-9cbb-4508-972b-1c4a754ad268'
+      cmuuid : '3cc3c738-856d-4e35-85da-0b41935aa2a5'
     };
     this.rooms.push(r);
   }
