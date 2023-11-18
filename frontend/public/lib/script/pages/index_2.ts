@@ -7,12 +7,11 @@ import {RoomList} from '../../components/room-list';
 
 import { localStorageAction } from '../actions/store';
 
-const registerForm = document.getElementById('register-form') as HTMLFormElement;
-const ideaForm = document.getElementById('idea-form') as HTMLFormElement;
+const ideaForm2 = document.getElementById('idea-form2') as HTMLFormElement;
 const downloadCsvBtn = document.getElementById('download-csv') as HTMLAnchorElement;
 const copyButton = document.getElementById('copy-uuid-button') as HTMLButtonElement;
 const cmUuidElement = document.getElementById('cm-uuid') as HTMLElement;
-const ideaList = document.getElementById("idea-list") as IdeaList;
+const ideaList2 = document.getElementById("idea-list2") as IdeaList;
 const roomList = document.getElementById("room-list") as RoomList;
 
 const restPort = 8080;
@@ -25,40 +24,14 @@ roomList.addEventListener('room-joined'
   const selectedUuid = (<CustomEvent>event).detail;
   console.log(selectedUuid);
   await localStorageAction.save('cm-uuid', selectedUuid);
+  updateUI();
   getIdeas();
     }
 );
 
-// register
-registerForm.addEventListener('submit', async function (event) {
-  event.preventDefault();
-
-  const storedUuid: string | null = await localStorageAction.load('cm-uuid');
-  if (storedUuid && storedUuid.length > 0) {
-    updateUI();
-    return;
-  }
-
-  const action = `http://localhost:${restPort}/api/ideas/register`;
-
-  fetch(action, {
-    headers: {
-      Accept: 'application/json',
-    },
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      const generatedUuid = response.uuid;
-
-      localStorageAction.save('cm-uuid', generatedUuid);
-
-      updateUI();
-    });
-});
 
 function updateUI() {
-  ideaForm.classList.toggle('hidden');
-  registerForm.classList.toggle('hidden');
+  ideaForm2.classList.toggle('hidden');
   console.log(localStorage.getItem('cm-uuid'));
   const cmUuid = localStorage.getItem('cm-uuid')?.replace(`"`, '').replace(`"`, '');
 
@@ -75,23 +48,10 @@ function updateUI() {
     }
   });
 
-  /* copy uuid */
-  copyButton.addEventListener('click', () => {
-    if (cmUuid) {
-      navigator.clipboard
-        .writeText(cmUuid)
-        .then(() => {
-          alert('cm-uuid copied into clipboard!');
-        })
-        .catch((err) => {
-          console.error('Something went wrong: ' + err);
-        });
-    }
-  });
 }
 
 // add idea
-ideaForm.addEventListener('submit', function (event) {
+ideaForm2.addEventListener('submit', function (event) {
   event.preventDefault();
 
   const action = `http://localhost:${restPort}/api/ideas/` + uuid;
@@ -138,26 +98,8 @@ async function getIdeas() {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-      // ideas = data;
-      ideaList.setIdeas(data);
-      // let ideaRows = '';
-      //
-      // ideas.map((idea) => {
-      //   ideaRows += `<tr>
-      //   <td>
-      //     ${idea.id}
-      //   </td>
-      //   <td>
-      //     ${idea.content}
-      //   </td>
-      // </tr>`;
-      // });
-      //
-      // const ideasTable = document.getElementById('ideas');
-      // if (ideasTable) {
-      //   ideasTable.innerHTML = ideaRows;
-      // }
+      //console.log(data);
+      ideaList2.setIdeas(data);
     })
     .catch((error) => {
       console.log(error);
