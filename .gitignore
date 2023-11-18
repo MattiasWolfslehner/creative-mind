@@ -199,3 +199,6 @@ $RECYCLE.BIN/
 
 # Artifacts/Generateables
 *.pdf
+
+
+backend/data/ideas/csv/*.csv
