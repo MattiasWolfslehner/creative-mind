@@ -10,4 +10,5 @@ interface Room {
 
 interface User {
   id: number;
+  userId: string;
 }
