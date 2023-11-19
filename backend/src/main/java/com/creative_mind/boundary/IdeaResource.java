@@ -1,4 +1,4 @@
-package com.creative_mind.boundary;
+/*package com.creative_mind.boundary;
 
 import com.creative_mind.model.Idea;
 import com.creative_mind.model.User;
@@ -89,3 +89,4 @@ public class IdeaResource {
     }
 
 }
+*/

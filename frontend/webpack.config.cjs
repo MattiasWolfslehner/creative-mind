@@ -35,6 +35,7 @@ module.exports = {
   entry: {
     // start bundling from here
     home: './public/lib/script/pages/index.js',
+    home2: './public/lib/script/pages/index_2.js',
     ...components,
   },
   output: {
@@ -59,6 +60,12 @@ module.exports = {
       filename: 'index.html',
       template: 'public/routes/index.html',
       chunks: ['home'], // only include the 'home' chunk
+    }),
+    new HtmlWebpackPlugin({
+      // minifies html and adds imports
+      filename: 'index_2.html',
+      template: 'public/routes/index_2.html',
+      chunks: ['home2'], // only include the 'home' chunk
     }),
     new MiniCssExtractPlugin({
       // minifies css and splits it
