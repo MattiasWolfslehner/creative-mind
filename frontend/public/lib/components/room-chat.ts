@@ -91,6 +91,13 @@ export class RoomChat extends LitElement {
     }
   }
 
+  private _keydown (event:KeyboardEvent) {
+    console.log(event);
+
+    if (event.key == 'Enter') {
+      this._sendMessage();
+    }
+  }
   override render() {
     return html`
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
@@ -98,7 +105,7 @@ export class RoomChat extends LitElement {
   <div>
     <h2>Chat</h2>
     <p>${this.returnString()}</p>
-    <input id="message-text" type="text" >
+    <input id="message-text" type="text" onkeydown="${(event:KeyboardEvent) => this._keydown(event)}">
     <button id="send-message" @click="${() => this._sendMessage()}">Send</button>
   </div>
   `;

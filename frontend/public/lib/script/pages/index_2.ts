@@ -6,6 +6,7 @@ import '../types';
 import {RoomList} from '../../components/room-list';
 
 import { localStorageAction } from '../actions/store';
+import {RoomChat} from "../../components/room-chat";
 
 const loginForm = document.getElementById('login-form') as HTMLFormElement;
 const userInput = document.getElementById('user-input') as HTMLInputElement;
@@ -16,6 +17,7 @@ const downloadCsvBtn = document.getElementById('download-csv') as HTMLAnchorElem
 const copyButton = document.getElementById('copy-room-id-button') as HTMLButtonElement;
 const roomIdElement = document.getElementById('room-id') as HTMLElement;
 // const ideaList2 = document.getElementById("idea-list2") as IdeaList;
+const roomChat = document.getElementById("room-chat") as RoomChat;
 const roomList = document.getElementById("room-list") as RoomList;
 
 const restPort = 8080;
@@ -27,6 +29,10 @@ roomList.addEventListener('room-joined'
   const selectedRoomId = (<CustomEvent>event).detail;
   console.log(selectedRoomId);
   await localStorageAction.save('roomId', selectedRoomId);
+  roomId = selectedRoomId;
+  if (userId) {
+      roomChat.setUserAndRoom(selectedRoomId, userId);
+  }
   await updateUI();
   await getIdeas();
     }
