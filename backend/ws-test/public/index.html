@@ -42,8 +42,8 @@
         };
 
         socket.onmessage = function (event) {
-            const message = event.data;
-            handleWebSocketMessage(message);
+            const ideas = JSON.parse(event.data);
+            handleWebSocketMessage(ideas);
         };
 
         socket.onclose = function (event) {
@@ -72,9 +72,15 @@
         }
     }
 
-    function handleWebSocketMessage(message) {
-        console.log("Received message:", message);
-        messageDisplay.innerHTML += `<p>${message}</p>`;
+    function handleWebSocketMessage(ideas) {
+        console.log("Received ideas:", ideas);
+        // Clear existing messages
+        messageDisplay.innerHTML = '';
+
+        // Display the received ideas dynamically
+        ideas.forEach(idea => {
+            messageDisplay.innerHTML += `<p>${idea.content}</p>`;
+        });
     }
 
     sendButton.addEventListener('click', () => {

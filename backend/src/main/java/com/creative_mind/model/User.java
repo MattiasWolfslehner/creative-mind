@@ -28,6 +28,10 @@ public class User {
     @OneToMany(mappedBy = "member")
     Set<Participation> participations;
 
+    @OneToMany(mappedBy = "member")
+    Set<Idea> ideas;
+
+
     public User() {
         this.userId = UUID.randomUUID();
     }
