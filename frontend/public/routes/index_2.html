@@ -22,6 +22,14 @@
 
     <main class="container">
 
+
+        <form id="login-form" method="post">
+            <input type="text" id="user-input" name="user" placeholder="your userid ">
+            <button id="login-button" type="submit">Login</button>
+            <button id="create-room-button" class="hidden" type="button">Create new Room</button>
+        </form>
+
+
         <room-list id="room-list"></room-list>
 
 
@@ -49,9 +57,9 @@
         <button id="download-csv" type="button"><i class="fa fa-download"></i> Download</button>
 
         <div class="button-container">
-            <button id="copy-uuid-button" data-clipboard-target="#cm-uuid">Copy</button>
+            <button id="copy-room-id-button" data-clipboard-target="#room-id">Copy</button>
         </div>
-        <div id="cm-uuid" class="cm-uuid"></div>
+        <div id="room-id" class="room-id"></div>
     </main>
 
     <footer>
