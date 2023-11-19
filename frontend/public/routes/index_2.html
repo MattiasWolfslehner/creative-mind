@@ -27,6 +27,7 @@
         <form id="login-form" method="post">
             <input type="text" id="user-input" name="user" placeholder="your userid ">
             <button id="login-button" type="submit">Login</button>
+            <button id="register-button" type="button">Register</button>
             <button id="create-room-button" class="hidden" type="button">Create new Room</button>
         </form>
 
@@ -39,23 +40,11 @@
             <button id="add-idea" type="submit">hinzufügen</button>
         </form>
 
+        <idea-list id="idea-list2"></idea-list>
+
         <room-chat id="room-chat"></room-chat>
 
 
-        <idea-list id="idea-list2"></idea-list>
-
-<!--            <table>
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>content</th>
-                </tr>
-
-            </thead>
-
-            <tbody id="ideas">
-            </tbody>
-        </table>-->
 
         <button id="download-csv" type="button"><i class="fa fa-download"></i> Download</button>
 
