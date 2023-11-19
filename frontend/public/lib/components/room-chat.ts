@@ -1,7 +1,8 @@
 // https://lit.dev/docs/tools/adding-lit/
 
-import {LitElement, html} from 'lit';
-import {customElement,property} from 'lit/decorators.js';
+import {html, LitElement} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+// import {live} from 'lit/directives/live.js';
 import '../script/types';
 import '../style/main.css';
 import '../style/style.scss';
@@ -10,14 +11,15 @@ import '../style/style.scss';
 @customElement('room-chat')
 export class RoomChat extends LitElement {
 
-  @property() actual_message: string;
+  @property() messages: string;
 
   protected roomId: string|null = null;
   protected userId: string|null = null;
   protected socket: WebSocket | null = null;
 
-  protected messages: string;
-
+  private returnString() {
+    return document.createRange().createContextualFragment(`${this.messages}`);
+  }
   private sendMessageToServer(message: string) {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);
@@ -26,17 +28,16 @@ export class RoomChat extends LitElement {
     }
   }
 
-  private _handleWebSocketMessage(event: MessageEvent) {
+  private async _handleWebSocketMessage(event: MessageEvent) {
+    event.preventDefault();
     const message: string = event.data;
+    let oldMessages = this.messages;
     console.log("Received message:", message);
-    this.messages += `<p>${message}</p>`;
-    this.requestUpdate();
+    this.messages = oldMessages + `<p>${message}</p>`;
   }
 
   constructor () {
     super();
-    this.actual_message = "";
-
     this.messages = "";
   }
 
@@ -45,55 +46,63 @@ export class RoomChat extends LitElement {
     this.roomId = roomId;
     this.userId = userId;
     this.messages = "";
-    this.actual_message = "";
+
+    let xx: RoomChat = this; // not to be mistaken with websocket inside
 
     this.socket = new WebSocket(`ws://localhost:8080/rooms/join/${roomId}/${userId}`);
 
     this.socket.onopen = function (event: Event) {
+      event.preventDefault();
       console.log("WebSocket connection opened:", event);
     };
-    this.socket.onmessage = this._handleWebSocketMessage;
+    this.socket.onmessage = function(ev:MessageEvent) {
+      xx._handleWebSocketMessage(ev);
+    }
 
     this.socket.onclose = function (event:Event) {
+      event.preventDefault();
       console.log("WebSocket connection closed:", event);
     };
 
     this.socket.onerror = function (error:Event) {
+      error.preventDefault();
       console.error("WebSocket error:", error);
     };
 
-    // now re-render
-    this.requestUpdate();
     // ...do other stuff...
     return 'done';
   }
 
   // dispatch the received button click as a "join-the-room" event
   private async _sendMessage() {
-    if (this.actual_message.trim().length > 0) {
-      this.sendMessageToServer(this.actual_message);
+    var message: string = "";
+    if (this.shadowRoot) {
+      const ttt = this.shadowRoot.getElementById("message-text") as HTMLInputElement;
+      message = ttt.value.trim();
+      ttt.value = ""; // reset input
+    }
+    if (message.length > 0) {
+      this.sendMessageToServer(message);
+      // and delete message from input
     }
     else {
-      console.log("nothing to send!")
+      console.log("nothing to send! ..." + message);
+      //this.sendMessageToServer("nothing to send!"); // fake message for test
     }
   }
 
   override render() {
-    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-
     return html`
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <div>
     <h2>Chat</h2>
-    <p>${this.messages}</p>
-    <input type="text" .value="${this.actual_message}">
-    <button id="send-message" @click="${() => this._sendMessage()}"></button>
+    <p>${this.returnString()}</p>
+    <input id="message-text" type="text" >
+    <button id="send-message" @click="${() => this._sendMessage()}">Send</button>
   </div>
   `;
-    }
-    else
-      return html`<div><h2>no chat so far</h2></div>`;
+
   }
 }
 
