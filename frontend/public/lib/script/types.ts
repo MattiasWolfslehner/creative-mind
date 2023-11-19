@@ -6,6 +6,7 @@ interface Idea {
 interface Room {
   id: number;
   roomId: string;
+  type: string;
 }
 
 interface User {
