@@ -33,10 +33,9 @@ roomList.addEventListener('room-joined'
 );
 
 
+
 async function getRooms() {
   const action = `http://localhost:${restPort}/api/rooms/list`;
-
-  console.log("in getRooms");
 
   fetch(action, {
       headers: {
@@ -46,7 +45,7 @@ async function getRooms() {
   })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         roomList.setRooms(data);
       })
       .catch((error) => {
@@ -122,29 +121,26 @@ loginForm.addEventListener('submit', function (event) {
 
 // create new room
 createRoomButton.addEventListener('click', function (event) {
-  event.preventDefault(); // prevent POSTback
-  // console.log(event);
-  // loginButton.classList.remove("hidden");
-  // createRoomButton.classList.add("hidden");
+    event.stopImmediatePropagation();// stop second click
+    //console.log(event);
 
-  const action = `http://localhost:${restPort}/api/rooms/create`;
-  fetch(action, {
-      headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({type: "brainwritingroom"})
-  })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        console.log("room created");
-        getRooms();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+    const action = `http://localhost:${restPort}/api/rooms/create`;
+    fetch(action, {
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({type: "brainwritingroom"})
+    })
+        .then((response) => response.json())
+        .then(() => {
+            getRooms();
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 });
 
 // add idea
