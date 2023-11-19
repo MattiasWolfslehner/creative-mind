@@ -39,7 +39,7 @@ export class IdeaList extends LitElement {
         ${this.ideas.map(i => html`
       <tr>
         <td>${i.id.toString()}</td>
-        <td>${i.content.toString()}</td>
+        <td>${((i.content.toString().length>40)?(i.content.toString().substring(1,40)+"..."):(i.content.toString()))}</td>
       </tr>
       `)}
         </tbody>
