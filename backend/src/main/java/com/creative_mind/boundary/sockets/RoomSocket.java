@@ -5,7 +5,9 @@ import com.creative_mind.model.requests.IdeaRequest;
 import com.creative_mind.model.requests.ParticipantionRequest;
 import com.creative_mind.repository.IdeaRepository;
 import com.creative_mind.repository.ParticipationRepository;
+import jakarta.enterprise.context.control.ActivateRequestContext;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
@@ -39,7 +41,7 @@ public class RoomSocket {
             // Store the session temporarily
             roomSessions.computeIfAbsent(parsedRoomId, k -> ConcurrentHashMap.newKeySet()).add(session);
 
-            broadcastIdeasToRoom(roomId);
+            broadcastMessage(roomId, String.format("%s joined the Room!", userId));
 
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
@@ -64,8 +66,7 @@ public class RoomSocket {
                 return v.isEmpty() ? null : v;
             });
 
-            broadcastIdeasToRoom(roomId);
-
+            broadcastMessage(roomId, String.format("%s left the Room!", userId));
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
             return null;
@@ -73,22 +74,26 @@ public class RoomSocket {
     }
 
     @OnMessage
-    public void onMessage(String content, Session session, @PathParam("roomId") String roomId, @PathParam("userId") String userId ) {
+    @ActivateRequestContext
+    public void onMessage(String content, Session session, @PathParam("roomId") String roomId, @PathParam("userId") String userId) {
 
         UUID parsedRoomId = UUID.fromString(roomId);
         UUID parsedUserId = UUID.fromString(userId);
 
+        IdeaRequest ideaRequest = new IdeaRequest(content, parsedRoomId, parsedUserId);
+
         CompletableFuture.runAsync(() -> {
 
-            IdeaRequest ideaRequest = new IdeaRequest(content, parsedRoomId, parsedUserId);
             ideaRepository.addIdea(ideaRequest);
 
             broadcastIdeasToRoom(roomId);
+
 
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
             return null;
         });
+
     }
 
     private void broadcastIdeasToRoom(String roomId) {
@@ -108,4 +113,23 @@ public class RoomSocket {
             }
         }
     }
+
+    private void broadcastMessage(String roomId, String message) {
+        UUID parsedRoomId = UUID.fromString(roomId);
+
+        // Get the sessions for the specified room
+        Set<Session> sessions = roomSessions.get(parsedRoomId);
+        if (sessions != null) {
+            for (Session iterator : sessions) {
+                iterator.getAsyncRemote().sendText(message, result -> {
+                    if (result.getException() != null) {
+                        System.out.println("Unable to send message: " + result.getException());
+                    }
+                });
+            }
+        }
+    }
+
+
+
 }

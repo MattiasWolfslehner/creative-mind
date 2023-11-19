@@ -1,17 +1,14 @@
 package com.creative_mind.boundary.rest;
 
 import com.creative_mind.model.Idea;
-import com.creative_mind.model.User;
 import com.creative_mind.model.requests.IdeaRequest;
 import com.creative_mind.repository.IdeaRepository;
-import com.creative_mind.services.IdeaCsvService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import java.util.List;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.LinkedList;
 import java.util.UUID;
 
 @Path("/api/ideas")
