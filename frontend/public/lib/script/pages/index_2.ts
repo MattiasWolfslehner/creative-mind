@@ -117,6 +117,7 @@ loginForm.addEventListener('submit', function (event) {
                     loginButton.classList.add("hidden");
                     registerButton.classList.add("hidden");
                     createRoomButton.classList.remove("hidden");
+                    ideaForm2.classList.remove("hidden");
                     getRooms();
                     // now user logged in can create rooms
                     return;
@@ -160,6 +161,7 @@ registerButton.addEventListener('click', function (event) {
             loginButton.classList.add("hidden");
             registerButton.classList.add("hidden");
             createRoomButton.classList.remove("hidden");
+            ideaForm2.classList.remove("hidden");
             getRooms();
             getIdeas();
         })
