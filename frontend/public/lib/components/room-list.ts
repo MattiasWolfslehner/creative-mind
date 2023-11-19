@@ -16,15 +16,15 @@ export class RoomList extends LitElement {
   constructor () {
     super();
 
-    // some example rooms
-    let r: Room = {
-      cmuuid : 'd79ed48c-b089-43f1-9fa6-d49b7029b69e'
-    };
-    this.rooms.push(r);
-    r = {
-      cmuuid : '3cc3c738-856d-4e35-85da-0b41935aa2a5'
-    };
-    this.rooms.push(r);
+    // // some example rooms
+    // let r: Room = {
+    //   cmuuid : 'd79ed48c-b089-43f1-9fa6-d49b7029b69e'
+    // };
+    // this.rooms.push(r);
+    // r = {
+    //   cmuuid : '3cc3c738-856d-4e35-85da-0b41935aa2a5'
+    // };
+    // this.rooms.push(r);
   }
 
   public async setRooms(rooms: Room[]) {
@@ -49,6 +49,7 @@ export class RoomList extends LitElement {
   <table>
     <thead>
       <tr>
+        <th>Id</th>
         <th>Room</th>
         <th>Join</th>
       </tr>
@@ -56,8 +57,9 @@ export class RoomList extends LitElement {
     <tbody>
       ${this.rooms.map(i => html`
       <tr>
-        <td>${i.cmuuid}</td>
-        <td><button id="_room_${i.cmuuid}" @click="${() => this._roomJoined(i.cmuuid)}">Join</button></td>
+        <td>${i.id}</td>
+        <td>${i.roomId}</td>
+        <td><button id="_room_${i.roomId}" @click="${() => this._roomJoined(i.roomId)}">Join</button></td>
       </tr>
       `)}
     </tbody>
