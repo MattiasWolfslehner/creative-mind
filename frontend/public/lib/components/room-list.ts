@@ -51,6 +51,7 @@ export class RoomList extends LitElement {
       <tr>
         <th>Id</th>
         <th>Room</th>
+        <th>Type</th>
         <th>Join</th>
       </tr>
     </thead>
@@ -59,6 +60,7 @@ export class RoomList extends LitElement {
       <tr>
         <td>${i.id}</td>
         <td>${i.roomId}</td>
+        <td>${i.type}</td>
         <td><button id="_room_${i.roomId}" @click="${() => this._roomJoined(i.roomId)}">Join</button></td>
       </tr>
       `)}
