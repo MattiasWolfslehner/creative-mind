@@ -17,7 +17,6 @@ import java.util.UUID;
         }
 )
 public class User {
-
     public static final String GET_USER_BY_USER_ID = "Participation.getUserByUserId";
 
     @Id

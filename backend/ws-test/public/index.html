@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Chat</title>
+</head>
+<body>
+
+<form>
+    <label for="roomId">Enter Room ID:</label>
+    <input type="text" id="roomId" placeholder="Type room ID...">
+    <label for="userId">Enter User ID:</label>
+    <input type="text" id="userId" placeholder="Type user ID...">
+    <button type="button" id="connectToSocket">Enter</button>
+</form>
+
+<input type="text" id="messageInput" placeholder="Type your message...">
+<button id="sendButton">Send</button>
+<div id="messageDisplay"></div>
+
+<button id="close">Close Connection</button>
+
+<script>
+    let socket;
+
+    const connectToSocket = document.getElementById('connectToSocket');
+    const roomIdInput = document.getElementById('roomId');
+    const userIdInput = document.getElementById('userId');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const messageDisplay = document.getElementById('messageDisplay');
+
+    connectToSocket.addEventListener('click', () => {
+        const roomId = roomIdInput.value;
+        const userId = userIdInput.value;
+
+        socket = new WebSocket(`ws://localhost:8080/rooms/join/${roomId}/${userId}`);
+
+        socket.onopen = function (event) {
+            console.log("WebSocket connection opened:", event);
+        };
+
+        socket.onmessage = function (event) {
+            const message = event.data;
+            handleWebSocketMessage(message);
+        };
+
+        socket.onclose = function (event) {
+            console.log("WebSocket connection closed:", event);
+        };
+
+        socket.onerror = function (error) {
+            console.error("WebSocket error:", error);
+        };
+    });
+
+    function closeWebSocketConnection() {
+        if (socket) {
+            socket.close(1000, "Closed by the client");
+        }
+    }
+
+    const closeButton = document.getElementById('close');
+    closeButton.addEventListener('click', closeWebSocketConnection);
+
+    function sendMessageToServer(message) {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.send(message);
+        } else {
+            console.error('WebSocket connection is not open.');
+        }
+    }
+
+    function handleWebSocketMessage(message) {
+        console.log("Received message:", message);
+        messageDisplay.innerHTML += `<p>${message}</p>`;
+    }
+
+    sendButton.addEventListener('click', () => {
+        const message = messageInput.value.trim();
+        if (message !== '') {
+            sendMessageToServer(message);
+            messageInput.value = '';
+        }
+    });
+</script>
+
+</body>
+</html>

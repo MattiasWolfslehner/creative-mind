@@ -47,7 +47,6 @@ public abstract class Room {
         roomId = UUID.randomUUID();
     }
 
-
     public UUID getRoomId() {
         return roomId;
     }
