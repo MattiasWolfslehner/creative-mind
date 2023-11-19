@@ -1,60 +1,53 @@
-/*package com.creative_mind.repository;
+package com.creative_mind.repository;
 
-import com.creative_mind.model.Idea;
+import com.creative_mind.exception.CreativeMindException;
+import com.creative_mind.model.*;
+import com.creative_mind.model.requests.IdeaRequest;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 
 import java.util.*;
 
 @ApplicationScoped
 public class IdeaRepository {
-    private HashMap<String, LinkedList<Idea>> ideas;
+    @Inject
+    EntityManager entityManager;
 
-    public IdeaRepository() {
-        this.ideas = new HashMap<>();
+    @Transactional
+    public Idea addIdea(IdeaRequest ideaRequest){
+        UUID userId = ideaRequest.getMemberId();
+        UUID roomId = ideaRequest.getRoomId();
+
+        TypedQuery<User> userQuery = this.entityManager
+                .createNamedQuery(User.GET_USER_BY_USER_ID, User.class);
+        userQuery.setParameter("userId", userId);
+
+        TypedQuery<BrainwritingRoom> roomQuery = this.entityManager
+                .createNamedQuery(BrainwritingRoom.GET_BRAINWRITING_ROOM_BY_ROOM_ID, BrainwritingRoom.class);
+        roomQuery.setParameter("roomId", roomId);
+
+        User member = userQuery.getSingleResult();
+        BrainwritingRoom room = roomQuery.getSingleResult();
+
+        Idea idea = new Idea(ideaRequest.getContent(), room, member);
+
+        this.entityManager.persist(idea);
+
+        return idea;
     }
 
-    public Set<String> getAllUUIDS(){
-        return this.ideas.keySet();
-    }
+    public List<Idea> findByRoomId(UUID roomId){
 
-    public LinkedList<Idea> insert(String uuid, Idea idea){
+        TypedQuery<Idea> query = this.entityManager.createNamedQuery(Idea.FIND_IDEA_BY_ROOM,Idea.class);
 
-        LinkedList<Idea> ideas = this.ideas.get(uuid);
+        query.setParameter("roomId", roomId);
 
-        // sets the current idea id based on the given list size
-        this.setIdeaId(idea, ideas.isEmpty() ? 0 : ideas.getLast().getId() + 1);
-
-        ideas.add(idea);
-
-        this.ideas.put(uuid, ideas);
-
-        return this.ideas.get(uuid);
+        return query.getResultList();
     }
 
 
-    public LinkedList<Idea> overrideList(String uuid, LinkedList<Idea> ideaList){
-
-        this.ideas.put(uuid, ideaList);
-
-        return this.ideas.get(uuid);
-    }
-
-
-    public boolean register(String uuid){
-        if(this.ideas.containsKey(uuid)){
-            return false;
-        }
-        this.overrideList(uuid, new LinkedList<>());
-        return true;
-    }
-
-    public LinkedList<Idea> getIdeas(String uuid){
-        return this.ideas.get(uuid);
-    }
-
-    private void setIdeaId(Idea idea, int id){
-        idea.setId(id);
-    }
 
 }
-*/

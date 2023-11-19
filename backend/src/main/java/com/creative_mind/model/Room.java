@@ -42,6 +42,8 @@ public abstract class Room {
     @OneToMany(mappedBy = "room")
     Set<Participation> participations;
 
+    @OneToMany(mappedBy = "brainwritingRoom")
+    Set<Idea> ideas;
 
     public Room() {
         roomId = UUID.randomUUID();

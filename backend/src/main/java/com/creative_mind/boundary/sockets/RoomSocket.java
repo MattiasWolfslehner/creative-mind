@@ -1,16 +1,16 @@
 package com.creative_mind.boundary.sockets;
 
+import com.creative_mind.model.Idea;
+import com.creative_mind.model.requests.IdeaRequest;
 import com.creative_mind.model.requests.ParticipantionRequest;
+import com.creative_mind.repository.IdeaRepository;
 import com.creative_mind.repository.ParticipationRepository;
 import jakarta.inject.Inject;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,6 +19,8 @@ public class RoomSocket {
 
     @Inject
     ParticipationRepository participationRepository;
+    @Inject
+    IdeaRepository ideaRepository;
 
     private static Map<UUID, Set<Session>> roomSessions = new ConcurrentHashMap<>();
 
@@ -37,7 +39,8 @@ public class RoomSocket {
             // Store the session temporarily
             roomSessions.computeIfAbsent(parsedRoomId, k -> ConcurrentHashMap.newKeySet()).add(session);
 
-            broadcastToRoom(roomId, String.format("%s joined the room!", userId));
+            broadcastIdeasToRoom(roomId);
+
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
             return null;
@@ -61,7 +64,8 @@ public class RoomSocket {
                 return v.isEmpty() ? null : v;
             });
 
-            broadcastToRoom(roomId, String.format("%s left the room!", userId));
+            broadcastIdeasToRoom(roomId);
+
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
             return null;
@@ -69,18 +73,34 @@ public class RoomSocket {
     }
 
     @OnMessage
-    public void onMessage(String message, Session session, @PathParam("roomId") String roomId, @PathParam("userId") String userId) {
-        broadcastToRoom(roomId, String.format("%s: %s", userId, message));
+    public void onMessage(String content, Session session, @PathParam("roomId") String roomId, @PathParam("userId") String userId ) {
+
+        UUID parsedRoomId = UUID.fromString(roomId);
+        UUID parsedUserId = UUID.fromString(userId);
+
+        CompletableFuture.runAsync(() -> {
+
+            IdeaRequest ideaRequest = new IdeaRequest(content, parsedRoomId, parsedUserId);
+            ideaRepository.addIdea(ideaRequest);
+
+            broadcastIdeasToRoom(roomId);
+
+        }).exceptionally(throwable -> {
+            throwable.printStackTrace();
+            return null;
+        });
     }
 
-    private void broadcastToRoom(String roomId, String message) {
+    private void broadcastIdeasToRoom(String roomId) {
         UUID parsedRoomId = UUID.fromString(roomId);
+
+        List<Idea> ideasByRoom = this.ideaRepository.findByRoomId(parsedRoomId);
 
         // Get the sessions for the specified room
         Set<Session> sessions = roomSessions.get(parsedRoomId);
         if (sessions != null) {
             for (Session iterator : sessions) {
-                iterator.getAsyncRemote().sendText(message, result -> {
+                iterator.getAsyncRemote().sendObject(ideasByRoom, result -> {
                     if (result.getException() != null) {
                         System.out.println("Unable to send message: " + result.getException());
                     }

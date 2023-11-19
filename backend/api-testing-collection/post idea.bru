@@ -5,13 +5,15 @@ meta {
 }
 
 post {
-  url: http://localhost:8080/api/ideas/{user-id}
+  url: http://localhost:8080/api/ideas/
   body: json
   auth: none
 }
 
 body:json {
   {
-    "content": "test"
+    "content": "test",
+    "roomId": "bc001b6e-9f7d-4830-ae0c-4ef6e925d608",
+    "memberId": "ba7683be-983e-48c8-840e-c8e6bb5beffb"
   }
 }

@@ -18,7 +18,6 @@ public class RoomRepository {
 
     @Transactional
     public Room createRoom(Room room){
-
         try{
             this.entityManager.persist(room);
             return room;

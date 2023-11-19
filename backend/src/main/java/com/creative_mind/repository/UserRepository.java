@@ -32,7 +32,6 @@ public class UserRepository {
             throw new CreativeMindException("Could not create user!", e);
         }
     }
-
     public User getUserByUUID(UUID uuid){
         try{
             TypedQuery<User> userQuery = this.entityManager
