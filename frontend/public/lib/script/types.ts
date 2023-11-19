@@ -4,7 +4,8 @@ interface Idea {
 }
 
 interface Room {
-  cmuuid: string;
+  id: number;
+  roomId: string;
 }
 
 interface User {
