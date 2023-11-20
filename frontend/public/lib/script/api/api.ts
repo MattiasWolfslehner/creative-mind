@@ -59,9 +59,13 @@ async function getUsers(): Promise<User[]> {
 }
 
 async function addUser() {
-   axios.post(`http://localhost:${restPort}/api/users/register`,{
-
-   })
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        }
+    }
+   axios.post(`http://localhost:${restPort}/api/users/register`,config)
    .then(function (response){
     console.log(response);
     return response.data;
@@ -70,6 +74,7 @@ async function addUser() {
     console.log(error);
    });
 }
+
 
 export{getRooms};
 export{addRoom};
