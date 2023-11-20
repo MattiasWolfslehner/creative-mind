@@ -23,7 +23,7 @@ async function getRooms(): Promise<Room[]> {
 
 async function addRoom(roomType: String) {
     try{
-        const response = await axios.post(`http://localhost:${restPort}/api/rooms/create`,roomType)
+        axios.post(`http://localhost:${restPort}/api/rooms/create`,roomType)
         .then(function (response){
             console.log("room added successfully: "+ response);
             return response.data;
@@ -86,7 +86,7 @@ async function addIdea(content: String, roomId: String, memberId: String) {
         "memberId": memberId
     }
     try {
-        const response = await axios.post(`http://localhost:${restPort}/api/ideas/`,data,config)
+        await axios.post(`http://localhost:${restPort}/api/ideas/`,data,config)
     } catch (error) {
         console.log(error);
         throw error;        
