@@ -2,12 +2,14 @@ package com.creative_mind.repository;
 
 import com.creative_mind.exception.CreativeMindException;
 import com.creative_mind.model.Room;
+import com.creative_mind.services.IdeaCsvService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,6 +17,10 @@ import java.util.UUID;
 public class RoomRepository {
     @Inject
     EntityManager entityManager;
+    @Inject
+    IdeaCsvService ideaCsvService;
+    @Inject
+    IdeaRepository ideaRepository;
 
     @Transactional
     public Room createRoom(Room room){
@@ -42,4 +48,10 @@ public class RoomRepository {
         }
     }
 
+    public byte[] getRoomIdeasAsCSV(UUID roomId) {
+        return this.ideaCsvService
+                .setCsvFilePath(UUID.randomUUID().toString())
+                .createCSVFile(new LinkedList<>(this.ideaRepository.findByRoomId(roomId)))
+                .getCsvFileBytes();
+    }
 }
