@@ -119,6 +119,7 @@ loginForm.addEventListener('submit', function (event) {
                     createRoomButton.classList.remove("hidden");
                     ideaForm2.classList.remove("hidden");
                     getRooms();
+                    getIdeas();
                     // now user logged in can create rooms
                     return;
                 }
@@ -142,6 +143,7 @@ registerButton.addEventListener('click', function (event) {
     const action = `http://localhost:${restPort}/api/users/register`;
     //console.log(userInput);
     userInput.value = "Try register";
+    userId = null;
 
     fetch(action, {
         headers: {
