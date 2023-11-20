@@ -7,14 +7,12 @@ import '../script/types';
 import '../style/main.css';
 import '../style/style.scss';
 
-
 @customElement('room-chat')
 export class RoomChat extends LitElement {
-
   @property() messages: string;
 
-  protected roomId: string|null = null;
-  protected userId: string|null = null;
+  protected roomId: string | null = null;
+  protected userId: string | null = null;
   protected socket: WebSocket | null = null;
 
   private returnString() {
@@ -32,20 +30,20 @@ export class RoomChat extends LitElement {
     event.preventDefault();
     const message: string = event.data;
     let oldMessages = this.messages;
-    console.log("Received message:", message);
+    console.log('Received message:', message);
     this.messages = oldMessages + `<p>${message}</p>`;
   }
 
-  constructor () {
+  constructor() {
     super();
-    this.messages = "";
+    this.messages = '';
   }
 
-  public async setUserAndRoom(roomId:string, userId:string) {
+  public async setUserAndRoom(roomId: string, userId: string) {
     // Set a property, triggering an update
     this.roomId = roomId;
     this.userId = userId;
-    this.messages = "";
+    this.messages = '';
 
     let xx: RoomChat = this; // not to be mistaken with websocket inside
 
@@ -54,24 +52,26 @@ export class RoomChat extends LitElement {
       this.socket.close();
     }
 
-    this.socket = new WebSocket(`ws://localhost:8080/rooms/join/${roomId}/${userId}`);
+    this.socket = new WebSocket(
+      `ws://localhost:8080/rooms/join/${roomId}/${userId}`,
+    );
 
     this.socket.onopen = function (event: Event) {
       event.preventDefault();
-      console.log("WebSocket connection opened:", event);
+      console.log('WebSocket connection opened:', event);
     };
-    this.socket.onmessage = function(ev:MessageEvent) {
+    this.socket.onmessage = function (ev: MessageEvent) {
       xx._handleWebSocketMessage(ev);
-    }
-
-    this.socket.onclose = function (event:Event) {
-      event.preventDefault();
-      console.log("WebSocket connection closed:", event);
     };
 
-    this.socket.onerror = function (error:Event) {
+    this.socket.onclose = function (event: Event) {
+      event.preventDefault();
+      console.log('WebSocket connection closed:', event);
+    };
+
+    this.socket.onerror = function (error: Event) {
       error.preventDefault();
-      console.error("WebSocket error:", error);
+      console.error('WebSocket error:', error);
     };
 
     // ...do other stuff...
@@ -80,18 +80,19 @@ export class RoomChat extends LitElement {
 
   // dispatch the received button click as a "join-the-room" event
   private async _sendMessage() {
-    var message: string = "";
+    var message: string = '';
     if (this.shadowRoot) {
-      const ttt = this.shadowRoot.getElementById("message-text") as HTMLInputElement;
+      const ttt = this.shadowRoot.getElementById(
+        'message-text',
+      ) as HTMLInputElement;
       message = ttt.value.trim();
-      ttt.value = ""; // reset input
+      ttt.value = ''; // reset input
     }
     if (message.length > 0) {
       this.sendMessageToServer(message);
       // and delete message from input
-    }
-    else {
-      console.log("nothing to send! ..." + message);
+    } else {
+      console.log('nothing to send! ...' + message);
       //this.sendMessageToServer("nothing to send!"); // fake message for test
     }
   }
@@ -106,17 +107,20 @@ export class RoomChat extends LitElement {
   override render() {
     // keep for later:  <!--onkeydown="${(event:KeyboardEvent) => this._keydown(event)}" -->
     return html`
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <div>
-    <h2>Chat</h2>
-    <p>${this.returnString()}</p>
-    <input id="message-text" type="text" >
-    <button id="send-message" @click="${() => this._sendMessage()}">Send</button>
-  </div>
-  `;
-
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <div>
+        <h2>Chat</h2>
+        <p>${this.returnString()}</p>
+        <input id="message-text" type="text" />
+        <button id="send-message" @click="${() => this._sendMessage()}">
+          Send
+        </button>
+      </div>
+    `;
   }
 }
-
-

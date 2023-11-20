@@ -32,7 +32,8 @@ body {
     bottom: 5%;
     right: 5%;
 
-    #copy-uuid-button, #copy-room-id-button {
+    #copy-uuid-button,
+    #copy-room-id-button {
       background-color: var(--background-color);
       color: #fff;
       border: none;
@@ -47,7 +48,8 @@ body {
       }
     }
 
-    #cm-uuid, #room-id {
+    #cm-uuid,
+    #room-id {
       display: none;
       position: fixed;
       bottom: 7%;
