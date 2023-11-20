@@ -20,14 +20,12 @@ public class ParticipationRepository {
     @Inject
     EntityManager entityManager;
 
-    public List<Participation> getAllParticipation()
-    {
+    public List<Participation> getAllParticipation() {
         return this.entityManager.createNamedQuery(Participation.QUERY_FIND_ALL, Participation.class).getResultList();
     }
 
     @Transactional
-    public void addParticipation(ParticipantionRequest participationRequest)
-    {
+    public void addParticipation(ParticipantionRequest participationRequest) {
         UUID userId = participationRequest.getMemberId();
         UUID roomId = participationRequest.getRoomId();
 
@@ -44,17 +42,15 @@ public class ParticipationRepository {
 
         Participation participation = new Participation(room, member);
 
-        if(!this.isUserInRoom(member.getId(), room.getId()))
-        {
+        if (!this.isUserInRoom(member.getId(), room.getId())) {
             this.entityManager.persist(participation);
-        }else{
-            throw new CreativeMindException(String.format("User[%s] is already in Room[%s]!",userId, roomId));
+        } else {
+            throw new CreativeMindException(String.format("User[%s] is already in Room[%s]!", userId, roomId));
         }
     }
 
     @Transactional
-    public void removeParticipation(ParticipantionRequest participationRequest)
-    {
+    public void removeParticipation(ParticipantionRequest participationRequest) {
         UUID userId = participationRequest.getMemberId();
         UUID roomId = participationRequest.getRoomId();
 
@@ -71,8 +67,7 @@ public class ParticipationRepository {
 
         Participation participation = new Participation(room, member);
 
-        if(this.isUserInRoom(member.getId(), room.getId()))
-        {
+        if (this.isUserInRoom(member.getId(), room.getId())) {
             Query participationQuery = this.entityManager
                     .createNamedQuery(Participation.DELETE_PARTICIPATION);
 
@@ -81,8 +76,8 @@ public class ParticipationRepository {
 
             int isSuccess = participationQuery.executeUpdate();
 
-        }else{
-            throw new CreativeMindException(String.format("User[%s] is not in Room[%s]!",userId, roomId));
+        } else {
+            throw new CreativeMindException(String.format("User[%s] is not in Room[%s]!", userId, roomId));
         }
     }
 

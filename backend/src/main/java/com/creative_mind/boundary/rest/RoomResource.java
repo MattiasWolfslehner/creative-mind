@@ -9,6 +9,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.hibernate.Incubating;
 
+import java.util.UUID;
+
 @Path("/api/rooms")
 public class RoomResource {
     @Inject
@@ -23,7 +25,6 @@ public class RoomResource {
         return Response.ok(roomRepository.getAllRooms()).build();
     }
 
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -33,5 +34,17 @@ public class RoomResource {
         Room createdRoom = this.roomRepository.createRoom(room);
 
         return Response.ok(createdRoom).build();
+    }
+
+    @GET
+    @Path("{room_id}/download/csv")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response downloadCSV(@PathParam("room_id") UUID roomId) {
+        byte[] fileBytes = this.roomRepository.getRoomIdeasAsCSV(roomId);
+        String contentDisposition = "attachment; filename=\"room-ideas-download-" + roomId + ".csv\"";
+
+        return Response.ok(fileBytes, MediaType.APPLICATION_OCTET_STREAM)
+                .header("Content-Disposition", contentDisposition)
+                .build();
     }
 }

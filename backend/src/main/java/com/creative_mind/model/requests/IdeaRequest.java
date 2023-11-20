@@ -7,30 +7,6 @@ public class IdeaRequest {
     private UUID roomId;
     private UUID memberId;
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public UUID getRoomId() {
-        return roomId;
-    }
-
-    public UUID getMemberId() {
-        return memberId;
-    }
-
-    public void setRoomId(UUID roomId) {
-        this.roomId = roomId;
-    }
-
-    public void setMemberId(UUID memberId) {
-        this.memberId = memberId;
-    }
-
     public IdeaRequest() {
     }
 
@@ -45,7 +21,29 @@ public class IdeaRequest {
         this.memberId = memberId;
     }
 
+    public String getContent() {
+        return content;
+    }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public UUID getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(UUID roomId) {
+        this.roomId = roomId;
+    }
+
+    public UUID getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(UUID memberId) {
+        this.memberId = memberId;
+    }
 
 
 }

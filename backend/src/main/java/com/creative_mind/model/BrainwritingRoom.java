@@ -23,7 +23,7 @@ public class BrainwritingRoom extends Room {
     private Set<Idea> ideas;
 
 
-    public BrainwritingRoom(){
+    public BrainwritingRoom() {
         super();
     }
 }

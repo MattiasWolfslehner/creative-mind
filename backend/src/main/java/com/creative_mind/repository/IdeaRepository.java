@@ -1,7 +1,8 @@
 package com.creative_mind.repository;
 
-import com.creative_mind.exception.CreativeMindException;
-import com.creative_mind.model.*;
+import com.creative_mind.model.BrainwritingRoom;
+import com.creative_mind.model.Idea;
+import com.creative_mind.model.User;
 import com.creative_mind.model.requests.IdeaRequest;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -9,7 +10,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 @ApplicationScoped
 public class IdeaRepository {
@@ -17,7 +19,7 @@ public class IdeaRepository {
     EntityManager entityManager;
 
     @Transactional
-    public Idea addIdea(IdeaRequest ideaRequest){
+    public Idea addIdea(IdeaRequest ideaRequest) {
         UUID userId = ideaRequest.getMemberId();
         UUID roomId = ideaRequest.getRoomId();
 
@@ -39,15 +41,12 @@ public class IdeaRepository {
         return idea;
     }
 
-    public List<Idea> findByRoomId(UUID roomId){
+    public List<Idea> findByRoomId(UUID roomId) {
 
-        TypedQuery<Idea> query = this.entityManager.createNamedQuery(Idea.FIND_IDEA_BY_ROOM,Idea.class);
+        TypedQuery<Idea> query = this.entityManager.createNamedQuery(Idea.FIND_IDEA_BY_ROOM, Idea.class);
 
         query.setParameter("roomId", roomId);
 
         return query.getResultList();
     }
-
-
-
 }

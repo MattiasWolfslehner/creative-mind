@@ -30,5 +30,4 @@ public class UserResource {
 
         return Response.ok(addedUser).build();
     }
-
 }
