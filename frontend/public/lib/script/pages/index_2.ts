@@ -90,6 +90,7 @@ async function updateUI() {
 // der LOGIN für einen USER
 loginForm.addEventListener('submit', function (event) {
   event.preventDefault();// prevent POSTback
+  event.stopImmediatePropagation();
   //console.log(event);
 
   const action = `http://localhost:${restPort}/api/users/list`;
@@ -228,6 +229,7 @@ ideaForm2.addEventListener('submit', function (event) {
   }
   else {
     console.log("no ROOM! in submit Idea");
+    alert("Please join a room first!");
     getIdeas();
   }
 });
