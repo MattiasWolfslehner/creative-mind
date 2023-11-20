@@ -21,14 +21,11 @@ async function getRooms(): Promise<Room[]> {
     }
 }
 
-async function addRoom() {
+async function addRoom(roomType: String) {
     try{
-        const response = await axios.post(`http://localhost:${restPort}/api/rooms/create`,{
-            //make type dynamic when there is more than one type
-            "type": "brainwritingroom"
-        })
+        const response = await axios.post(`http://localhost:${restPort}/api/rooms/create`,roomType)
         .then(function (response){
-            console.log(response);
+            console.log("room added successfully: "+ response);
             return response.data;
         })
         .catch(function (error){
