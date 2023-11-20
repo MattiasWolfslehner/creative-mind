@@ -7,6 +7,7 @@ import {RoomList} from '../../components/room-list';
 
 import { localStorageAction } from '../actions/store';
 import {RoomChat} from "../../components/room-chat";
+import { User } from '../types';
 
 const loginForm = document.getElementById('login-form') as HTMLFormElement;
 const userInput = document.getElementById('user-input') as HTMLInputElement;
