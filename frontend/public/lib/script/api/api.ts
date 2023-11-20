@@ -1,6 +1,6 @@
 // TODO: put api logic here
 import axios from "axios";
-import { Room, User } from "../types";
+import { Idea, Room, User } from "../types";
 
 const restPort = 8080;
 
@@ -93,9 +93,28 @@ async function addIdea(content: String, roomId: String, memberId: String) {
     }
 }
 
+async function getIdeas(): Promise<Idea[]> {
+    const config = {
+        headers: {
+            Accept: 'application/json'
+        }  
+    }
+
+    try {
+        const response = await axios.get(`http://localhost:${restPort}/api/ideas/`,config);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    } 
+}
+
+
 
 export{getRooms};
 export{addRoom};
 export{addUser};
 export{getUsers};
 export{addIdea};
+export{getIdeas};
