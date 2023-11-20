@@ -1,15 +1,15 @@
-interface Idea {
+export interface Idea {
   id: number;
   content: string;
 }
 
-interface Room {
+export interface Room {
   id: number;
   roomId: string;
   type: string;
 }
 
-interface User {
+export interface User {
   id: number;
   userId: string;
 }
