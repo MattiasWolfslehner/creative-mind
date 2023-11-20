@@ -49,6 +49,10 @@ export class RoomChat extends LitElement {
 
     let xx: RoomChat = this; // not to be mistaken with websocket inside
 
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.close();
+    }
+
     this.socket = new WebSocket(`ws://localhost:8080/rooms/join/${roomId}/${userId}`);
 
     this.socket.onopen = function (event: Event) {
