@@ -18,18 +18,16 @@ import java.util.UUID;
 )
 public class User {
     public static final String GET_USER_BY_USER_ID = "Participation.getUserByUserId";
-
+    @OneToMany(mappedBy = "member")
+    Set<Participation> participations;
+    @OneToMany(mappedBy = "member")
+    Set<Idea> ideas;
     @Id
     @GeneratedValue
     private Integer id;
     private UUID userId;
     @Transient
     private Session session;
-    @OneToMany(mappedBy = "member")
-    Set<Participation> participations;
-
-    @OneToMany(mappedBy = "member")
-    Set<Idea> ideas;
 
 
     public User() {
@@ -47,7 +45,4 @@ public class User {
     public void setSession(Session session) {
         this.session = session;
     }
-
-
-
 }

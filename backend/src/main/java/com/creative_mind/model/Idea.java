@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = Idea.FIND_IDEA_BY_ROOM, query="select i from Idea i where i.brainwritingRoom.roomId = :roomId")
+        @NamedQuery(name = Idea.FIND_IDEA_BY_ROOM, query = "select i from Idea i where i.brainwritingRoom.roomId = :roomId")
 })
 public class Idea {
 
@@ -14,7 +14,7 @@ public class Idea {
     @GeneratedValue
     private int id;
 
-    @Column(name="content")
+    @Column(name = "content")
     private String content;
 
     @ManyToOne
@@ -42,5 +42,4 @@ public class Idea {
     public String getContent() {
         return content;
     }
-
 }
