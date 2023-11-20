@@ -5,6 +5,7 @@ import {customElement} from 'lit/decorators.js';
 import '../script/types';
 import '../style/main.css';
 import '../style/style.scss';
+import { Idea } from '../script/types';
 
 @customElement('idea-list')
 export class IdeaList extends LitElement {
