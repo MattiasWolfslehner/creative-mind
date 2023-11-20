@@ -49,6 +49,7 @@ export class RoomChat extends LitElement {
 
     let xx: RoomChat = this; // not to be mistaken with websocket inside
 
+    // baba.
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.close();
     }
