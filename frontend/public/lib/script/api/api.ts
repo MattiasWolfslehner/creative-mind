@@ -2,6 +2,8 @@
 import axios from "axios";
 import { User } from "../types";
 
+const restPort = 8080;
+
 async function getUsers(): Promise<User[]> {
     const config = {
         headers: {
@@ -10,7 +12,7 @@ async function getUsers(): Promise<User[]> {
     }
 
     try {
-        const response = await axios.get('http://localhost:8080/api/users/list',config);
+        const response = await axios.get(`http://localhost:${restPort}/api/users/list`,config);
         console.log(response.data);
         return response.data;
     } catch (error) {
@@ -19,4 +21,19 @@ async function getUsers(): Promise<User[]> {
     } 
 }
 
+async function addUser() {
+   axios.post(`http://localhost:${restPort}/api/users/register`,{
 
+   })
+   .then(function (response){
+    console.log(response);
+    return response.data;
+   })
+   .catch(function (error){
+    console.log(error);
+   });
+}
+
+
+export{addUser};
+export{getUsers};
