@@ -21,6 +21,26 @@ async function getRooms(): Promise<Room[]> {
     }
 }
 
+async function addRoom() {
+    try{
+        const response = await axios.post(`http://localhost:${restPort}/api/rooms/create`,{
+            //make type dynamic when there is more than one type
+            "type": "brainwritingroom"
+        })
+        .then(function (response){
+            console.log(response);
+            return response.data;
+        })
+        .catch(function (error){
+            console.log(error);
+            
+        })
+    }catch(error){
+        console.log(error);
+        throw error;    
+    }
+}
+
 async function getUsers(): Promise<User[]> {
     const config = {
         headers: {
@@ -52,5 +72,6 @@ async function addUser() {
 }
 
 export{getRooms};
+export{addRoom};
 export{addUser};
 export{getUsers};
