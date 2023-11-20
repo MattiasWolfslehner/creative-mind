@@ -8,7 +8,12 @@ Christoph Ursprung
 :experimental:
 
 === Link zum Wireframe
-
 https://www.figma.com/file/dM3qG2VB9eYjCiUFSOzOit/Creative-Minds---Wireframe?type=design&node-id=0%3A1&mode=design&t=TQcbbbunzxwIeFKL-1[Wireframe]
 
+=== Wireframes als PNG
+
+Homepage (Create/Join Room)
+image:./img/Wireframe_Home.png[]
+
+6-3-5 Methode (Brainwriting)
 image:./img/Wireframe_Brainwriting.png[]
