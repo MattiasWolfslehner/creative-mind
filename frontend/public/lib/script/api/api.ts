@@ -72,8 +72,30 @@ async function addUser() {
    });
 }
 
+async function addIdea(content: String, roomId: String, memberId: String) {
+    const config = {
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        }
+    }
+
+    const data = {
+        "content": content,
+        "roomId": roomId,
+        "memberId": memberId
+    }
+    try {
+        const response = await axios.post(`http://localhost:${restPort}/api/ideas/`,data,config)
+    } catch (error) {
+        console.log(error);
+        throw error;        
+    }
+}
+
 
 export{getRooms};
 export{addRoom};
 export{addUser};
 export{getUsers};
+export{addIdea};
