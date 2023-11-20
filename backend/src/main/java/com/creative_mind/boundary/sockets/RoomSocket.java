@@ -7,24 +7,25 @@ import com.creative_mind.repository.IdeaRepository;
 import com.creative_mind.repository.ParticipationRepository;
 import jakarta.enterprise.context.control.ActivateRequestContext;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint("/rooms/join/{roomId}/{userId}")
 public class RoomSocket {
 
+    private static final Map<UUID, Set<Session>> roomSessions = new ConcurrentHashMap<>();
     @Inject
     ParticipationRepository participationRepository;
     @Inject
     IdeaRepository ideaRepository;
-
-    private static Map<UUID, Set<Session>> roomSessions = new ConcurrentHashMap<>();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("userId") String userId) {
@@ -129,7 +130,4 @@ public class RoomSocket {
             }
         }
     }
-
-
-
 }

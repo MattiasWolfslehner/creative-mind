@@ -8,6 +8,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.hibernate.Incubating;
+
 import java.util.UUID;
 
 @Path("/api/rooms")
@@ -23,7 +24,6 @@ public class RoomResource {
     public Response listRooms() {
         return Response.ok(roomRepository.getAllRooms()).build();
     }
-
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)

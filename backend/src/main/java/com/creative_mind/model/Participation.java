@@ -45,15 +45,19 @@ public class Participation {
     public Integer getId() {
         return id;
     }
+
     public Room getRoom() {
         return room;
     }
-    public User getMember() {
-        return member;
-    }
+
     private void setRoom(Room room) {
         this.room = room;
     }
+
+    public User getMember() {
+        return member;
+    }
+
     private void setMember(User member) {
         this.member = member;
     }

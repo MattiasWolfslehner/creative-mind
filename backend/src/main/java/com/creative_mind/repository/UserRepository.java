@@ -23,26 +23,26 @@ public class UserRepository {
                 .getResultList();
         return users;
     }
+
     @Transactional
-    public User createUser(User user){
-        try{
+    public User createUser(User user) {
+        try {
             entityManager.persist(user);
             return user;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CreativeMindException("Could not create user!", e);
         }
     }
-    public User getUserByUUID(UUID uuid){
-        try{
+
+    public User getUserByUUID(UUID uuid) {
+        try {
             TypedQuery<User> userQuery = this.entityManager
                     .createNamedQuery(User.GET_USER_BY_USER_ID, User.class);
             userQuery.setParameter("userId", uuid);
 
             return userQuery.getSingleResult();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CreativeMindException(String.format("Could not get user[%s]", uuid.toString()), e);
         }
     }
-
-
 }
