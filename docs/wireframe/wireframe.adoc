@@ -1,0 +1,14 @@
+= Creative-Mind Wireframe
+Christoph Ursprung
+1.0.0, {docdate}
+//:toc-placement!:  // prevents the generation of the doc at this position, so it can be printed afterwards
+:icons: font
+:sectnums:
+:toc: left
+:experimental:
+
+=== Link zum Wireframe
+
+https://www.figma.com/file/dM3qG2VB9eYjCiUFSOzOit/Creative-Minds---Wireframe?type=design&node-id=0%3A1&mode=design&t=TQcbbbunzxwIeFKL-1[Wireframe]
+
+image:./img/Wireframe_Brainwriting.png[]
