@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint("/rooms/join/{roomId}/{userId}")
-public class RoomSocket {
+public class BrainwritingRoomSocket {
 
     private static final Map<UUID, Set<Session>> roomSessions = new ConcurrentHashMap<>();
     @Inject
