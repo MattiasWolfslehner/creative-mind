@@ -110,8 +110,6 @@ async function getIdeas(): Promise<Idea[]> {
     } 
 }
 
-
-
 export{getRooms};
 export{addRoom};
 export{addUser};
