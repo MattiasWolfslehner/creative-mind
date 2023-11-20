@@ -124,7 +124,7 @@ loginForm.addEventListener('submit', function (event) {
                 }
             }
             userId = null;
-            console.log("user not found");
+            alert("User not found. Please try different User Id.");
         })
         .catch((error) => {
             console.log(error);
