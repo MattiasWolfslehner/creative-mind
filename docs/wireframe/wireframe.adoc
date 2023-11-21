@@ -18,6 +18,9 @@ image:./img/Wireframe_Home.png[]
 6-3-5 Methode bevor Start des Timers als Room Admin (Brainwriting)
 image:./img/Wireframe_Brainwriting_BeforeStartingTheTimerAsTheRoomAdmin.png[]
 
+6-3-5 Methode währrend man als Member wartet (Brainwriting)
+image:./img/Wireframe_Brainwriting_BeforeTheRoomAdminStartsTheTimer.png[]
+
 6-3-5 Methode nach Start des Timers (Brainwriting)
 image:./img/Wireframe_Brainwriting_StartOfTimer.png[]
 
