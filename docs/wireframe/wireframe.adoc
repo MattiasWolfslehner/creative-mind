@@ -15,5 +15,8 @@ https://www.figma.com/file/dM3qG2VB9eYjCiUFSOzOit/Creative-Minds---Wireframe?typ
 Homepage (Create/Join Room)
 image:./img/Wireframe_Home.png[]
 
+6-3-5 Methode nach Start des Timers (Brainwriting)
+image:./img/Wireframe_Brainwriting_StartOfTimer.png[]
+
 6-3-5 Methode (Brainwriting)
 image:./img/Wireframe_Brainwriting.png[]
