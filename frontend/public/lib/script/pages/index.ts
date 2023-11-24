@@ -1,6 +1,6 @@
 // import '../../style/main.css';
 // import '../../style/style.scss';
-// import '../types';
+// import { Idea } from '../types';
 //
 // import {localStorageAction} from '../actions/store';
 //
