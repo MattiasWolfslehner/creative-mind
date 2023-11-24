@@ -1,5 +1,6 @@
 package com.creative_mind.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.websocket.Session;
 
@@ -22,6 +23,7 @@ public class User {
     Set<Participation> participations;
     @OneToMany(mappedBy = "member")
     Set<Idea> ideas;
+    @JsonIgnore
     @Id
     @GeneratedValue
     private Integer id;

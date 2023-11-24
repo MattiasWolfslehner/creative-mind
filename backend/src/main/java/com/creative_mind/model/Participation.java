@@ -1,5 +1,6 @@
 package com.creative_mind.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -20,6 +21,7 @@ public class Participation {
     public static final String DELETE_PARTICIPATION = "Participation.deleteParticipation";
     public static final String QUERY_FIND_ALL = "Grade.findAll";
 
+    @JsonIgnore
     @Id
     @GeneratedValue
     private Integer id;

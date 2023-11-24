@@ -75,7 +75,6 @@ public class ParticipationRepository {
             participationQuery.setParameter("userId", participation.getMember().getUserId());
 
             int isSuccess = participationQuery.executeUpdate();
-
         } else {
             throw new CreativeMindException(String.format("User[%s] is not in Room[%s]!", userId, roomId));
         }

@@ -1,5 +1,6 @@
 package com.creative_mind.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
@@ -36,6 +37,7 @@ public abstract class Room {
     Set<Participation> participations;
     @OneToMany(mappedBy = "brainwritingRoom")
     Set<Idea> ideas;
+    @JsonIgnore
     @Id
     @GeneratedValue
     private Integer id;

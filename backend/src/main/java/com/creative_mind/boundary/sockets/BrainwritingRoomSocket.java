@@ -74,47 +74,6 @@ public class BrainwritingRoomSocket {
         });
     }
 
-    @OnMessage
-    @ActivateRequestContext
-    public void onMessage(String content, Session session, @PathParam("roomId") String roomId, @PathParam("userId") String userId) {
-
-        UUID parsedRoomId = UUID.fromString(roomId);
-        UUID parsedUserId = UUID.fromString(userId);
-
-        IdeaRequest ideaRequest = new IdeaRequest(content, parsedRoomId, parsedUserId);
-
-        CompletableFuture.runAsync(() -> {
-
-            ideaRepository.addIdea(ideaRequest);
-
-            broadcastIdeasToRoom(roomId);
-
-
-        }).exceptionally(throwable -> {
-            throwable.printStackTrace();
-            return null;
-        });
-
-    }
-
-    private void broadcastIdeasToRoom(String roomId) {
-        UUID parsedRoomId = UUID.fromString(roomId);
-
-        List<Idea> ideasByRoom = this.ideaRepository.findByRoomId(parsedRoomId);
-
-        // Get the sessions for the specified room
-        Set<Session> sessions = roomSessions.get(parsedRoomId);
-        if (sessions != null) {
-            for (Session iterator : sessions) {
-                iterator.getAsyncRemote().sendObject(ideasByRoom, result -> {
-                    if (result.getException() != null) {
-                        System.out.println("Unable to send message: " + result.getException());
-                    }
-                });
-            }
-        }
-    }
-
     private void broadcastMessage(String roomId, String message) {
         UUID parsedRoomId = UUID.fromString(roomId);
 

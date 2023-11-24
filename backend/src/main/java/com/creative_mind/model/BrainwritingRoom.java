@@ -19,6 +19,8 @@ public class BrainwritingRoom extends Room {
     public static final String GET_BRAINWRITING_ROOM_BY_ROOM_ID = "Participation.getBrainWritingRoomByRoomId";
     private static final String ROOM_TYPE = String.valueOf(RoomType.BRAINWRITING);
 
+    private static final Integer roomSize = 6;
+
     @OneToMany(mappedBy = "brainwritingRoom")
     private Set<Idea> ideas;
 
