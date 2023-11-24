@@ -83,7 +83,6 @@ public class ParticipationRepository {
             participationQuery.setParameter("userId", participation.getMember().getUserId());
             participationQuery.setParameter("sessionId", participation.getSessionId());
 
-
             int isSuccess = participationQuery.executeUpdate();
 
            this.removeSessionFromRoom(roomId, sessionId);
