@@ -22,6 +22,7 @@ public class RoomRepository {
     @Inject
     IdeaRepository ideaRepository;
 
+
     @Transactional
     public Room createRoom(Room room) {
         try {

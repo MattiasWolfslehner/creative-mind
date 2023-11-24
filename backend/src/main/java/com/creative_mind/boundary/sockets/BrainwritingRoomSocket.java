@@ -34,12 +34,10 @@ public class BrainwritingRoomSocket {
 
         ParticipantionRequest participantionRequest = new ParticipantionRequest(parsedRoomId, parsedUserId);
 
-        // Offload the blocking operation to a separate thread
         CompletableFuture.runAsync(() -> {
-            // Keep track of the rooms in the database
+
             participationRepository.addParticipation(participantionRequest);
 
-            // Store the session temporarily
             roomSessions.computeIfAbsent(parsedRoomId, k -> ConcurrentHashMap.newKeySet()).add(session);
 
             broadcastMessage(roomId, String.format("%s joined the Room!", userId));
@@ -57,11 +55,9 @@ public class BrainwritingRoomSocket {
 
         ParticipantionRequest participantionRequest = new ParticipantionRequest(parsedRoomId, parsedUserId);
 
-        // Offload the blocking operation to a separate thread
         CompletableFuture.runAsync(() -> {
             participationRepository.removeParticipation(participantionRequest);
 
-            // Remove the session from the roomSessions map
             roomSessions.computeIfPresent(parsedRoomId, (k, v) -> {
                 v.remove(session);
                 return v.isEmpty() ? null : v;
@@ -77,7 +73,6 @@ public class BrainwritingRoomSocket {
     private void broadcastMessage(String roomId, String message) {
         UUID parsedRoomId = UUID.fromString(roomId);
 
-        // Get the sessions for the specified room
         Set<Session> sessions = roomSessions.get(parsedRoomId);
         if (sessions != null) {
             for (Session iterator : sessions) {

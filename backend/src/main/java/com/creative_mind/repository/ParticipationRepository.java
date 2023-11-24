@@ -20,6 +20,7 @@ public class ParticipationRepository {
     @Inject
     EntityManager entityManager;
 
+
     public List<Participation> getAllParticipation() {
         return this.entityManager.createNamedQuery(Participation.QUERY_FIND_ALL, Participation.class).getResultList();
     }

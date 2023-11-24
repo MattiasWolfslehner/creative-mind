@@ -41,7 +41,6 @@ public class Participation {
     }
 
     public Participation() {
-
     }
 
     public Integer getId() {
