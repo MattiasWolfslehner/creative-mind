@@ -1,6 +1,7 @@
 package com.creative_mind.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,7 +14,7 @@ import jakarta.persistence.*;
         ),
         @NamedQuery(
                 name = Participation.DELETE_PARTICIPATION,
-                query = "delete from Participation p where p.member.userId = :userId and p.room.roomId = :roomId"
+                query = "delete from Participation p where p.member.userId = :userId and p.room.roomId = :roomId and p.sessionId = :sessionId"
         )
 })
 public class Participation {
@@ -35,9 +36,16 @@ public class Participation {
     // name must be the same mappedBy = "member" => Member member
     private User member;
 
+    private String sessionId;
+
     public Participation(Room room, User user) {
         this.setRoom(room);
         this.setMember(user);
+    }
+    public Participation(Room room, User user, String sessionId) {
+        this.setRoom(room);
+        this.setMember(user);
+        this.sessionId = sessionId;
     }
 
     public Participation() {
@@ -57,6 +65,10 @@ public class Participation {
 
     public User getMember() {
         return member;
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 
     private void setMember(User member) {

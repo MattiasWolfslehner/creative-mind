@@ -1,6 +1,7 @@
 package com.creative_mind.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.websocket.Session;
 
@@ -28,10 +29,6 @@ public class User {
     @GeneratedValue
     private Integer id;
     private UUID userId;
-    @Transient
-    private Session session;
-
-
     public User() {
         this.userId = UUID.randomUUID();
     }
@@ -44,7 +41,4 @@ public class User {
         return id;
     }
 
-    public void setSession(Session session) {
-        this.session = session;
-    }
 }
