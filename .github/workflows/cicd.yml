@@ -1,0 +1,72 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16
+
+      - name: Initialize Frontend
+        run: npm ci
+        working-directory: frontend
+
+      - name: Format/Lint Frontend
+        run: |
+          npm run format
+          npm run lint
+        working-directory: frontend
+
+      - name: Build Frontend
+        run: npm run build
+        working-directory: frontend
+
+      - name: Archive Frontend
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend
+          path: frontend/dist
+
+      - name: Setup Java environment
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Build Backend
+        run: |
+          cd backend
+          ./mvnw package -Dnative -Dquarkus.native.container-build=true
+
+      - name: Archive Backend
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend
+          path: backend/target
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Oracle Cloud
+        run: |
+          echo "Deployment step is not implemented yet!"
+
+        # TODO
+        # https://github.com/marketplace/actions/run-an-oracle-cloud-infrastructure-oci-cli-command
+        # https://github.com/marketplace/actions/get-or-create-an-oracle-cloud-infrastructure-registry-ocir-repository
