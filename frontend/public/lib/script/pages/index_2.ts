@@ -1,13 +1,23 @@
+// Styling
 import '../../style/main.css';
 import '../../style/style.scss';
-import '../types';
+
+// General
+import {localStorageAction} from '../actions/store';
+import {User} from '../types';
+
+// ShoelaceUI
+import '@shoelace-style/shoelace/dist/themes/light.css';
+import '@shoelace-style/shoelace/dist/themes/dark.css';
+import '@shoelace-style/shoelace/dist/components/qr-code/qr-code.js';
+import {setBasePath} from '@shoelace-style/shoelace/dist/utilities/base-path.js';
+setBasePath('/dist/shoelace');
+
+// Custom Components
 
 import {IdeaList} from '../../components/idea-list';
 import {RoomList} from '../../components/room-list';
-
-import {localStorageAction} from '../actions/store';
 import {RoomChat} from '../../components/room-chat';
-import {User} from '../types';
 
 const loginForm = document.getElementById('login-form') as HTMLFormElement;
 const userInput = document.getElementById('user-input') as HTMLInputElement;

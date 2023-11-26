@@ -73,11 +73,21 @@ module.exports = {
       chunkFilename: DEV_MODE ? '[id].css' : '[id].[contenthash].css',
     }),
     new CopyPlugin({
-      // TODO: add component library
       patterns: [
         {
           from: path.resolve(__dirname, 'public/static'),
           to: path.resolve(__dirname, 'dist'),
+        },
+      ],
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(
+            __dirname,
+            'node_modules/@shoelace-style/shoelace/dist/assets',
+          ),
+          to: path.resolve(__dirname, 'dist/shoelace/assets'),
         },
       ],
     }),
