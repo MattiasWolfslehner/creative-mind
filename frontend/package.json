@@ -18,7 +18,8 @@
     "preview": "node server.js --folder dist",
     "format": "prettier --single-quote --no-bracket-spacing --bracket-same-line --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,css,scss}\"",
     "lint": "eslint public",
-    "prepare": "cd .. && husky install frontend/.husky"
+    "prepare": "cd .. && husky install frontend/.husky",
+    "test": "jest"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",
@@ -30,11 +31,14 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
     "eslint": "^8.54.0",
+    "eslint-plugin-jest": "^27.6.0",
     "execa-webpack-plugin": "^6.0.2",
     "file-loader": "^6.2.0",
     "glob": "^10.3.10",
     "html-webpack-plugin": "^5.5.3",
     "husky": "^8.0.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "lit": "^3.0.2",
     "lit-html": "^3.0.2",
     "mini-css-extract-plugin": "^2.7.6",
@@ -46,6 +50,7 @@
     "style-loader": "^3.3.3",
     "tailwindcss": "^3.3.5",
     "ts-loader": "^9.5.0",
+    "ts-node": "^10.9.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
   },
