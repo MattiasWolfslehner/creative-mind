@@ -2,7 +2,6 @@ import axios, {AxiosResponse} from 'axios'; // TODO: REPLACE AXIOS WITH BROWSER 
 import {Idea, Room, User} from '../types';
 
 const restPort = 8080;
-const host = 'http://localhost';
 
 async function getRooms(): Promise<AxiosResponse<Room[]>> {
   const config = {
@@ -13,10 +12,10 @@ async function getRooms(): Promise<AxiosResponse<Room[]>> {
 
   try {
     const response = await axios.get(
-      `${host}:${restPort}/api/rooms/list`,
+      `http://localhost:${restPort}/api/rooms/list`,
       config,
     );
-    // console.log(response.data);
+    console.log(response.data);
     return response;
   } catch (error) {
     console.log(error);
@@ -27,10 +26,10 @@ async function getRooms(): Promise<AxiosResponse<Room[]>> {
 async function addRoom(roomType: String): Promise<AxiosResponse<any>> {
   try {
     const response = await axios.post(
-      `${host}:${restPort}/api/rooms/create`,
-        {type: roomType},
+      `http://localhost:${restPort}/api/rooms/create`,
+      roomType,
     );
-    // console.log('room added successfully: ' + response);
+    console.log('room added successfully: ' + response);
     return response;
   } catch (error) {
     console.log(error);
@@ -47,10 +46,10 @@ async function getUsers(): Promise<AxiosResponse<User[]>> {
 
   try {
     const response = await axios.get(
-      `${host}:${restPort}/api/users/list`,
+      `http://localhost:${restPort}/api/users/list`,
       config,
     );
-    // console.log(response.data);
+    console.log(response.data);
     return response;
   } catch (error) {
     console.log(error);
@@ -68,10 +67,10 @@ async function addUser(): Promise<AxiosResponse<any>> {
 
   try {
     const response = await axios.post(
-      `${host}:${restPort}/api/users/register`,
+      `http://localhost:${restPort}/api/users/register`,
       config,
     );
-    // console.log(response);
+    console.log(response);
     return response;
   } catch (error) {
     console.log(error);
@@ -98,7 +97,7 @@ async function addIdea(
   };
   try {
     return await axios.post(
-      `${host}:${restPort}/api/ideas/`,
+      `http://localhost:${restPort}/api/ideas/`,
       data,
       config,
     );
@@ -108,7 +107,7 @@ async function addIdea(
   }
 }
 
-async function getIdeas(roomId:string): Promise<AxiosResponse<Idea[]>> {
+async function getIdeas(): Promise<AxiosResponse<Idea[]>> {
   const config = {
     headers: {
       Accept: 'application/json',
@@ -117,10 +116,10 @@ async function getIdeas(roomId:string): Promise<AxiosResponse<Idea[]>> {
 
   try {
     const response = await axios.get(
-      `${host}:${restPort}/api/ideas/${roomId}`,
+      `http://localhost:${restPort}/api/ideas/`,
       config,
     );
-    // console.log(response.data);
+    console.log(response.data);
     return response;
   } catch (error) {
     console.log(error);
