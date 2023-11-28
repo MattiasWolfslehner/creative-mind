@@ -1,167 +1,100 @@
-import { Idea, Room, User, RoomRequest } from "../types";
+import {Idea, Room, User, RoomRequest} from '../types';
 
-const restPort = 8080;
+const restPort = 8080; // 127.0.0.1 needed for tests. else -> ::1 => Error
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function fetchJson(url: string, config: RequestInit): Promise<any> {
+  try {
+    const response = await fetch(url, config);
+
+    if (!response.ok) {
+      console.error(`Request failed. Status: ${response.status}`);
+      return null;
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
 
 async function getRooms(): Promise<Room[]> {
-  let parsedData: Room[] = [];
-
-  const config = {
+  const config: RequestInit = {
     headers: {
-      Accept: "application/json",
+      Accept: 'application/json',
     },
   };
 
-  parsedData = await fetch(
-    `http://localhost:${restPort}/api/rooms/list`,
-    config
-  )
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      console.info(data);
-      return data;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-
-  return parsedData;
+  return await fetchJson(`http://127.0.0.1:${restPort}/api/rooms/list`, config);
 }
 
-async function addRoom(room: Room): Promise<Room | null> {
-  let responseRoom: Room | null = null;
-
-  const config = {
-    method: "POST",
+async function addRoom(type: string): Promise<Room | null> {
+  const config: RequestInit = {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      type: room,
+      type: type,
     }),
   };
 
-  responseRoom = await fetch(
-    `http://localhost:${restPort}/api/rooms/create`,
-    config
-  )
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      console.info(data);
-      return data;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-
-  return responseRoom;
+  return await fetchJson(
+    `http://127.0.0.1:${restPort}/api/rooms/create`,
+    config,
+  );
 }
 
 async function getUsers(): Promise<User[]> {
-  const config = {
+  const config: RequestInit = {
     headers: {
-      Accept: "application/json",
+      Accept: 'application/json',
     },
   };
 
-  let parsedData: User[] = [];
-
-  parsedData = await fetch(
-    `http://localhost:${restPort}/api/users/list`,
-    config
-  )
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      console.info(data);
-      return data;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-
-  return parsedData;
+  return await fetchJson(`http://127.0.0.1:${restPort}/api/users/list`, config);
 }
 
 async function addUser(): Promise<User | null> {
-  let responseUser: User | null;
-  const config = {
+  const config: RequestInit = {
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
   };
 
-  responseUser = await fetch(
-    `http://localhost:${restPort}/api/users/register`,
-    config
-  )
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      console.info(data);
-      return data;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-
-  return responseUser;
+  return await fetchJson(
+    `http://127.0.0.1:${restPort}/api/users/register`,
+    config,
+  );
 }
 
 async function addIdea(request: RoomRequest): Promise<Idea | null> {
-  let responseIdea: Idea | null;
-  const config = {
+  const config: RequestInit = {
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      type: request,
-    }),
+    body: JSON.stringify(request),
   };
 
-  responseIdea = await fetch(`http://localhost:${restPort}/api/ideas/`, config)
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      console.info(data);
-      return data;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-
-  return responseIdea;
+  return await fetchJson(`http://127.0.0.1:${restPort}/api/ideas/`, config);
 }
 
-async function getIdeas(): Promise<Idea[]> {
-  let ideas: Idea[] = [];
-  const config = {
+async function getIdeas(roomId: string): Promise<Idea[]> {
+  const config: RequestInit = {
     headers: {
-      Accept: "application/json",
+      Accept: 'application/json',
     },
   };
 
-  ideas = await fetch(`http://localhost:${restPort}/api/ideas/`, config)
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      console.info(data);
-      return data;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-
-  return ideas;
+  return await fetchJson(
+    `http://127.0.0.1:${restPort}/api/ideas/${roomId}`,
+    config,
+  );
 }
 
-export { getRooms, addRoom, addUser, getUsers, addIdea, getIdeas };
+export {getRooms, addRoom, addUser, getUsers, addIdea, getIdeas};

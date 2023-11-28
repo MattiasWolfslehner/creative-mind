@@ -28,7 +28,8 @@
       }
     ]
   },
+  "presets": ["@babel/preset-typescript"],
   "include": ["public/**/*.ts"],
-  "types": ["@types/babel-types"],
+  "types": ["@types/babel-types", "@types/jest", "@types/node", "@types/cors"],
   "exclude": []
 }
