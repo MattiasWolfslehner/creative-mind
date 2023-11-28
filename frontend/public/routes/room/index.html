@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script type="module" src="bundle.copyright-notice.js" defer></script>
+
+    <title>Room</title>
+</head>
+
+<body>
+    <header>
+        <h1 class="underline">Creative Mind</h1>
+    </header>
+
+    <main class="container">
+        <form id="register-form" method="get">
+            <button id="register" type="submit">registrieren</button>
+        </form>
+
+        <form id="idea-form" method="post" class="hidden">
+            <input type="text" id="idea" name="idea" placeholder="your idea...">
+            <button id="add-idea" type="submit">hinzufügen</button>
+        </form>
+
+        <div class="button-container">
+            <button id="copy-uuid-button" data-clipboard-target="#cm-uuid">Copy</button>
+        </div>
+        <div id="cm-uuid" class="cm-uuid"></div>
+    </main>
+
+    <footer>
+        <copyright-notice></copyright-notice> <br>
+        <a href="https://github.com/Stevan06v/creative-mind">Github</a>
+    </footer>
+</body>
+
+</html>

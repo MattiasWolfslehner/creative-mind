@@ -29,7 +29,7 @@ export class RoomChat extends LitElement {
   private async _handleWebSocketMessage(event: MessageEvent) {
     event.preventDefault();
     const message: string = event.data;
-    let oldMessages = this.messages;
+    const oldMessages = this.messages;
     console.log('Received message:', message);
     this.messages = oldMessages + `<p>${message}</p>`;
   }
@@ -45,7 +45,8 @@ export class RoomChat extends LitElement {
     this.userId = userId;
     this.messages = '';
 
-    let xx: RoomChat = this; // not to be mistaken with websocket inside
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const roomChatContext: RoomChat = this; // not to be mistaken with websocket inside
 
     // baba.
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
@@ -61,7 +62,7 @@ export class RoomChat extends LitElement {
       console.log('WebSocket connection opened:', event);
     };
     this.socket.onmessage = function (ev: MessageEvent) {
-      xx._handleWebSocketMessage(ev);
+      roomChatContext._handleWebSocketMessage(ev);
     };
 
     this.socket.onclose = function (event: Event) {
@@ -80,7 +81,7 @@ export class RoomChat extends LitElement {
 
   // dispatch the received button click as a "join-the-room" event
   private async _sendMessage() {
-    var message: string = '';
+    let message: string = '';
     if (this.shadowRoot) {
       const ttt = this.shadowRoot.getElementById(
         'message-text',
