@@ -17,7 +17,9 @@ setBasePath('/dist/shoelace');
 
 import {IdeaList} from '../../components/idea-list';
 import {RoomList} from '../../components/room-list';
-import {RoomChat} from '../../components/room-chat';
+// import {RoomChat} from '../../components/room-chat';
+import '../api/api';
+import {addIdea, addRoom, addUser, getIdeas, getRooms, getUsers} from "../api/api";
 
 const loginForm = document.getElementById('login-form') as HTMLFormElement;
 const userInput = document.getElementById('user-input') as HTMLInputElement;
@@ -37,7 +39,7 @@ const copyButton = document.getElementById(
 ) as HTMLButtonElement;
 const roomIdElement = document.getElementById('room-id') as HTMLElement;
 const ideaList2 = document.getElementById('idea-list2') as IdeaList;
-const roomChat = document.getElementById('room-chat') as RoomChat;
+// const roomChat = document.getElementById('room-chat') as RoomChat;
 const roomList = document.getElementById('room-list') as RoomList;
 
 const restPort = 8080;
@@ -50,30 +52,36 @@ roomList.addEventListener('room-joined', async function (event) {
   await localStorageAction.save('roomId', selectedRoomId);
   roomId = selectedRoomId;
   if (userId) {
-    roomChat.setUserAndRoom(selectedRoomId, userId);
+    // roomChat.setUserAndRoom(selectedRoomId, userId);
   }
   await updateUI();
-  await getIdeas();
+  await getIdeasForComponent();
 });
 
-async function getRooms() {
-  const action = `http://localhost:${restPort}/api/rooms/list`;
+async function getRoomsForComponent() {
+  // const action = `http://localhost:${restPort}/api/rooms/list`;
 
   if (userId) {
-    fetch(action, {
-      headers: {
-        Accept: 'application/json',
-      },
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        //console.log(data);
-        roomList.setRooms(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    getRooms()
+        .then((response) => response.data)
+        .then((data) => {
+          //console.log(data);
+          roomList.setRooms(data);
+        });
+    // fetch(action, {
+    //   headers: {
+    //     Accept: 'application/json',
+    //   },
+    //   method: 'GET',
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     //console.log(data);
+    //     roomList.setRooms(data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   } else {
     await roomList.setRooms([]);
   }
@@ -98,7 +106,7 @@ async function updateUI() {
     });
   }
 
-  await getRooms();
+  await getRoomsForComponent();
 }
 
 // der LOGIN für einen USER
@@ -107,22 +115,25 @@ loginForm.addEventListener('submit', function (event) {
   event.stopImmediatePropagation();
   //console.log(event);
 
-  const action = `http://localhost:${restPort}/api/users/list`;
+  // const action = `http://localhost:${restPort}/api/users/list`;
   //console.log(userInput);
   userId = userInput?.value;
   console.log(`USER: ${userId}`);
 
   if (userId) {
-    fetch(action, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        let userList: User[] = response;
+    getUsers()
+        .then((response) => response.data)
+        .then((userList) => {
+    // fetch(action, {
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   method: 'GET',
+    // })
+    //   .then((response) => response.json())
+    //   .then((response) => {
+    //     let userList: User[] = response;
         // console.log(userList);
         for (var usr of userList) {
           if (usr.userId == userId) {
@@ -133,8 +144,8 @@ loginForm.addEventListener('submit', function (event) {
             registerButton.classList.add('hidden');
             createRoomButton.classList.remove('hidden');
             ideaForm2.classList.remove('hidden');
-            getRooms();
-            getIdeas();
+            getRoomsForComponent();
+            getIdeasForComponent();
             // now user logged in can create rooms
             return;
           }
@@ -154,20 +165,21 @@ registerButton.addEventListener('click', function (event) {
   event.stopImmediatePropagation(); // prevent second coll from div
   //console.log(event);
 
-  const action = `http://localhost:${restPort}/api/users/register`;
+  // const action = `http://localhost:${restPort}/api/users/register`;
   //console.log(userInput);
   userInput.value = 'Try register';
   userId = null;
 
-  fetch(action, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: '{}',
-  })
-    .then((response) => response.json())
+  addUser()
+  // fetch(action, {
+  //   headers: {
+  //     Accept: 'application/json',
+  //     'Content-Type': 'application/json',
+  //   },
+  //   method: 'POST',
+  //   body: '{}',
+  // })
+    .then((response) => response.data)
     .then((response) => {
       let newUser: User = response;
       userId = newUser.userId;
@@ -178,8 +190,8 @@ registerButton.addEventListener('click', function (event) {
       registerButton.classList.add('hidden');
       createRoomButton.classList.remove('hidden');
       ideaForm2.classList.remove('hidden');
-      getRooms();
-      getIdeas();
+      getRoomsForComponent();
+      getIdeasForComponent();
     })
     .catch((error) => {
       console.log(error);
@@ -193,18 +205,19 @@ createRoomButton.addEventListener('click', function (event) {
   //console.log(event);
 
   if (userId) {
-    const action = `http://localhost:${restPort}/api/rooms/create`;
-    fetch(action, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({type: 'brainwritingroom'}),
-    })
-      .then((response) => response.json())
+    // const action = `http://localhost:${restPort}/api/rooms/create`;
+    addRoom('brainwritingroom')
+    // fetch(action, {
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   method: 'POST',
+    //   body: JSON.stringify({type: 'brainwritingroom'}),
+    // })
+      .then((response) => response.data)
       .then(() => {
-        getRooms();
+        getRoomsForComponent();
       })
       .catch((error) => {
         console.log(error);
@@ -217,27 +230,28 @@ ideaForm2.addEventListener('submit', function (event) {
   event.preventDefault();
   event.stopImmediatePropagation();
 
-  if (roomId) {
-    const action = `http://localhost:${restPort}/api/ideas/`;
+  if (roomId && userId) {
+    // const action = `http://localhost:${restPort}/api/ideas/`;
     const formData = new FormData(event.target as HTMLFormElement);
-    const content: string | null = formData.get('idea') as string | null;
+    const content: string = formData.get('idea') as string;
 
-    fetch(action, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        content: content,
-        roomId: roomId,
-        memberId: userId,
-      }),
-    })
-      .then((response) => response.json())
+    addIdea(content, roomId, userId)
+    // fetch(action, {
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     content: content,
+    //     roomId: roomId,
+    //     memberId: userId,
+    //   }),
+    // })
+      .then((response) => response.data)
       .then((/*response*/) => {
         //console.log(response);
-        getIdeas();
+        getIdeasForComponent();
       })
       .catch((error) => {
         console.log(error);
@@ -245,7 +259,7 @@ ideaForm2.addEventListener('submit', function (event) {
   } else {
     console.log('no ROOM! in submit Idea');
     alert('Please join a room first!');
-    getIdeas();
+    getIdeasForComponent();
   }
 });
 
@@ -256,21 +270,22 @@ window.addEventListener('DOMContentLoaded', async function () {
   if (roomId && roomId.length > 0) {
     await updateUI();
   } else {
-    await getIdeas();
+    await getIdeasForComponent();
   }
 });
 
-async function getIdeas() {
+async function getIdeasForComponent() {
   roomId = await localStorageAction.load('roomId');
   if (roomId) {
-    const action = `http://localhost:${restPort}/api/ideas/` + roomId;
+    // const action = `http://localhost:${restPort}/api/ideas/` + roomId;
 
-    fetch(action, {
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-      .then((response) => response.json())
+    getIdeas(roomId)
+    // fetch(action, {
+    //   headers: {
+    //     Accept: 'application/json',
+    //   },
+    // })
+      .then((response) => response.data)
       .then((data) => {
         //console.log(data);
         ideaList2.setIdeas(data);
@@ -280,7 +295,7 @@ async function getIdeas() {
       });
   } else {
     ideaList2.setIdeas([]);
-    console.log('no ROOM! in getIdeas');
+    console.log('no ROOM! in getIdeasForComponent');
   }
 }
 
