@@ -122,9 +122,9 @@ loginForm.addEventListener('submit', function (event) {
     })
       .then((response) => response.json())
       .then((response) => {
-        let userList: User[] = response;
+        const userList: User[] = response;
         // console.log(userList);
-        for (var usr of userList) {
+        for (const usr of userList) {
           if (usr.userId == userId) {
             console.log('user logged in');
             // if everything goes right ... cancel user Input and let him/her create rooms
@@ -169,7 +169,7 @@ registerButton.addEventListener('click', function (event) {
   })
     .then((response) => response.json())
     .then((response) => {
-      let newUser: User = response;
+      const newUser: User = response;
       userId = newUser.userId;
       userInput.value = userId;
       console.log(`user logged in ${userId}`);
