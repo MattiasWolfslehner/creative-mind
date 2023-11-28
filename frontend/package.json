@@ -28,6 +28,7 @@
     "@typescript-eslint/parser": "^6.12.0",
     "asciidoctor": "^3.0.0",
     "autoprefixer": "^10.4.16",
+    "axios": "^1.6.2",
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
@@ -57,7 +58,6 @@
   },
   "dependencies": {
     "@shoelace-style/shoelace": "^2.12.0",
-    "axios": "^1.6.2",
     "cors": "^2.8.5",
     "express": "^4.18.2"
   }
