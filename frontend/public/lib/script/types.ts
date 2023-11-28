@@ -15,7 +15,7 @@ export interface User {
 }
 
 export interface RoomRequest {
-  content: string,
-  roomId: string,
-  memberId: string
+  content: string;
+  roomId: string;
+  memberId: string;
 }

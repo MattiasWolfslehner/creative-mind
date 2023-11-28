@@ -32,7 +32,7 @@ async function getRooms(): Promise<Room[]> {
 async function addRoom(room: Room): Promise<Room | null> {
   let responseRoom: Room | null = null;
 
-  let config = {
+  const config = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -137,6 +137,7 @@ async function addIdea(request: RoomRequest): Promise<Idea | null> {
     .catch((err) => {
       console.error(err);
     });
+
   return responseIdea;
 }
 
