@@ -182,7 +182,7 @@
 //   }
 // }
 
-const isFull: boolean = false;
+//const isFull: boolean = false;
 //component: brainwriteing-waiting -> until 6 Members
 
 //component: idea-writing -> when 6 members
