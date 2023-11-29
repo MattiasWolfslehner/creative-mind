@@ -1,4 +1,6 @@
 body {
+  background-image: url('../assets/FunkyRetro_Background.png');
+
   header {
     padding: 0.5rem 1rem;
     position: sticky;
@@ -43,6 +45,7 @@ body {
       &:hover + #cm-uuid {
         display: block;
       }
+
       &:hover + #room-id {
         display: block;
       }
