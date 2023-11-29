@@ -34,7 +34,7 @@ module.exports = {
   devtool: DEV_MODE ? 'inline-source-map' : false,
   entry: {
     // start bundling from here
-    home: './public/lib/script/pages/index.js',
+    brainwriting: './public/lib/script/pages/brainwriting.js',
     home2: './public/lib/script/pages/index_2.js',
     room: './public/lib/script/pages/room.ts',
     ...components,
@@ -60,7 +60,7 @@ module.exports = {
       // minifies html and adds imports
       filename: 'index.html',
       template: 'public/routes/index.html',
-      chunks: ['home'], // only include the 'home' chunk
+      chunks: ['brainwriting'], // only include the 'home' chunk
     }),
     new HtmlWebpackPlugin({
       // minifies html and adds imports
