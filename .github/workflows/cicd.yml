@@ -47,6 +47,7 @@ jobs:
       - name: Build Backend
         run: |
           cd backend
+          chmod +x mvnw
           ./mvnw package -Dnative -Dquarkus.native.container-build=true
 
       - name: Archive Backend
