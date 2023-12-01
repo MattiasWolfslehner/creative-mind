@@ -58,8 +58,8 @@ module.exports = {
     // https://webpack.js.org/plugins/
     new HtmlWebpackPlugin({
       // minifies html and adds imports
-      filename: 'index.html',
-      template: 'public/routes/index.html',
+      filename: 'brainwriting/index.html',
+      template: 'public/routes/brainwriting/index.html',
       chunks: ['brainwriting'], // only include the 'home' chunk
     }),
     new HtmlWebpackPlugin({
@@ -70,7 +70,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       // minifies html and adds imports
-      filename: 'room.html',
+      filename: 'room/index.html',
       template: 'public/routes/room/index.html',
       chunks: ['room'], // only include the 'room' chunk
     }),
