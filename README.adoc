@@ -1,0 +1,4 @@
+= Creative Mind
+
+Creative Mind is a web app where your new startup idea might be born. +
+Easily brainstorm with others in real time.
