@@ -34,19 +34,21 @@ public class RoomRepository {
     }
 
     public List<Room> getAllRooms() {
-        return this.entityManager.createQuery("select r from Room r").getResultList();
+        return this.entityManager.createNamedQuery(Room.GET_ALL_ROOMS, Room.class).getResultList();
     }
 
     public Room getRoomByUUID(UUID uuid) {
-        try {
-            TypedQuery<Room> roomQuery = this.entityManager
-                    .createNamedQuery(Room.GET_ROOM_BY_ROOM_ID, Room.class);
-            roomQuery.setParameter("roomId", uuid);
 
-            return roomQuery.getSingleResult();
-        } catch (Exception e) {
-            throw new CreativeMindException(String.format("Could not get room[%s]", uuid.toString()), e);
+        TypedQuery<Room> roomQuery = this.entityManager
+                .createNamedQuery(Room.GET_ROOM_BY_ROOM_ID, Room.class);
+        roomQuery.setParameter("roomId", uuid);
+
+        Room room =  roomQuery.getSingleResult();
+
+        if(room == null){
+            throw new CreativeMindException(String.format("No room with [%s] available!", uuid.toString()));
         }
+        return room;
     }
 
     public byte[] getRoomIdeasAsCSV(UUID roomId) {

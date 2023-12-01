@@ -17,27 +17,23 @@ import java.util.UUID;
 public class IdeaRepository {
     @Inject
     EntityManager entityManager;
+    @Inject
+    UserRepository userRepository;
+
 
     @Transactional
     public Idea addIdea(IdeaRequest ideaRequest) {
-        UUID userId = ideaRequest.getMemberId();
-        UUID roomId = ideaRequest.getRoomId();
-
-        TypedQuery<User> userQuery = this.entityManager
-                .createNamedQuery(User.GET_USER_BY_USER_ID, User.class);
-        userQuery.setParameter("userId", userId);
 
         TypedQuery<BrainwritingRoom> roomQuery = this.entityManager
                 .createNamedQuery(BrainwritingRoom.GET_BRAINWRITING_ROOM_BY_ROOM_ID, BrainwritingRoom.class);
-        roomQuery.setParameter("roomId", roomId);
+        roomQuery.setParameter("roomId", ideaRequest.getRoomId());
 
-        User member = userQuery.getSingleResult();
+        User member = userRepository.getUserByUUID(ideaRequest.getMemberId());
         BrainwritingRoom room = roomQuery.getSingleResult();
 
         Idea idea = new Idea(ideaRequest.getContent(), room, member);
 
         this.entityManager.persist(idea);
-
         return idea;
     }
 

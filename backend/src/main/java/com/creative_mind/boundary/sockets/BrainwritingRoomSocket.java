@@ -1,5 +1,6 @@
 package com.creative_mind.boundary.sockets;
 
+import com.creative_mind.manager.RoomManager;
 import com.creative_mind.model.Idea;
 import com.creative_mind.model.requests.IdeaRequest;
 import com.creative_mind.model.requests.ParticipantionRequest;
@@ -22,9 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BrainwritingRoomSocket {
 
     @Inject
-    ParticipationRepository participationRepository;
-    @Inject
-    IdeaRepository ideaRepository;
+    RoomManager roomManager;
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("userId") String userId) {
@@ -37,8 +36,8 @@ public class BrainwritingRoomSocket {
 
         CompletableFuture.runAsync(() -> {
 
-            participationRepository.addParticipation(participantionRequest);
-            participationRepository.addSessionToRoom(parsedRoomId, session);
+            roomManager.addParticipantToRoom(participantionRequest);
+            roomManager.addSessionToRoom(parsedRoomId, session);
 
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
@@ -55,7 +54,8 @@ public class BrainwritingRoomSocket {
         ParticipantionRequest participantionRequest = new ParticipantionRequest(parsedRoomId, parsedUserId, sessionId);
 
         CompletableFuture.runAsync(() -> {
-            participationRepository.removeParticipation(participantionRequest);
+            roomManager.removeParticipant(participantionRequest);
+            roomManager.removeSessionFromRoom(parsedRoomId, sessionId);
         }).exceptionally(throwable -> {
             throwable.printStackTrace();
             return null;
