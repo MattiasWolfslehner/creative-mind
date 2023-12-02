@@ -46,13 +46,20 @@ public class RoomResource {
 
     @PUT
     @Produces(MediaType.TEXT_PLAIN)
+    @Path("/stop/{roomId}")
+    public Response stopRoom(@PathParam("roomId") UUID roomId) {
+        roomManager.stopRoom(roomId);
+        return Response.ok(true).build();
+    }
+
+    @PUT
+    @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/updateState/{roomId}")
     public Response createRoom(@PathParam("roomId") UUID roomId, RoomStateRequest roomStateRequest) {
         boolean state = this.roomRepository.updateRoomState(roomId, roomStateRequest.getRoomState());
         return Response.ok(state).build();
     }
-
 
     @GET
     @Path("{room_id}/download/csv")
