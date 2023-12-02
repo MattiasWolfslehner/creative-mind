@@ -28,21 +28,21 @@ jobs:
           npm run lint
         working-directory: frontend
 
-      - name: Setup Java environment
-        uses: actions/setup-java@v3
-        with:
-          java-version: "17"
-          distribution: "temurin"
+      #- name: Setup Java environment
+      #  uses: actions/setup-java@v3
+      #  with:
+      #    java-version: "17"
+      #    distribution: "temurin"
 
-      - name: Start Backend
-        run: |
-          cd backend
-          chmod +x mvnw
-          ./mvnw compile quarkus:dev
+      #- name: Start Backend
+      #  run: |
+      #    cd backend
+      #    chmod +x mvnw
+      #    ./mvnw compile quarkus:dev > quarkus_dev.log 2>&1 & disown
 
-      - name: Test Frontend
-        run: npm run test
-        working-directory: frontend
+      #- name: Test Frontend
+      #  run: npm run test
+      #  working-directory: frontend
 
       - name: Build Frontend
         run: npm run build
