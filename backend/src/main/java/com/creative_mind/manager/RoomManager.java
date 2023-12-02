@@ -1,9 +1,9 @@
 package com.creative_mind.manager;
 import com.creative_mind.exception.CreativeMindException;
-import com.creative_mind.model.Participation;
 import com.creative_mind.model.requests.ParticipantionRequest;
 import com.creative_mind.repository.ParticipationRepository;
 import com.creative_mind.repository.RoomRepository;
+import io.vertx.core.Vertx;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.websocket.Session;
@@ -14,9 +14,55 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @ApplicationScoped
 public class RoomManager {
+
+    @Inject
+    Vertx vertx;
     @Inject
     ParticipationRepository participationRepository;
+    @Inject
+    RoomRepository roomRepository;
     private Map<UUID, Set<Session>> roomSessions = new ConcurrentHashMap<>();
+    private Map<UUID, Long> roomTimers = new ConcurrentHashMap<>();
+
+    public void startRoom(UUID roomId) {
+
+        // ToDo: Implement dynamic room-counters
+        long delay = 1000L;
+        long maxTime = 300000L;
+
+        if (!this.roomTimers.containsKey(roomId)) {
+            long startTime = System.currentTimeMillis();
+
+            long timerId = vertx.setPeriodic(delay, timer -> {
+                long currentTime = System.currentTimeMillis();
+                long elapsedTime = currentTime - startTime;
+                long remainingTime = maxTime - elapsedTime;
+
+                if (remainingTime >= 0) {
+                    // Convert remaining time to seconds
+                    long remainingSeconds = remainingTime / 1000;
+                    this.broadcastMessageToRoom(roomId, String.format("Time left: %s seconds", remainingSeconds));
+                } else {
+                    vertx.cancelTimer(timer); // Stop the timer if maxTime is reached
+                    this.broadcastMessageToRoom(roomId, "Room ended");
+                    this.stopRoom(roomId);
+                }
+            });
+
+            this.roomTimers.put(roomId, timerId);
+        } else {
+            throw new CreativeMindException(String.format("Timer for room[%s] is already running!", roomId.toString()));
+        }
+    }
+
+
+    public void stopRoom(UUID roomId) {
+        Long timerId = roomTimers.remove(roomId);
+        if (timerId != null) {
+            vertx.cancelTimer(timerId);
+        }
+    }
+
 
     public void removeParticipant(ParticipantionRequest participantionRequest){
         this.participationRepository.removeParticipation(participantionRequest);

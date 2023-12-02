@@ -35,7 +35,7 @@ public abstract class Room {
     @Id
     @GeneratedValue
     private Integer id;
-    private boolean isStarted;
+    private boolean roomState;
     private UUID roomId;
 
     public Room() {
@@ -47,12 +47,12 @@ public abstract class Room {
     public Integer getId() {
         return id;
     }
-    public boolean isStarted() {
-        return isStarted;
+    public boolean getRoomState() {
+        return roomState;
     }
 
-    public void setStarted(boolean started) {
-        isStarted = started;
+    public void setRoomState(boolean started) {
+        roomState = started;
     }
 }
 

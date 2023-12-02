@@ -1,6 +1,8 @@
 package com.creative_mind.boundary.rest;
 
+import com.creative_mind.manager.RoomManager;
 import com.creative_mind.model.Room;
+import com.creative_mind.model.requests.RoomStateRequest;
 import com.creative_mind.repository.ParticipationRepository;
 import com.creative_mind.repository.RoomRepository;
 import jakarta.inject.Inject;
@@ -15,8 +17,8 @@ import java.util.UUID;
 public class RoomResource {
     @Inject
     RoomRepository roomRepository;
-    @Incubating
-    ParticipationRepository participationRepository;
+    @Inject
+    RoomManager roomManager;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -30,11 +32,27 @@ public class RoomResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/create")
     public Response createRoom(Room room) {
-
         Room createdRoom = this.roomRepository.createRoom(room);
-
         return Response.ok(createdRoom).build();
     }
+
+    @PUT
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/start/{roomId}")
+    public Response startRoom(@PathParam("roomId") UUID roomId) {
+        roomManager.startRoom(roomId);
+        return Response.ok(true).build();
+    }
+
+    @PUT
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/updateState/{roomId}")
+    public Response createRoom(@PathParam("roomId") UUID roomId, RoomStateRequest roomStateRequest) {
+        boolean state = this.roomRepository.updateRoomState(roomId, roomStateRequest.getRoomState());
+        return Response.ok(state).build();
+    }
+
 
     @GET
     @Path("{room_id}/download/csv")

@@ -22,7 +22,6 @@ public class RoomRepository {
     @Inject
     IdeaRepository ideaRepository;
 
-
     @Transactional
     public Room createRoom(Room room) {
         try {
@@ -31,6 +30,13 @@ public class RoomRepository {
         } catch (Exception e) {
             throw new CreativeMindException("Could not create room!", e);
         }
+    }
+
+    @Transactional
+    public boolean updateRoomState(UUID roomId, boolean state) {
+        Room room = this.getRoomByUUID(roomId);
+        room.setRoomState(state);
+        return room.getRoomState();
     }
 
     public List<Room> getAllRooms() {
