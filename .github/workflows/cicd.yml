@@ -28,6 +28,12 @@ jobs:
           npm run lint
         working-directory: frontend
 
+      - name: Start Backend
+        run: |
+          cd backend
+          chmod +x mvnw
+          ./mvnw compile quarkus:dev
+
       - name: Test Frontend
         run: npm run test
         working-directory: frontend
