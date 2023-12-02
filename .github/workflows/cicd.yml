@@ -28,6 +28,12 @@ jobs:
           npm run lint
         working-directory: frontend
 
+      - name: Setup Java environment
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
       - name: Start Backend
         run: |
           cd backend
