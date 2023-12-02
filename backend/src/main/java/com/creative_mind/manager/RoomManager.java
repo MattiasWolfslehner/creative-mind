@@ -1,6 +1,4 @@
 package com.creative_mind.manager;
-
-
 import com.creative_mind.exception.CreativeMindException;
 import com.creative_mind.model.Participation;
 import com.creative_mind.model.requests.ParticipantionRequest;
@@ -9,7 +7,6 @@ import com.creative_mind.repository.RoomRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.websocket.Session;
-
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -32,7 +29,7 @@ public class RoomManager {
     public void addSessionToRoom(UUID roomId, Session session){
         try{
             roomSessions.computeIfAbsent(roomId, k -> ConcurrentHashMap.newKeySet()).add(session);
-            this.broadcastMessage(roomId, String.format("%s joined the Room!", session.getId()));
+            this.broadcastMessageToRoom(roomId, String.format("%s joined the Room!", session.getId()));
         }catch (Exception e){
             throw new CreativeMindException("Failed to add Session!", e);
         }
@@ -49,13 +46,13 @@ public class RoomManager {
                 }
                 return v.isEmpty() ? null : v;
             });
-            this.broadcastMessage(roomId, String.format("%s left the Room!", sessionId));
+            this.broadcastMessageToRoom(roomId, String.format("%s left the Room!", sessionId));
         }catch (Exception e){
             throw new CreativeMindException("Session is not available!",e);
         }
     }
 
-    public void broadcastMessage(UUID roomId, String message) {
+    public void broadcastMessageToRoom(UUID roomId, String message) {
         Set<Session> sessions = roomSessions.get(roomId);
         if (sessions != null) {
             for (Session iterator : sessions) {

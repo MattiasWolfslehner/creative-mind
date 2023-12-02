@@ -19,7 +19,6 @@ import java.util.UUID;
 public class ParticipationRepository {
     @Inject
     EntityManager entityManager;
-
     @Inject
     UserRepository userRepository;
     @Inject
@@ -62,13 +61,22 @@ public class ParticipationRepository {
     }
 
     public boolean isUserInRoom(Integer userId, Integer roomId) {
-        TypedQuery<Long> query = entityManager.createNamedQuery("Participation.countUserInRoom", Long.class);
+        TypedQuery<Long> query = entityManager.createNamedQuery(Participation.COUNT_USER_IN_ROOM, Long.class);
 
         Long count = query
                 .setParameter("userId", userId)
                 .setParameter("roomId", roomId)
                 .getSingleResult();
+
         return count > 0;
+    }
+
+    public Integer countUsersInRoom(UUID roomId){
+        TypedQuery<Long> query = entityManager.createNamedQuery(Participation.COUNT_USERS_BY_ROOM, Long.class);
+        return query
+                .setParameter("roomId", roomId)
+                .getSingleResult()
+                .intValue();
     }
 
 }

@@ -27,29 +27,32 @@ import static jakarta.persistence.InheritanceType.SINGLE_TABLE;
 public abstract class Room {
     public static final String GET_ROOM_BY_ROOM_ID = "Participation.getRoomByRoomId";
     public static final String GET_ALL_ROOMS = "Participation.getAllRooms";
-
     @OneToMany(mappedBy = "room")
     Set<Participation> participations;
-
     @OneToMany(mappedBy = "brainwritingRoom")
     Set<Idea> ideas;
-
     @JsonIgnore
     @Id
     @GeneratedValue
     private Integer id;
-
+    private boolean isStarted;
     private UUID roomId;
 
     public Room() {
         roomId = UUID.randomUUID();
     }
-
     public UUID getRoomId() {
         return roomId;
     }
-
     public Integer getId() {
         return id;
     }
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    public void setStarted(boolean started) {
+        isStarted = started;
+    }
 }
+

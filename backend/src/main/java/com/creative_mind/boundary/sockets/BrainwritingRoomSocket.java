@@ -11,12 +11,14 @@ import jakarta.inject.Inject;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
+import org.eclipse.microprofile.context.ManagedExecutor;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint("/rooms/join/{roomId}/{userId}")
@@ -24,6 +26,9 @@ public class BrainwritingRoomSocket {
 
     @Inject
     RoomManager roomManager;
+
+    @Inject
+    ManagedExecutor managedExecutor;
 
     @OnOpen
     public void onOpen(Session session, @PathParam("roomId") String roomId, @PathParam("userId") String userId) {
@@ -39,9 +44,18 @@ public class BrainwritingRoomSocket {
             roomManager.addParticipantToRoom(participantionRequest);
             roomManager.addSessionToRoom(parsedRoomId, session);
 
-        }).exceptionally(throwable -> {
-            throwable.printStackTrace();
-            return null;
+        }, managedExecutor).exceptionally(throwable -> {
+            throw new CompletionException(throwable);
+        });
+    }
+
+    @OnMessage
+    public void onMessage(String content, Session session, @PathParam("roomId") String roomId, @PathParam("userId") String userId) {
+        CompletableFuture.runAsync(() -> {
+
+
+        }, managedExecutor).exceptionally(throwable -> {
+            throw new CompletionException(throwable);
         });
     }
 
@@ -54,11 +68,12 @@ public class BrainwritingRoomSocket {
         ParticipantionRequest participantionRequest = new ParticipantionRequest(parsedRoomId, parsedUserId, sessionId);
 
         CompletableFuture.runAsync(() -> {
+
             roomManager.removeParticipant(participantionRequest);
             roomManager.removeSessionFromRoom(parsedRoomId, sessionId);
-        }).exceptionally(throwable -> {
-            throwable.printStackTrace();
-            return null;
+
+        }, managedExecutor).exceptionally(throwable -> {
+            throw new CompletionException(throwable);
         });
     }
 }
