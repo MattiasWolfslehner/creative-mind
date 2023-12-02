@@ -113,7 +113,7 @@ jobs:
           file: "{{defaultContext}}:backend"
 
   deploy-frontend-to-oci:
-    needs: push
+    needs: push-frontend-to-docker-hub
     runs-on: ubuntu-latest
     name: Deploying frontend to OCI
 
@@ -145,7 +145,7 @@ jobs:
           docker push "${{ steps.get-ocir-repository.outputs.repo_path }}:latest"
 
   deploy-backend-to-oci:
-    needs: push
+    needs: push-backend-to-docker-hub
     runs-on: ubuntu-latest
     name: Deploying backend to OCI
 
