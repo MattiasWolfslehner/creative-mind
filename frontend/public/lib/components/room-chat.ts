@@ -1,11 +1,9 @@
 // https://lit.dev/docs/tools/adding-lit/
 
-import {html, LitElement} from 'lit';
+import {html, LitElement,css, unsafeCSS} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 // import {live} from 'lit/directives/live.js';
 import '../script/types';
-import '../style/main.css';
-import '../style/style.scss';
 
 @customElement('room-chat')
 export class RoomChat extends LitElement {
@@ -26,6 +24,23 @@ export class RoomChat extends LitElement {
     }
   }
 
+  static override get styles() {
+    return [
+      css`${unsafeCSS(require("../style/style.scss"))}`,
+      css`${unsafeCSS(require("../style/main.css"))}`,
+      css`
+          #send-message {
+            -webkit-appearance: button;
+            background-color: transparent;
+            padding: 0;
+            --border-color: var(--primary);
+            border: 1px solid #fff;
+            border-radius: 5px;
+          }
+        `,
+      css``
+    ];
+  }
   private async _handleWebSocketMessage(event: MessageEvent) {
     event.preventDefault();
     const message: string = event.data;
