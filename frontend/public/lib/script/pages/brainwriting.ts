@@ -60,6 +60,9 @@ roomList.addEventListener('room-joined', async function (event) {
     roomId = selectedRoomId;
     if (userId) {
         await roomChat.setUserAndRoom(selectedRoomId, userId);
+
+        // user cant change the room after join
+        roomList.classList.remove('hidden');
     }
     await updateUI();
     await getIdeasForComponent();
