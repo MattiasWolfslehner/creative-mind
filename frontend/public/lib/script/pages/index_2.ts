@@ -100,7 +100,7 @@ loginForm.addEventListener('submit', function (event) {
   if (userId) {
     getUsers()
         .then((userList) => {
-          for (let usr of userList) {
+          for (const usr of userList) {
             if (usr.userId == userId) {
               console.log('user logged in');
               // if everything goes right ... cancel user Input and let him/her create rooms
