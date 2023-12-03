@@ -65,7 +65,7 @@ export class RoomList extends LitElement {
                 <td>${i.type}</td>
                 <td>
                   <button
-                    id="_room_${i.roomId}"
+                    id="_room_${i.roomId}" class="room-join-button"
                     @click="${() => this._roomJoined(i.roomId)}">
                     Join
                   </button>
