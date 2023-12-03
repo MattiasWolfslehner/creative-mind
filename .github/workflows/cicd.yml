@@ -84,6 +84,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -101,13 +104,16 @@ jobs:
         with:
           push: true
           tags: cre8ivemind/creative-mind-frontend:latest
-          context: "./frontend"
+          context: ./frontend
 
   push-backend-to-docker-hub:
     needs: test-and-build-backend
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -125,7 +131,7 @@ jobs:
         with:
           push: true
           tags: cre8ivemind/creative-mind-backend:latest
-          context: "./backend"
+          context: ./backend
 
   deploy-frontend-to-oci:
     needs: push-frontend-to-docker-hub
