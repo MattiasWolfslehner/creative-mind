@@ -18,8 +18,9 @@ setBasePath('/dist/shoelace');
 import {IdeaList} from '../../components/idea-list';
 import {RoomList} from '../../components/room-list';
 import {RoomChat} from '../../components/room-chat';
-import {addIdea, addRoom, addUser, getDownload, getIdeas, getRooms, getUsers} from "../api/api";
 import {IdeaCreate} from "../../components/idea-create";
+
+import {addIdea, addRoom, addUser, getDownload, getIdeas, getRooms, getUsers} from "../api/api";
 
 const loginForm = document.getElementById('login-form') as HTMLFormElement;
 const userInput = document.getElementById('user-input') as HTMLInputElement;
@@ -58,7 +59,7 @@ roomList.addEventListener('room-joined', async function (event) {
   await localStorageAction.save('roomId', selectedRoomId);
   roomId = selectedRoomId;
   if (userId) {
-    roomChat.setUserAndRoom(selectedRoomId, userId);
+    await roomChat.setUserAndRoom(selectedRoomId, userId);
   }
   await updateUI();
   await getIdeasForComponent();
@@ -240,7 +241,7 @@ async function getIdeasForComponent() {
           console.log(error);
         });
   } else {
-    ideaList2.setIdeas([]);
+    await ideaList2.setIdeas([]);
     console.log('no ROOM! in getIdeasForComponent');
   }
 }
