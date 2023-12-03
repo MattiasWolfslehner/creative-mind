@@ -44,9 +44,9 @@ export class IdeaList extends LitElement {
               <tr>
                 <td>${i.id?i.id.toString():"null"}</td>
                 <td>
-                  ${i.content.toString().length > 40
+                  ${i.content?(i.content.toString().length > 40
                     ? i.content.toString().substring(1, 40) + '...'
-                    : i.content.toString()}
+                    : i.content.toString()):"null"}
                 </td>
               </tr>
             `,
