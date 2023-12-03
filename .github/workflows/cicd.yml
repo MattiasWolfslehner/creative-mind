@@ -101,7 +101,7 @@ jobs:
         with:
           push: true
           tags: cre8ivemind/creative-mind-frontend:latest
-          file: "{{defaultContext}}:frontend"
+          context: "./frontend"
 
   push-backend-to-docker-hub:
     needs: test-and-build-backend
@@ -125,7 +125,7 @@ jobs:
         with:
           push: true
           tags: cre8ivemind/creative-mind-backend:latest
-          file: "{{defaultContext}}:backend"
+          context: "./backend"
 
   deploy-frontend-to-oci:
     needs: push-frontend-to-docker-hub
