@@ -4,7 +4,7 @@ import '../../style/style.scss';
 
 // General
 import {localStorageAction} from '../actions/store';
-import {User} from '../types';
+import {RoomRequest} from '../types';
 
 // ShoelaceUI
 import '@shoelace-style/shoelace/dist/themes/light.css';
@@ -17,30 +17,30 @@ setBasePath('/dist/shoelace');
 
 import {IdeaList} from '../../components/idea-list';
 import {RoomList} from '../../components/room-list';
-import {RoomChat} from '../../components/room-chat';
+// import {RoomChat} from '../../components/room-chat';
+import {addIdea, addRoom, addUser, getDownload, getIdeas, getRooms, getUsers} from "../api/api";
 
 const loginForm = document.getElementById('login-form') as HTMLFormElement;
 const userInput = document.getElementById('user-input') as HTMLInputElement;
 const loginButton = document.getElementById('login-button') as HTMLFormElement;
 const registerButton = document.getElementById(
-  'register-button',
+    'register-button',
 ) as HTMLFormElement;
 const createRoomButton = document.getElementById(
-  'create-room-button',
+    'create-room-button',
 ) as HTMLFormElement;
 const ideaForm2 = document.getElementById('idea-form2') as HTMLFormElement;
 const downloadCsvBtn = document.getElementById(
-  'download-csv',
+    'download-csv',
 ) as HTMLAnchorElement;
 const copyButton = document.getElementById(
-  'copy-room-id-button',
+    'copy-room-id-button',
 ) as HTMLButtonElement;
 const roomIdElement = document.getElementById('room-id') as HTMLElement;
 const ideaList2 = document.getElementById('idea-list2') as IdeaList;
-const roomChat = document.getElementById('room-chat') as RoomChat;
+// const roomChat = document.getElementById('room-chat') as RoomChat;
 const roomList = document.getElementById('room-list') as RoomList;
 
-const restPort = 8080;
 let roomId: string | null = null;
 let userId: string | null = null;
 
@@ -50,30 +50,19 @@ roomList.addEventListener('room-joined', async function (event) {
   await localStorageAction.save('roomId', selectedRoomId);
   roomId = selectedRoomId;
   if (userId) {
-    roomChat.setUserAndRoom(selectedRoomId, userId);
+    // roomChat.setUserAndRoom(selectedRoomId, userId);
   }
   await updateUI();
-  await getIdeas();
+  await getIdeasForComponent();
 });
 
-async function getRooms() {
-  const action = `http://localhost:${restPort}/api/rooms/list`;
-
+async function getRoomsForComponent() {
   if (userId) {
-    fetch(action, {
-      headers: {
-        Accept: 'application/json',
-      },
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        //console.log(data);
-        roomList.setRooms(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    getRooms()
+        .then((data) => {
+          //console.log(data);
+          roomList.setRooms(data);
+        });
   } else {
     await roomList.setRooms([]);
   }
@@ -98,53 +87,41 @@ async function updateUI() {
     });
   }
 
-  await getRooms();
+  await getRoomsForComponent();
 }
 
 // der LOGIN für einen USER
 loginForm.addEventListener('submit', function (event) {
   event.preventDefault(); // prevent POSTback
   event.stopImmediatePropagation();
-  //console.log(event);
 
-  const action = `http://localhost:${restPort}/api/users/list`;
-  //console.log(userInput);
   userId = userInput?.value;
   console.log(`USER: ${userId}`);
 
   if (userId) {
-    fetch(action, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const userList: User[] = response;
-        // console.log(userList);
-        for (const usr of userList) {
-          if (usr.userId == userId) {
-            console.log('user logged in');
-            // if everything goes right ... cancel user Input and let him/her create rooms
-            userInput.setAttribute('readonly', 'readonly');
-            loginButton.classList.add('hidden');
-            registerButton.classList.add('hidden');
-            createRoomButton.classList.remove('hidden');
-            ideaForm2.classList.remove('hidden');
-            getRooms();
-            getIdeas();
-            // now user logged in can create rooms
-            return;
+    getUsers()
+        .then((userList) => {
+          for (var usr of userList) {
+            if (usr.userId == userId) {
+              console.log('user logged in');
+              // if everything goes right ... cancel user Input and let him/her create rooms
+              userInput.setAttribute('readonly', 'readonly');
+              loginButton.classList.add('hidden');
+              registerButton.classList.add('hidden');
+              createRoomButton.classList.remove('hidden');
+              ideaForm2.classList.remove('hidden');
+              getRoomsForComponent();
+              getIdeasForComponent();
+              // now user logged in can create rooms
+              return;
+            }
           }
-        }
-        userId = null;
-        alert('User not found. Please try different User Id.');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+          userId = null;
+          alert('User not found. Please try different User Id.');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   }
 });
 
@@ -152,38 +129,31 @@ loginForm.addEventListener('submit', function (event) {
 registerButton.addEventListener('click', function (event) {
   event.preventDefault(); // prevent POSTback
   event.stopImmediatePropagation(); // prevent second coll from div
-  //console.log(event);
 
-  const action = `http://localhost:${restPort}/api/users/register`;
-  //console.log(userInput);
   userInput.value = 'Try register';
   userId = null;
 
-  fetch(action, {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: '{}',
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      const newUser: User = response;
-      userId = newUser.userId;
-      userInput.value = userId;
-      console.log(`user logged in ${userId}`);
-      userInput.setAttribute('readonly', 'readonly');
-      loginButton.classList.add('hidden');
-      registerButton.classList.add('hidden');
-      createRoomButton.classList.remove('hidden');
-      ideaForm2.classList.remove('hidden');
-      getRooms();
-      getIdeas();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  addUser()
+      .then((newUser) => {
+        if (newUser) {
+          userId = newUser.userId;
+          userInput.value = userId;
+          console.log(`user logged in ${userId}`);
+          userInput.setAttribute('readonly', 'readonly');
+          loginButton.classList.add('hidden');
+          registerButton.classList.add('hidden');
+          createRoomButton.classList.remove('hidden');
+          ideaForm2.classList.remove('hidden');
+          getRoomsForComponent();
+          getIdeasForComponent();
+        }
+        else {
+          alert ("Registration failed!");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 });
 
 //
@@ -193,22 +163,13 @@ createRoomButton.addEventListener('click', function (event) {
   //console.log(event);
 
   if (userId) {
-    const action = `http://localhost:${restPort}/api/rooms/create`;
-    fetch(action, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({type: 'brainwritingroom'}),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        getRooms();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    addRoom('brainwritingroom')
+        .then(() => {
+          getRoomsForComponent();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   }
 });
 
@@ -217,35 +178,27 @@ ideaForm2.addEventListener('submit', function (event) {
   event.preventDefault();
   event.stopImmediatePropagation();
 
-  if (roomId) {
-    const action = `http://localhost:${restPort}/api/ideas/`;
+  if (roomId && userId) {
     const formData = new FormData(event.target as HTMLFormElement);
-    const content: string | null = formData.get('idea') as string | null;
 
-    fetch(action, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        content: content,
-        roomId: roomId,
-        memberId: userId,
-      }),
-    })
-      .then((response) => response.json())
-      .then((/*response*/) => {
-        //console.log(response);
-        getIdeas();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const request: RoomRequest = {
+      content : formData.get('idea') as string,
+      roomId : roomId,
+      memberId : userId
+    };
+
+    addIdea(request)
+        .then((/*response*/) => { // do not need response
+          //console.log(response);
+          getIdeasForComponent();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   } else {
     console.log('no ROOM! in submit Idea');
     alert('Please join a room first!');
-    getIdeas();
+    getIdeasForComponent();
   }
 });
 
@@ -256,54 +209,55 @@ window.addEventListener('DOMContentLoaded', async function () {
   if (roomId && roomId.length > 0) {
     await updateUI();
   } else {
-    await getIdeas();
+    await getIdeasForComponent();
   }
 });
 
-async function getIdeas() {
+async function getIdeasForComponent() {
   roomId = await localStorageAction.load('roomId');
   if (roomId) {
-    const action = `http://localhost:${restPort}/api/ideas/` + roomId;
-
-    fetch(action, {
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        //console.log(data);
-        ideaList2.setIdeas(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    getIdeas(roomId)
+        .then((data) => {
+          //console.log(data);
+          ideaList2.setIdeas(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   } else {
     ideaList2.setIdeas([]);
-    console.log('no ROOM! in getIdeas');
+    console.log('no ROOM! in getIdeasForComponent');
   }
 }
 
 downloadCsvBtn.addEventListener('click', downloadFile);
 
 async function downloadFile() {
-  const roomId = await localStorageAction.load('roomId');
-
-  const href = `http://localhost:${restPort}/api/rooms/${roomId}/download/csv`;
   const fileName = `ideas-${Date.now()}`;
 
-  const response = await fetch(href);
-  const blob = await response.blob();
+  if (roomId) {
+    getDownload(roomId)
+        .then((blob) => {
 
-  const suggestedFileName = prompt('Gib einen Dateinamen ein:', fileName);
+          if (blob) {
+            const suggestedFileName = prompt('Please Enter Filename:', fileName);
 
-  if (suggestedFileName) {
-    const downloadLink = document.createElement('a');
-    downloadLink.href = URL.createObjectURL(blob);
-    downloadLink.download = suggestedFileName + '.csv';
+            if (suggestedFileName) {
+              const downloadLink = document.createElement('a');
+              downloadLink.href = URL.createObjectURL(blob);
+              downloadLink.download = suggestedFileName + '.csv';
 
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
+              document.body.appendChild(downloadLink);
+              downloadLink.click();
+              document.body.removeChild(downloadLink);
+            }
+          }
+          else {
+            alert("Nothing to download!");
+          }
+        });
+  }
+  else {
+    alert("No room joined so far!");
   }
 }
