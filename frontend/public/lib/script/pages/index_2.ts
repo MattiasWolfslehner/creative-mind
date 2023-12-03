@@ -109,6 +109,7 @@ function setUserOfPage(newUserId:string) {
   registerButton.classList.add('hidden');
   createRoomButton.classList.remove('hidden');
   roomList.classList.remove('hidden');
+  roomChat.classList.remove('hidden');
   ideaCreate.classList.remove('hidden');
   ideaList2.classList.remove('hidden');
 }
