@@ -87,6 +87,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - uses: actions/download-artifact@v3
+        with:
+          name: frontend
+          path: ./frontend/dist
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -113,6 +118,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: backend
+          path: ./backend/target
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
