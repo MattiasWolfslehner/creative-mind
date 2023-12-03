@@ -118,13 +118,14 @@ export class RoomChat extends LitElement {
       <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      
       <div>
         <h2>Chat</h2>
         <p>${this.returnString()}</p>
-        <input id="message-text" type="text" />
+        <!--<input id="message-text" type="text" />
         <button id="send-message" @click="${() => this._sendMessage()}">
           Send
-        </button>
+        </button>-->
       </div>
     `;
   }

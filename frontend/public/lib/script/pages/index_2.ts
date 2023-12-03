@@ -95,6 +95,8 @@ loginForm.addEventListener('submit', function (event) {
   event.stopImmediatePropagation();
 
   userId = userInput?.value;
+  roomId = null;
+  ideaList2.setIdeas([]);
   console.log(`USER: ${userId}`);
 
   if (userId) {
@@ -131,6 +133,8 @@ registerButton.addEventListener('click', function (event) {
 
   userInput.value = 'Try register';
   userId = null;
+  roomId = null;
+  ideaList2.setIdeas([]);
 
   addUser()
       .then((newUser) => {
