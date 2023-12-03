@@ -34,8 +34,9 @@ module.exports = {
   devtool: DEV_MODE ? 'inline-source-map' : false,
   entry: {
     // start bundling from here
-    home: './public/lib/script/pages/index.js',
+    brainwriting: './public/lib/script/pages/brainwriting.js',
     home2: './public/lib/script/pages/index_2.js',
+    room: './public/lib/script/pages/room.ts',
     ...components,
   },
   output: {
@@ -57,15 +58,21 @@ module.exports = {
     // https://webpack.js.org/plugins/
     new HtmlWebpackPlugin({
       // minifies html and adds imports
-      filename: 'index.html',
-      template: 'public/routes/index.html',
-      chunks: ['home'], // only include the 'home' chunk
+      filename: 'brainwriting/index.html',
+      template: 'public/routes/brainwriting/index.html',
+      chunks: ['brainwriting'], // only include the 'home' chunk
     }),
     new HtmlWebpackPlugin({
       // minifies html and adds imports
       filename: 'index_2.html',
       template: 'public/routes/index_2.html',
       chunks: ['home2'], // only include the 'home' chunk
+    }),
+    new HtmlWebpackPlugin({
+      // minifies html and adds imports
+      filename: 'room/index.html',
+      template: 'public/routes/room/index.html',
+      chunks: ['room'], // only include the 'room' chunk
     }),
     new MiniCssExtractPlugin({
       // minifies css and splits it
@@ -107,6 +114,11 @@ module.exports = {
   module: {
     // loaders, so that webpack understands more than JavaScript and JSON
     rules: [
+      {
+        // static assets (Images, Fonts, etc.)
+        test: /\.(png|jpg|gif|svg|eot|ttf|woff)$/,
+        type: 'asset/resource',
+      },
       {
         // static assets (Images, Fonts, etc.)
         test: /\.(png|jpg|gif|svg|eot|ttf|woff)$/,

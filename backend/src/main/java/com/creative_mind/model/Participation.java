@@ -6,21 +6,17 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "participation")
-@NamedQueries({
-        @NamedQuery(name = Participation.QUERY_FIND_ALL, query = "SELECT p FROM Participation p order by p.id"),
-        @NamedQuery(
-                name = Participation.COUNT_USER_IN_ROOM,
-                query = "select count(p) from Participation p where p.member.id = :userId and p.room.id = :roomId"
-        ),
-        @NamedQuery(
-                name = Participation.DELETE_PARTICIPATION,
-                query = "delete from Participation p where p.member.userId = :userId and p.room.roomId = :roomId and p.sessionId = :sessionId"
-        )
-})
+
+@NamedQuery(name = Participation.QUERY_FIND_ALL, query = "SELECT p FROM Participation p order by p.id")
+@NamedQuery(name = Participation.COUNT_USER_IN_ROOM, query = "select count(p) from Participation p where p.member.id = :userId and p.room.id = :roomId")
+@NamedQuery(name = Participation.COUNT_USERS_BY_ROOM, query = "select count(p.id) from Participation p where p.room.roomId = :roomId")
+@NamedQuery(name = Participation.DELETE_PARTICIPATION, query = "delete from Participation p where p.member.userId = :userId and p.room.roomId = :roomId and p.sessionId = :sessionId")
 public class Participation {
     public static final String COUNT_USER_IN_ROOM = "Participation.countUserInRoom";
     public static final String DELETE_PARTICIPATION = "Participation.deleteParticipation";
-    public static final String QUERY_FIND_ALL = "Grade.findAll";
+    public static final String QUERY_FIND_ALL = "Participation.findAll";
+    public static final String COUNT_USERS_BY_ROOM = "Participation.getCountByRoomId";
+
 
     @JsonIgnore
     @Id

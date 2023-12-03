@@ -39,42 +39,46 @@ export class RoomChat extends LitElement {
     this.messages = '';
   }
 
-  public async setUserAndRoom(roomId: string, userId: string) {
+  public async setUserAndRoom(roomId: string | null, userId: string | null) {
     // Set a property, triggering an update
     this.roomId = roomId;
     this.userId = userId;
     this.messages = '';
-
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const roomChatContext: RoomChat = this; // not to be mistaken with websocket inside
 
     // baba.
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.close();
     }
 
-    this.socket = new WebSocket(
-      `ws://localhost:8080/rooms/join/${roomId}/${userId}`,
-    );
+    this.socket = null;
 
-    this.socket.onopen = function (event: Event) {
-      event.preventDefault();
-      console.log('WebSocket connection opened:', event);
-    };
-    this.socket.onmessage = function (ev: MessageEvent) {
-      roomChatContext._handleWebSocketMessage(ev);
-    };
+    if (roomId && userId) {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const roomChatContext: RoomChat = this; // not to be mistaken with websocket inside
 
-    this.socket.onclose = function (event: Event) {
-      event.preventDefault();
-      console.log('WebSocket connection closed:', event);
-    };
+      this.socket = new WebSocket(
+          `ws://localhost:8080/rooms/join/${roomId}/${userId}`,
+      );
 
-    this.socket.onerror = function (error: Event) {
-      error.preventDefault();
-      console.error('WebSocket error:', error);
-    };
+      this.socket.onopen = function (event: Event) {
+        event.preventDefault();
+        console.log('WebSocket connection opened:', event);
+      };
+      this.socket.onmessage = function (ev: MessageEvent) {
+        roomChatContext._handleWebSocketMessage(ev);
+      };
 
+      this.socket.onclose = function (event: Event) {
+        event.preventDefault();
+        console.log('WebSocket connection closed:', event);
+      };
+
+      this.socket.onerror = function (error: Event) {
+        error.preventDefault();
+        console.error('WebSocket error:', error);
+      };
+
+    }
     // ...do other stuff...
     return 'done';
   }
