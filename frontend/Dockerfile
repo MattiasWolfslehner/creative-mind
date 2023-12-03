@@ -1,11 +1,9 @@
-# Use a minimal Nginx base image
-FROM nginx:alpine
+FROM nginx:stable-alpine3.17-slim
 
-# Copy the static files from the local machine to the Nginx default public directory
-COPY frontend/dist /usr/share/nginx/html
+WORKDIR /usr/share/nginx/html
 
-# Expose the default Nginx port
+COPY dist/. .
+
 EXPOSE 80
 
-# Command to start Nginx when the container runs
 CMD ["nginx", "-g", "daemon off;"]
