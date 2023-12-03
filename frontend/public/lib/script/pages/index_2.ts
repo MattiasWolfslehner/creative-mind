@@ -236,6 +236,8 @@ async function downloadFile() {
   const fileName = `ideas-${Date.now()}`;
 
   if (roomId) {
+    console.log(`fetch for room ${roomId}`);
+
     getDownload(roomId)
         .then((blob) => {
 
