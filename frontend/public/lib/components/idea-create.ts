@@ -1,9 +1,10 @@
 // https://lit.dev/docs/tools/adding-lit/
 
-import {LitElement, html} from 'lit';
+import {LitElement, html, unsafeCSS, css} from 'lit';
 import {customElement} from 'lit/decorators.js';
-import '../style/main.css';
-import '../style/style.scss';
+// import '../style/main.css';
+// import '../style/style.scss';
+
 
 @customElement('idea-create')
 export class IdeaCreate extends LitElement {
@@ -13,6 +14,23 @@ export class IdeaCreate extends LitElement {
     super();
   }
 
+  static override get styles() {
+    return [
+        css`${unsafeCSS(require("../style/style.scss"))}`,
+        css`${unsafeCSS(require("../style/main.css"))}`,
+        css`
+          #add-idea {
+            -webkit-appearance: button;
+            background-color: transparent;
+            padding: 0;
+            --border-color: var(--primary);
+            border: 1px solid #fff;
+            border-radius: 5px;
+          }
+        `,
+        css``
+    ];
+  }
   private async _createClick() {
     this.content = '';
     if (this.shadowRoot) {
@@ -40,10 +58,8 @@ export class IdeaCreate extends LitElement {
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
       
-      <div>
-        <textarea id="idea" name="idea" placeholder="your idea..."></textarea>
-        <button id="add-idea" @click="${() => this._createClick()}">hinzufügen</button>
-      </div>    
+      <textarea id="idea" name="idea" placeholder="your idea..."></textarea>
+      <button id="add-idea" @click="${() => this._createClick()}">hinzufügen</button>
     `;
   }
 }
