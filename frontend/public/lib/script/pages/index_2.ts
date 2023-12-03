@@ -100,6 +100,9 @@ async function updateUI() {
 function setUserOfPage(newUserId:string) {
   userId = newUserId;
   userInput.value = newUserId;
+  roomId = null;
+  localStorageAction.save('roomId', roomId);
+  ideaList2.setIdeas([]);
   userInput.setAttribute('readonly', 'readonly');
   loginButton.classList.add('hidden');
   registerButton.classList.add('hidden');
@@ -115,8 +118,6 @@ loginForm.addEventListener('submit', function (event) {
   event.stopImmediatePropagation();
 
   userId = userInput?.value;
-  roomId = null;
-  ideaList2.setIdeas([]);
   console.log(`USER: ${userId}`);
 
   if (userId) {
@@ -150,8 +151,6 @@ registerButton.addEventListener('click', function (event) {
   // reset room and user
   userInput.value = 'Try register';
   userId = null;
-  roomId = null;
-  ideaList2.setIdeas([]);
 
   addUser()
       .then((newUser) => {
