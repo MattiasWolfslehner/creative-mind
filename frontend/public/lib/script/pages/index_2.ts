@@ -17,7 +17,7 @@ setBasePath('/dist/shoelace');
 
 import {IdeaList} from '../../components/idea-list';
 import {RoomList} from '../../components/room-list';
-// import {RoomChat} from '../../components/room-chat';
+import {RoomChat} from '../../components/room-chat';
 import {addIdea, addRoom, addUser, getDownload, getIdeas, getRooms, getUsers} from "../api/api";
 
 const loginForm = document.getElementById('login-form') as HTMLFormElement;
@@ -38,7 +38,7 @@ const copyButton = document.getElementById(
 ) as HTMLButtonElement;
 const roomIdElement = document.getElementById('room-id') as HTMLElement;
 const ideaList2 = document.getElementById('idea-list2') as IdeaList;
-// const roomChat = document.getElementById('room-chat') as RoomChat;
+const roomChat = document.getElementById('room-chat') as RoomChat;
 const roomList = document.getElementById('room-list') as RoomList;
 
 let roomId: string | null = null;
@@ -46,11 +46,11 @@ let userId: string | null = null;
 
 roomList.addEventListener('room-joined', async function (event) {
   const selectedRoomId = (<CustomEvent>event).detail;
-  console.log(selectedRoomId);
+  console.log(`selected room ${selectedRoomId}`);
   await localStorageAction.save('roomId', selectedRoomId);
   roomId = selectedRoomId;
   if (userId) {
-    // roomChat.setUserAndRoom(selectedRoomId, userId);
+    roomChat.setUserAndRoom(selectedRoomId, userId);
   }
   await updateUI();
   await getIdeasForComponent();
@@ -60,7 +60,6 @@ async function getRoomsForComponent() {
   if (userId) {
     getRooms()
         .then((data) => {
-          //console.log(data);
           roomList.setRooms(data);
         });
   } else {
@@ -236,8 +235,6 @@ async function downloadFile() {
   const fileName = `ideas-${Date.now()}`;
 
   if (roomId) {
-    console.log(`fetch for room ${roomId}`);
-
     getDownload(roomId)
         .then((blob) => {
 
