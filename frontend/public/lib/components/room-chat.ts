@@ -1,6 +1,6 @@
 // https://lit.dev/docs/tools/adding-lit/
 
-import {html, LitElement,css, unsafeCSS} from 'lit';
+import {html, LitElement, css, unsafeCSS} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 // import {live} from 'lit/directives/live.js';
 import '../script/types';
@@ -26,19 +26,23 @@ export class RoomChat extends LitElement {
 
   static override get styles() {
     return [
-      css`${unsafeCSS(require("../style/style.scss"))}`,
-      css`${unsafeCSS(require("../style/main.css"))}`,
       css`
-          #send-message {
-            -webkit-appearance: button;
-            background-color: transparent;
-            padding: 0;
-            --border-color: var(--primary);
-            border: 1px solid #fff;
-            border-radius: 5px;
-          }
-        `,
-      css``
+        ${unsafeCSS(require('../style/style.scss'))}
+      `,
+      css`
+        ${unsafeCSS(require('../style/main.css'))}
+      `,
+      css`
+        #send-message {
+          -webkit-appearance: button;
+          background-color: transparent;
+          padding: 0;
+          --border-color: var(--primary);
+          border: 1px solid #fff;
+          border-radius: 5px;
+        }
+      `,
+      css``,
     ];
   }
   private async _handleWebSocketMessage(event: MessageEvent) {
@@ -72,7 +76,7 @@ export class RoomChat extends LitElement {
       const roomChatContext: RoomChat = this; // not to be mistaken with websocket inside
 
       this.socket = new WebSocket(
-          `ws://localhost:8080/rooms/join/${roomId}/${userId}`,
+        `ws://localhost:8080/rooms/join/${roomId}/${userId}`,
       );
 
       this.socket.onopen = function (event: Event) {
@@ -92,7 +96,6 @@ export class RoomChat extends LitElement {
         error.preventDefault();
         console.error('WebSocket error:', error);
       };
-
     }
     // ...do other stuff...
     return 'done';
@@ -133,7 +136,7 @@ export class RoomChat extends LitElement {
       <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-      
+
       <div>
         <h2>Chat</h2>
         <p>${this.returnString()}</p>

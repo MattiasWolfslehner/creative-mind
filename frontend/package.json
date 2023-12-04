@@ -12,9 +12,9 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "cross-env BUILD_DOCS=false webpack-cli serve",
+    "start": "cross-env BUILD_DOCS=true webpack-cli serve",
     "dev": "npm start",
-    "build": "cross-env BUILD_DOCS=false webpack-cli build --mode production",
+    "build": "cross-env BUILD_DOCS=true webpack-cli build --mode production",
     "preview": "node server.js --folder dist",
     "format": "prettier --single-quote --no-bracket-spacing --bracket-same-line --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,css,scss}\"",
     "lint": "eslint public",

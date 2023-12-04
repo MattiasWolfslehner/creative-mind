@@ -41,8 +41,8 @@ async function addRoom(type: string): Promise<Room | null> {
   };
 
   return await fetchJson(
-      `http://127.0.0.1:${restPort}/api/rooms/create`,
-      config,
+    `http://127.0.0.1:${restPort}/api/rooms/create`,
+    config,
   );
 }
 
@@ -63,12 +63,12 @@ async function addUser(): Promise<User | null> {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({}),  // needs empty body!
+    body: JSON.stringify({}), // needs empty body!
   };
 
   return await fetchJson(
-      `http://127.0.0.1:${restPort}/api/users/register`,
-      config,
+    `http://127.0.0.1:${restPort}/api/users/register`,
+    config,
   );
 }
 
@@ -93,12 +93,12 @@ async function getIdeas(roomId: string): Promise<Idea[]> {
   };
 
   return await fetchJson(
-      `http://127.0.0.1:${restPort}/api/ideas/${roomId}`,
-      config,
+    `http://127.0.0.1:${restPort}/api/ideas/${roomId}`,
+    config,
   );
 }
 
-async function getDownload(roomId:string): Promise<Blob | null> {
+async function getDownload(roomId: string): Promise<Blob | null> {
   try {
     const href = `http://127.0.0.1:${restPort}/api/rooms/${roomId}/download/csv`;
     const response = await fetch(href);

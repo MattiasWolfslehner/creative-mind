@@ -1,6 +1,6 @@
 // https://lit.dev/docs/tools/adding-lit/
 
-import {LitElement, html,css,unsafeCSS} from 'lit';
+import {LitElement, html, css, unsafeCSS} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import {Idea} from '../script/types';
 
@@ -14,19 +14,23 @@ export class IdeaList extends LitElement {
 
   static override get styles() {
     return [
-      css`${unsafeCSS(require("../style/style.scss"))}`,
-      css`${unsafeCSS(require("../style/main.css"))}`,
       css`
-          .my-lit-button {
-            -webkit-appearance: button;
-            background-color: transparent;
-            padding: 0;
-            --border-color: var(--primary);
-            border: 1px solid #fff;
-            border-radius: 5px;
-          }
-        `,
-      css``
+        ${unsafeCSS(require('../style/style.scss'))}
+      `,
+      css`
+        ${unsafeCSS(require('../style/main.css'))}
+      `,
+      css`
+        .my-lit-button {
+          -webkit-appearance: button;
+          background-color: transparent;
+          padding: 0;
+          --border-color: var(--primary);
+          border: 1px solid #fff;
+          border-radius: 5px;
+        }
+      `,
+      css``,
     ];
   }
 
@@ -58,11 +62,13 @@ export class IdeaList extends LitElement {
           ${this.ideas.map(
             (i) => html`
               <tr>
-                <td>${i.id?i.id.toString():"null"}</td>
+                <td>${i.id ? i.id.toString() : 'null'}</td>
                 <td>
-                  ${i.content?(i.content.toString().length > 40
-                    ? i.content.toString().substring(1, 40) + '...'
-                    : i.content.toString()):"null"}
+                  ${i.content
+                    ? i.content.toString().length > 40
+                      ? i.content.toString().substring(1, 40) + '...'
+                      : i.content.toString()
+                    : 'null'}
                 </td>
               </tr>
             `,
