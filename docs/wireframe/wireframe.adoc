@@ -12,8 +12,11 @@ https://www.figma.com/file/dM3qG2VB9eYjCiUFSOzOit/Creative-Minds---Wireframe?typ
 
 === Wireframes als PNG
 
-Homepage (Create/Join Room)
+Homepage (Login/Join Room)
 image:./img/Wireframe_Home.png[]
+
+Homepage (Register/Join Room)
+image:./img/Wireframe_HomeWhenClickedOnRegister.png[]
 
 6-3-5 Methode bevor Start des Timers als Room Admin (Brainwriting)
 image:./img/Wireframe_Brainwriting_BeforeStartingTheTimerAsTheRoomAdmin.png[]
