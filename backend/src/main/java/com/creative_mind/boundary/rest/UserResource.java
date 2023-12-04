@@ -25,9 +25,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addUser(User user) {
-
         User addedUser = this.userRepository.createUser(user);
-
         return Response.ok(addedUser).build();
     }
 }

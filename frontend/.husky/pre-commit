@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+cd ./frontend/
+
+npm run format
+
+# maybe not wanted:
+# git add --all
+# git commit --amend
+
+# If the npm command fails on Windows, navigate to the where node command and delete the non-executable file.

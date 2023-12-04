@@ -42,6 +42,7 @@
         };
 
         socket.onmessage = function (event) {
+            console.log(ideas);
             const ideas = JSON.parse(event.data);
             handleWebSocketMessage(ideas);
         };

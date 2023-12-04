@@ -1,130 +1,118 @@
-import axios, { AxiosResponse } from 'axios'; // TODO: REPLACE AXIOS WITH BROWSER FETCH
-import { Idea, Room, User } from '../types';
+import {Idea, Room, User, RoomRequest} from '../types';
 
-const restPort = 8080;
+const restPort = 8080; // 127.0.0.1 needed for tests. else -> ::1 => Error
 
-async function getRooms(): Promise<AxiosResponse<Room[]>> {
-  const config = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function fetchJson(url: string, config: RequestInit): Promise<any> {
+  try {
+    const response = await fetch(url, config);
+
+    if (!response.ok) {
+      console.error(`Request failed. Status: ${response.status}`);
+      return null;
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+
+async function getRooms(): Promise<Room[]> {
+  const config: RequestInit = {
     headers: {
       Accept: 'application/json',
     },
   };
 
-  try {
-    const response = await axios.get(
-      `http://localhost:${restPort}/api/rooms/list`,
-      config,
-    );
-    console.log(response.data);
-    return response;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  return await fetchJson(`http://127.0.0.1:${restPort}/api/rooms/list`, config);
 }
 
-async function addRoom(roomType: String): Promise<AxiosResponse<any>> {
-  try {
-    const response = await axios.post(
-      `http://localhost:${restPort}/api/rooms/create`,
-      roomType,
-    );
-    console.log('room added successfully: ' + response);
-    return response;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+async function addRoom(type: string): Promise<Room | null> {
+  const config: RequestInit = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      type: type,
+    }),
+  };
+
+  return await fetchJson(
+    `http://127.0.0.1:${restPort}/api/rooms/create`,
+    config,
+  );
 }
 
-async function getUsers(): Promise<AxiosResponse<User[]>> {
-  const config = {
+async function getUsers(): Promise<User[]> {
+  const config: RequestInit = {
     headers: {
       Accept: 'application/json',
     },
   };
 
-  try {
-    const response = await axios.get(
-      `http://localhost:${restPort}/api/users/list`,
-      config,
-    );
-    console.log(response.data);
-    return response;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  return await fetchJson(`http://127.0.0.1:${restPort}/api/users/list`, config);
 }
 
-async function addUser(): Promise<AxiosResponse<any>> {
-  const config = {
+async function addUser(): Promise<User | null> {
+  const config: RequestInit = {
+    method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({}), // needs empty body!
   };
 
-  try {
-    const response = await axios.post(
-      `http://localhost:${restPort}/api/users/register`,
-      config,
-    );
-    console.log(response);
-    return response;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  return await fetchJson(
+    `http://127.0.0.1:${restPort}/api/users/register`,
+    config,
+  );
 }
 
-async function addIdea(
-  content: String,
-  roomId: String,
-  memberId: String,
-): Promise<AxiosResponse<any>> {
-  const config = {
+async function addIdea(request: RoomRequest): Promise<Idea | null> {
+  const config: RequestInit = {
+    method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify(request),
   };
 
-  const data = {
-    content: content,
-    roomId: roomId,
-    memberId: memberId,
-  };
-  try {
-    return await axios.post(
-      `http://localhost:${restPort}/api/ideas/`,
-      data,
-      config,
-    );
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  return await fetchJson(`http://127.0.0.1:${restPort}/api/ideas/`, config);
 }
 
-async function getIdeas(): Promise<AxiosResponse<Idea[]>> {
-  const config = {
+async function getIdeas(roomId: string): Promise<Idea[]> {
+  const config: RequestInit = {
     headers: {
       Accept: 'application/json',
     },
   };
 
+  return await fetchJson(
+    `http://127.0.0.1:${restPort}/api/ideas/${roomId}`,
+    config,
+  );
+}
+
+async function getDownload(roomId: string): Promise<Blob | null> {
   try {
-    const response = await axios.get(
-      `http://localhost:${restPort}/api/ideas/`,
-      config,
-    );
-    console.log(response.data);
-    return response;
-  } catch (error) {
-    console.log(error);
-    throw error;
+    const href = `http://127.0.0.1:${restPort}/api/rooms/${roomId}/download/csv`;
+    const response = await fetch(href);
+
+    if (!response.ok) {
+      console.error(`Request failed. Status: ${response.status}`);
+      return null;
+    }
+
+    return await response.blob();
+  } catch (err) {
+    console.error(err);
+    return null;
   }
 }
 
-export { getRooms, addRoom, addUser, getUsers, addIdea, getIdeas };
+export {getRooms, addRoom, addUser, getUsers, addIdea, getIdeas, getDownload};

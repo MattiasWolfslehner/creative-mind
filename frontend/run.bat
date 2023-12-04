@@ -1,6 +1,4 @@
 @echo off
 
 rem faster npm i (forces lockfile usage)
-npm ci --frozen-lockfile
-
-npm start
+npm ci --frozen-lockfile --no-audit && npm start

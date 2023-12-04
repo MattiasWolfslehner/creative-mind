@@ -1,0 +1,7 @@
+= Creative Mind
+
+https://github.com/Stevan06v/creative-mind/actions/workflows/cicd.yml[image:https://github.com/Stevan06v/creative-mind/actions/workflows/cicd.yml/badge.svg[CI/CD
+Pipeline]]
+
+Creative Mind is a web app where your new startup idea might be born. +
+Easily brainstorm with others in real time.

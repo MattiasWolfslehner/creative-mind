@@ -22,19 +22,6 @@ public class ParticipationResource {
                 .build();
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/participate")
-    public Response participate(ParticipantionRequest participantRequest) {
-
-        this.participationRepository.addParticipation(participantRequest);
-
-        return Response
-                .ok(participationRepository.getAllParticipation())
-                .build();
-    }
-
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

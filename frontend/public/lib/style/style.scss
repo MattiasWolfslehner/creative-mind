@@ -1,4 +1,8 @@
 body {
+  background-image: url('../assets/FunkyRetro_Background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+
   header {
     padding: 0.5rem 1rem;
     position: sticky;
@@ -43,6 +47,7 @@ body {
       &:hover + #cm-uuid {
         display: block;
       }
+
       &:hover + #room-id {
         display: block;
       }
@@ -55,6 +60,15 @@ body {
       bottom: 7%;
       right: 10%;
       background-color: var(--background-color);
+      padding: 10px;
+      border: 1px solid #fff;
+      border-radius: 5px;
+    }
+
+    #add-idea,
+    .room-join-button,
+    #send-message {
+      background-color: green;
       padding: 10px;
       border: 1px solid #fff;
       border-radius: 5px;

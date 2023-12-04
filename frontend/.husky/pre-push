@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+cd ./frontend/
+
+npm run lint
+
+# If the npm command fails on Windows, navigate to the where node command and delete the non-executable file.

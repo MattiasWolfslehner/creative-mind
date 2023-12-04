@@ -7,12 +7,19 @@ public class ParticipantionRequest {
     private UUID roomId;
     private UUID memberId;
 
+    private String sessionId;
+
     public ParticipantionRequest() {
     }
 
-    public ParticipantionRequest(UUID roomId, UUID memberId) {
+    public ParticipantionRequest(UUID roomId, UUID memberId, String sessionId) {
         this.roomId = roomId;
         this.memberId = memberId;
+        this.sessionId = sessionId;
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 
     public String getRoomType() {

@@ -11,14 +11,18 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
-
 import java.util.List;
 import java.util.UUID;
+
 
 @ApplicationScoped
 public class ParticipationRepository {
     @Inject
     EntityManager entityManager;
+    @Inject
+    UserRepository userRepository;
+    @Inject
+    RoomRepository roomRepository;
 
     public List<Participation> getAllParticipation() {
         return this.entityManager.createNamedQuery(Participation.QUERY_FIND_ALL, Participation.class).getResultList();
@@ -26,64 +30,38 @@ public class ParticipationRepository {
 
     @Transactional
     public void addParticipation(ParticipantionRequest participationRequest) {
-        UUID userId = participationRequest.getMemberId();
-        UUID roomId = participationRequest.getRoomId();
+        String sessionId = participationRequest.getSessionId();
 
-        TypedQuery<User> userQuery = this.entityManager
-                .createNamedQuery(User.GET_USER_BY_USER_ID, User.class);
-        userQuery.setParameter("userId", userId);
+        User member = userRepository.getUserByUUID(participationRequest.getMemberId());
+        Room room = roomRepository.getRoomByUUID(participationRequest.getRoomId());
 
-        TypedQuery<Room> roomQuery = this.entityManager
-                .createNamedQuery(Room.GET_ROOM_BY_ROOM_ID, Room.class);
-        roomQuery.setParameter("roomId", roomId);
-
-        User member = userQuery.getSingleResult();
-        Room room = roomQuery.getSingleResult();
-
-        Participation participation = new Participation(room, member);
+        Participation participation = new Participation(room, member, sessionId);
 
         if (!this.isUserInRoom(member.getId(), room.getId())) {
             this.entityManager.persist(participation);
         } else {
-            throw new CreativeMindException(String.format("User[%s] is already in Room[%s]!", userId, roomId));
+            throw new CreativeMindException(String.format("User[%s] is already in Room[%s]!", member.getId(), room.getId()));
         }
     }
 
     @Transactional
     public void removeParticipation(ParticipantionRequest participationRequest) {
-        UUID userId = participationRequest.getMemberId();
-        UUID roomId = participationRequest.getRoomId();
+        String sessionId = participationRequest.getSessionId();
 
-        TypedQuery<User> userQuery = this.entityManager
-                .createNamedQuery(User.GET_USER_BY_USER_ID, User.class);
-        userQuery.setParameter("userId", userId);
+        User member = userRepository.getUserByUUID(participationRequest.getMemberId());
+        Room room = roomRepository.getRoomByUUID(participationRequest.getRoomId());
 
-        TypedQuery<Room> roomQuery = this.entityManager
-                .createNamedQuery(Room.GET_ROOM_BY_ROOM_ID, Room.class);
-        roomQuery.setParameter("roomId", roomId);
-
-        User member = userQuery.getSingleResult();
-        Room room = roomQuery.getSingleResult();
-
-        Participation participation = new Participation(room, member);
+        Participation participation = new Participation(room, member, sessionId);
 
         if (this.isUserInRoom(member.getId(), room.getId())) {
-            Query participationQuery = this.entityManager
-                    .createNamedQuery(Participation.DELETE_PARTICIPATION);
-
-            participationQuery.setParameter("roomId", participation.getRoom().getRoomId());
-            participationQuery.setParameter("userId", participation.getMember().getUserId());
-
-            int isSuccess = participationQuery.executeUpdate();
-
+            this.entityManager.remove(participation);
         } else {
-            throw new CreativeMindException(String.format("User[%s] is not in Room[%s]!", userId, roomId));
+            throw new CreativeMindException(String.format("User[%s] is not in Room[%s]!", member.getId(), room.getId()));
         }
     }
 
-
     public boolean isUserInRoom(Integer userId, Integer roomId) {
-        TypedQuery<Long> query = entityManager.createNamedQuery("Participation.countUserInRoom", Long.class);
+        TypedQuery<Long> query = entityManager.createNamedQuery(Participation.COUNT_USER_IN_ROOM, Long.class);
 
         Long count = query
                 .setParameter("userId", userId)
@@ -92,4 +70,13 @@ public class ParticipationRepository {
 
         return count > 0;
     }
+
+    public Integer countUsersInRoom(UUID roomId){
+        TypedQuery<Long> query = entityManager.createNamedQuery(Participation.COUNT_USERS_BY_ROOM, Long.class);
+        return query
+                .setParameter("roomId", roomId)
+                .getSingleResult()
+                .intValue();
+    }
+
 }

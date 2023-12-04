@@ -1,6 +1,6 @@
 export interface Idea {
-  id: number;
-  content: string;
+  id: number | null;
+  content: string | null;
 }
 
 export interface Room {
@@ -12,6 +12,12 @@ export interface Room {
 export interface User {
   id: number;
   userId: string;
+}
+
+export interface RoomRequest {
+  content: string;
+  roomId: string;
+  memberId: string;
 }
 
 export interface IdeaRequest {
