@@ -5,6 +5,8 @@ RUN chown 1001 /work \
     && chown 1001:root /work
 COPY --chown=1001:root target/*-runner /work/application
 
+RUN chmod +x /work/application
+
 EXPOSE 8080
 USER 1001
 
