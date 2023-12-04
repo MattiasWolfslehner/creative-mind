@@ -3,8 +3,6 @@
 import {LitElement, html,css,unsafeCSS} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import {Room} from '../script/types';
-import '../style/main.css';
-import '../style/style.scss';
 
 @customElement('room-list')
 export class RoomList extends LitElement {

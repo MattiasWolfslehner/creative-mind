@@ -2,9 +2,6 @@
 
 import {LitElement, html, unsafeCSS, css} from 'lit';
 import {customElement} from 'lit/decorators.js';
-// import '../style/main.css';
-// import '../style/style.scss';
-
 
 @customElement('idea-create')
 export class IdeaCreate extends LitElement {

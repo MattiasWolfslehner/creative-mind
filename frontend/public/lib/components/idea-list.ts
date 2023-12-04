@@ -3,9 +3,6 @@
 import {LitElement, html,css,unsafeCSS} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import {Idea} from '../script/types';
-import '../style/main.css';
-import '../style/style.scss';
-
 
 @customElement('idea-list')
 export class IdeaList extends LitElement {
