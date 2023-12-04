@@ -1,9 +1,11 @@
-FROM openjdk:22-ea-17-jdk-slim-bullseye
-
-WORKDIR /application
-
-COPY target/. .
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.8
+WORKDIR /work/
+RUN chown 1001 /work \
+    && chmod "g+rwX" /work \
+    && chown 1001:root /work
+COPY --chown=1001:root target/*-runner /work/application
 
 EXPOSE 8080
+USER 1001
 
-CMD ["./creative-mind-backend-1.0-SNAPSHOT-runner", "-Dquarkus.http.host=0.0.0.0"]
+ENTRYPOINT ["./application", "-Dquarkus.http.host=0.0.0.0"]
