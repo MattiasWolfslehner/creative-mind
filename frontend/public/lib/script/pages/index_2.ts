@@ -18,6 +18,8 @@ setBasePath('/dist/shoelace');
 import {IdeaList} from '../../components/idea-list';
 import {RoomList} from '../../components/room-list';
 import {RoomChat} from '../../components/room-chat';
+import {IdeaCreate} from "../../components/idea-create";
+
 import {addIdea, addRoom, addUser, getDownload, getIdeas, getRooms, getUsers} from "../api/api";
 
 const loginForm = document.getElementById('login-form') as HTMLFormElement;
@@ -29,14 +31,21 @@ const registerButton = document.getElementById(
 const createRoomButton = document.getElementById(
     'create-room-button',
 ) as HTMLFormElement;
-const ideaForm2 = document.getElementById('idea-form2') as HTMLFormElement;
+
+
+
+// const ideaForm2 = document.getElementById('idea-form2') as HTMLFormElement;
 const downloadCsvBtn = document.getElementById(
     'download-csv',
 ) as HTMLAnchorElement;
 const copyButton = document.getElementById(
     'copy-room-id-button',
 ) as HTMLButtonElement;
+
+
 const roomIdElement = document.getElementById('room-id') as HTMLElement;
+
+const ideaCreate = document.getElementById('idea-create') as IdeaCreate;
 const ideaList2 = document.getElementById('idea-list2') as IdeaList;
 const roomChat = document.getElementById('room-chat') as RoomChat;
 const roomList = document.getElementById('room-list') as RoomList;
@@ -50,7 +59,7 @@ roomList.addEventListener('room-joined', async function (event) {
   await localStorageAction.save('roomId', selectedRoomId);
   roomId = selectedRoomId;
   if (userId) {
-    roomChat.setUserAndRoom(selectedRoomId, userId);
+    await roomChat.setUserAndRoom(selectedRoomId, userId);
   }
   await updateUI();
   await getIdeasForComponent();
@@ -68,7 +77,6 @@ async function getRoomsForComponent() {
 }
 
 async function updateUI() {
-  ideaForm2.classList.toggle('hidden');
   console.log(roomId);
 
   if (roomId) {
@@ -89,6 +97,23 @@ async function updateUI() {
   await getRoomsForComponent();
 }
 
+
+function setUserOfPage(newUserId:string) {
+  userId = newUserId;
+  userInput.value = newUserId;
+  roomId = null;
+  localStorageAction.save('roomId', roomId);
+  ideaList2.setIdeas([]);
+  userInput.setAttribute('readonly', 'readonly');
+  loginButton.classList.add('hidden');
+  registerButton.classList.add('hidden');
+  createRoomButton.classList.remove('hidden');
+  roomList.classList.remove('hidden');
+  roomChat.classList.remove('hidden');
+  ideaCreate.classList.remove('hidden');
+  ideaList2.classList.remove('hidden');
+}
+
 // der LOGIN für einen USER
 loginForm.addEventListener('submit', function (event) {
   event.preventDefault(); // prevent POSTback
@@ -104,11 +129,7 @@ loginForm.addEventListener('submit', function (event) {
             if (usr.userId == userId) {
               console.log('user logged in');
               // if everything goes right ... cancel user Input and let him/her create rooms
-              userInput.setAttribute('readonly', 'readonly');
-              loginButton.classList.add('hidden');
-              registerButton.classList.add('hidden');
-              createRoomButton.classList.remove('hidden');
-              ideaForm2.classList.remove('hidden');
+              setUserOfPage(usr.userId);
               getRoomsForComponent();
               getIdeasForComponent();
               // now user logged in can create rooms
@@ -129,20 +150,15 @@ registerButton.addEventListener('click', function (event) {
   event.preventDefault(); // prevent POSTback
   event.stopImmediatePropagation(); // prevent second coll from div
 
+  // reset room and user
   userInput.value = 'Try register';
   userId = null;
 
   addUser()
       .then((newUser) => {
         if (newUser) {
-          userId = newUser.userId;
-          userInput.value = userId;
-          console.log(`user logged in ${userId}`);
-          userInput.setAttribute('readonly', 'readonly');
-          loginButton.classList.add('hidden');
-          registerButton.classList.add('hidden');
-          createRoomButton.classList.remove('hidden');
-          ideaForm2.classList.remove('hidden');
+          console.log(`user logged in ${newUser.userId}`);
+          setUserOfPage(newUser.userId);
           getRoomsForComponent();
           getIdeasForComponent();
         }
@@ -173,15 +189,17 @@ createRoomButton.addEventListener('click', function (event) {
 });
 
 // add idea
-ideaForm2.addEventListener('submit', function (event) {
+ideaCreate.addEventListener('pressed-create', function (event) {
   event.preventDefault();
   event.stopImmediatePropagation();
 
+  const newIdea = (<CustomEvent>event).detail;
+  console.log(`new IDEA ${newIdea}`);
+
   if (roomId && userId) {
-    const formData = new FormData(event.target as HTMLFormElement);
 
     const request: RoomRequest = {
-      content : formData.get('idea') as string,
+      content : newIdea,
       roomId : roomId,
       memberId : userId
     };
@@ -224,7 +242,7 @@ async function getIdeasForComponent() {
           console.log(error);
         });
   } else {
-    ideaList2.setIdeas([]);
+    await ideaList2.setIdeas([]);
     console.log('no ROOM! in getIdeasForComponent');
   }
 }
