@@ -4,12 +4,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'spinnaker': ['Spinnaker', 'sans-serif'],
+        spinnaker: ['Spinnaker', 'sans-serif'],
       },
       colors: {
         inputfieldPurple: '#8D63D0',
         inputfieldBorderPurple: '#9D75EF',
-      }
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],

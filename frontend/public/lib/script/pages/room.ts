@@ -51,6 +51,7 @@ roomInput.addEventListener("input", function() {
 
 
 registerButton.addEventListener('click', function (event) {
+
   event.preventDefault(); // prevent POST back
   event.stopImmediatePropagation(); // prevent second coll from div
 
@@ -73,7 +74,7 @@ registerButton.addEventListener('click', function (event) {
           console.log(error);
       });
 
-    const newHTMLContent = `
+  const newHTMLContent = `
     <div style="position: absolute; left: 20%; top: 25vh; width: 60vw; display: flex; flex-direction: column; align-items: center; justify-content: center;">
         <h2 class="text-4xl text-white font-spinnaker">Kreativitätstechnik</h2>
         <hr class="border-inputfieldBorderPurple border-5 border-t-5">
@@ -90,6 +91,7 @@ registerButton.addEventListener('click', function (event) {
         <div id="create-room-button" role="button" class="flex-grow w-full max-w-[360px] h-full px-4 py-2 text-black text-2xl font-spinnaker bg-white border-5 border-black rounded"
             style="display: flex; align-items: center; justify-content: center;">Create Room</div>
     </div>`;
+  
     const mainContainer = document.getElementById('mainContainer');
     if (mainContainer) {
         mainContainer.innerHTML = newHTMLContent;

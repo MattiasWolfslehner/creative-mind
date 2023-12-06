@@ -1,6 +1,6 @@
 // https://lit.dev/docs/tools/adding-lit/
 
-import {LitElement, html,css,unsafeCSS} from 'lit';
+import {LitElement, html, css, unsafeCSS} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import {Room} from '../script/types';
 
@@ -24,19 +24,23 @@ export class RoomList extends LitElement {
 
   static override get styles() {
     return [
-      css`${unsafeCSS(require("../style/style.scss"))}`,
-      css`${unsafeCSS(require("../style/main.css"))}`,
       css`
-          .room-list-button {
-            -webkit-appearance: button;
-            background-color: transparent;
-            padding: 0;
-            --border-color: var(--primary);
-            border: 1px solid #fff;
-            border-radius: 5px;
-          }
-        `,
-      css``
+        ${unsafeCSS(require('../style/style.scss'))}
+      `,
+      css`
+        ${unsafeCSS(require('../style/main.css'))}
+      `,
+      css`
+        .room-list-button {
+          -webkit-appearance: button;
+          background-color: transparent;
+          padding: 0;
+          --border-color: var(--primary);
+          border: 1px solid #fff;
+          border-radius: 5px;
+        }
+      `,
+      css``,
     ];
   }
   public async setRooms(rooms: Room[]) {
@@ -80,7 +84,8 @@ export class RoomList extends LitElement {
                 <td>${i.type}</td>
                 <td>
                   <button
-                    id="_room_${i.roomId}" class="room-list-button"
+                    id="_room_${i.roomId}"
+                    class="room-list-button"
                     @click="${() => this._roomJoined(i.roomId)}">
                     Join
                   </button>

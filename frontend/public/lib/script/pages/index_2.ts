@@ -18,30 +18,35 @@ setBasePath('/dist/shoelace');
 import {IdeaList} from '../../components/idea-list';
 import {RoomList} from '../../components/room-list';
 import {RoomChat} from '../../components/room-chat';
-import {IdeaCreate} from "../../components/idea-create";
+import {IdeaCreate} from '../../components/idea-create';
 
-import {addIdea, addRoom, addUser, getDownload, getIdeas, getRooms, getUsers} from "../api/api";
+import {
+  addIdea,
+  addRoom,
+  addUser,
+  getDownload,
+  getIdeas,
+  getRooms,
+  getUsers,
+} from '../api/api';
 
 const loginForm = document.getElementById('login-form') as HTMLFormElement;
 const userInput = document.getElementById('user-input') as HTMLInputElement;
 const loginButton = document.getElementById('login-button') as HTMLFormElement;
 const registerButton = document.getElementById(
-    'register-button',
+  'register-button',
 ) as HTMLFormElement;
 const createRoomButton = document.getElementById(
-    'create-room-button',
+  'create-room-button',
 ) as HTMLFormElement;
-
-
 
 // const ideaForm2 = document.getElementById('idea-form2') as HTMLFormElement;
 const downloadCsvBtn = document.getElementById(
-    'download-csv',
+  'download-csv',
 ) as HTMLAnchorElement;
 const copyButton = document.getElementById(
-    'copy-room-id-button',
+  'copy-room-id-button',
 ) as HTMLButtonElement;
-
 
 const roomIdElement = document.getElementById('room-id') as HTMLElement;
 
@@ -67,10 +72,9 @@ roomList.addEventListener('room-joined', async function (event) {
 
 async function getRoomsForComponent() {
   if (userId) {
-    getRooms()
-        .then((data) => {
-          roomList.setRooms(data);
-        });
+    getRooms().then((data) => {
+      roomList.setRooms(data);
+    });
   } else {
     await roomList.setRooms([]);
   }
@@ -97,8 +101,7 @@ async function updateUI() {
   await getRoomsForComponent();
 }
 
-
-function setUserOfPage(newUserId:string) {
+function setUserOfPage(newUserId: string) {
   userId = newUserId;
   userInput.value = newUserId;
   roomId = null;
@@ -124,24 +127,24 @@ loginForm.addEventListener('submit', function (event) {
 
   if (userId) {
     getUsers()
-        .then((userList) => {
-          for (const usr of userList) {
-            if (usr.userId == userId) {
-              console.log('user logged in');
-              // if everything goes right ... cancel user Input and let him/her create rooms
-              setUserOfPage(usr.userId);
-              getRoomsForComponent();
-              getIdeasForComponent();
-              // now user logged in can create rooms
-              return;
-            }
+      .then((userList) => {
+        for (const usr of userList) {
+          if (usr.userId == userId) {
+            console.log('user logged in');
+            // if everything goes right ... cancel user Input and let him/her create rooms
+            setUserOfPage(usr.userId);
+            getRoomsForComponent();
+            getIdeasForComponent();
+            // now user logged in can create rooms
+            return;
           }
-          userId = null;
-          alert('User not found. Please try different User Id.');
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        }
+        userId = null;
+        alert('User not found. Please try different User Id.');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 });
 
@@ -155,20 +158,19 @@ registerButton.addEventListener('click', function (event) {
   userId = null;
 
   addUser()
-      .then((newUser) => {
-        if (newUser) {
-          console.log(`user logged in ${newUser.userId}`);
-          setUserOfPage(newUser.userId);
-          getRoomsForComponent();
-          getIdeasForComponent();
-        }
-        else {
-          alert ("Registration failed!");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    .then((newUser) => {
+      if (newUser) {
+        console.log(`user logged in ${newUser.userId}`);
+        setUserOfPage(newUser.userId);
+        getRoomsForComponent();
+        getIdeasForComponent();
+      } else {
+        alert('Registration failed!');
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
 
 //
@@ -179,12 +181,12 @@ createRoomButton.addEventListener('click', function (event) {
 
   if (userId) {
     addRoom('brainwritingroom')
-        .then(() => {
-          getRoomsForComponent();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      .then(() => {
+        getRoomsForComponent();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 });
 
@@ -197,21 +199,21 @@ ideaCreate.addEventListener('pressed-create', function (event) {
   console.log(`new IDEA ${newIdea}`);
 
   if (roomId && userId) {
-
     const request: RoomRequest = {
-      content : newIdea,
-      roomId : roomId,
-      memberId : userId
+      content: newIdea,
+      roomId: roomId,
+      memberId: userId,
     };
 
     addIdea(request)
-        .then((/*response*/) => { // do not need response
-          //console.log(response);
-          getIdeasForComponent();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      .then((/*response*/) => {
+        // do not need response
+        //console.log(response);
+        getIdeasForComponent();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   } else {
     console.log('no ROOM! in submit Idea');
     alert('Please join a room first!');
@@ -234,13 +236,13 @@ async function getIdeasForComponent() {
   roomId = await localStorageAction.load('roomId');
   if (roomId) {
     getIdeas(roomId)
-        .then((data) => {
-          //console.log(data);
-          ideaList2.setIdeas(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      .then((data) => {
+        //console.log(data);
+        ideaList2.setIdeas(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   } else {
     await ideaList2.setIdeas([]);
     console.log('no ROOM! in getIdeasForComponent');
@@ -253,28 +255,24 @@ async function downloadFile() {
   const fileName = `ideas-${Date.now()}`;
 
   if (roomId) {
-    getDownload(roomId)
-        .then((blob) => {
+    getDownload(roomId).then((blob) => {
+      if (blob) {
+        const suggestedFileName = prompt('Please Enter Filename:', fileName);
 
-          if (blob) {
-            const suggestedFileName = prompt('Please Enter Filename:', fileName);
+        if (suggestedFileName) {
+          const downloadLink = document.createElement('a');
+          downloadLink.href = URL.createObjectURL(blob);
+          downloadLink.download = suggestedFileName + '.csv';
 
-            if (suggestedFileName) {
-              const downloadLink = document.createElement('a');
-              downloadLink.href = URL.createObjectURL(blob);
-              downloadLink.download = suggestedFileName + '.csv';
-
-              document.body.appendChild(downloadLink);
-              downloadLink.click();
-              document.body.removeChild(downloadLink);
-            }
-          }
-          else {
-            alert("Nothing to download!");
-          }
-        });
-  }
-  else {
-    alert("No room joined so far!");
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+        }
+      } else {
+        alert('Nothing to download!');
+      }
+    });
+  } else {
+    alert('No room joined so far!');
   }
 }

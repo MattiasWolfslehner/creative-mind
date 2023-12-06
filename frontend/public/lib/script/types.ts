@@ -19,3 +19,15 @@ export interface RoomRequest {
   roomId: string;
   memberId: string;
 }
+
+export interface IdeaRequest {
+  content: string;
+  roomId: string;
+  memberId: string;
+}
+
+export interface ParticipationRequest {
+  roomType: string;
+  roomId: string;
+  memberId: string;
+}

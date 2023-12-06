@@ -53,7 +53,8 @@ body {
       }
     }
 
-    #cm-uuid, #room-id {
+    #cm-uuid,
+    #room-id {
       display: none;
       position: fixed;
       bottom: 7%;
@@ -64,7 +65,9 @@ body {
       border-radius: 5px;
     }
 
-    #add-idea, .room-join-button, #send-message {
+    #add-idea,
+    .room-join-button,
+    #send-message {
       background-color: green;
       padding: 10px;
       border: 1px solid #fff;
