@@ -109,6 +109,7 @@ jobs:
         with:
           push: true
           tags: cre8ivemind/creative-mind-frontend:latest
+          platforms: linux/amd64,linux/arm64
           context: ./frontend
 
   push-backend-to-docker-hub:
@@ -141,12 +142,12 @@ jobs:
         with:
           push: true
           tags: cre8ivemind/creative-mind-backend:latest
+          platforms: linux/amd64,linux/arm64
           context: ./backend
 
   deploy-frontend-to-oci:
     needs: push-frontend-to-docker-hub
     runs-on: ubuntu-latest
-    name: Deploying frontend to OCI
 
     env:
       OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
@@ -178,7 +179,6 @@ jobs:
   deploy-backend-to-oci:
     needs: push-backend-to-docker-hub
     runs-on: ubuntu-latest
-    name: Deploying backend to OCI
 
     env:
       OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
