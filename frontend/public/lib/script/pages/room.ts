@@ -1,42 +1,76 @@
 import '../../style/main.css';
 import '../../style/style.scss';
 
-import {User} from '../types';
+import {addUser, getUsers} from "../api/api";
 
+const userInput = document.getElementById('user') as HTMLInputElement;
+const loginButton = document.getElementById('login') as HTMLFormElement;
+const roomInput = document.getElementById('room') as HTMLInputElement;
 const registerButton = document.getElementById(
     'register',
   ) as HTMLFormElement;
 
-const restPort = 8080;
 let userId: string | null = null;
 
+userInput.addEventListener("input", function() {
+  userInput.title = userInput.value;
+});
+
+loginButton.addEventListener('click', function (event) {
+  event.preventDefault(); // prevent POST back
+  event.stopImmediatePropagation();
+
+  userId = userInput?.value;
+  console.log(`USER: ${userId}`);
+
+  if (userId) {
+      getUsers()
+          .then((userList) => {
+              for (const usr of userList) {
+                  if (usr.userId == userId) {
+                      console.log('user logged in');
+                      alert('Succesfully logged in.');
+                      // if everything goes right ... cancel user Input and let him/her create rooms
+                      setUserOfPage(usr.userId);
+                      // now user logged in can create rooms
+                      return;
+                  }
+              }
+              userId = null;
+              alert('User not found. Please try different User Id.');
+          })
+          .catch((error) => {
+              console.log(error);
+          });
+  }
+});
+
+roomInput.addEventListener("input", function() {
+  roomInput.title = roomInput .value;
+});
+
+
 registerButton.addEventListener('click', function (event) {
-    event.preventDefault(); // prevent POSTback
-    event.stopImmediatePropagation(); // prevent second coll from div
-    //console.log(event);
-  
-    const action = `http://localhost:${restPort}/api/users/register`;
-    //console.log(userInput);
+  event.preventDefault(); // prevent POST back
+  event.stopImmediatePropagation(); // prevent second coll from div
+
+  // reset room and user
+  if (userId) {
     userId = null;
-  
-    fetch(action, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: '{}',
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const newUser: User = response;
-        userId = newUser.userId;
-        console.log(`user logged in ${userId}`);
-        registerButton.classList.add('hidden');
-        registerButton.style.display = "none"
+  }
+
+  addUser()
+      .then((newUser) => {
+          if (newUser) {
+              console.log(`user logged in ${newUser.userId}`);
+              setUserOfPage(newUser.userId);
+          }
+          else {
+              alert ("Registration failed!");
+          }
       })
       .catch((error) => {
-        console.log(error);
+          console.log(error);
       });
 
     const newHTMLContent = `
@@ -61,3 +95,7 @@ registerButton.addEventListener('click', function (event) {
         mainContainer.innerHTML = newHTMLContent;
     }
   });
+
+  function setUserOfPage(newUserId:string) {
+    userId = newUserId;
+  }
