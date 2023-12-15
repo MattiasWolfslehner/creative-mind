@@ -31,7 +31,7 @@ loginButton.addEventListener('click', function (event) {
                       console.log('user logged in');
                       alert('Succesfully logged in.');
                       // if everything goes right ... cancel user Input and let him/her create rooms
-                      setUserOfPage(usr.userId);
+                      userId = usr.userId;
                       // now user logged in can create rooms
                       return;
                   }
@@ -98,6 +98,3 @@ registerButton.addEventListener('click', function (event) {
     }
   });
 
-  function setUserOfPage(newUserId:string) {
-    userId = newUserId;
-  }
