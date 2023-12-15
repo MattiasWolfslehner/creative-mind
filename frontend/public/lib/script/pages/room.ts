@@ -64,7 +64,7 @@ registerButton.addEventListener('click', function (event) {
       .then((newUser) => {
           if (newUser) {
               console.log(`user logged in ${newUser.userId}`);
-              setUserOfPage(newUser.userId);
+              userId = newUser.userId
           }
           else {
               alert ("Registration failed!");
