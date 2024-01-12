@@ -1,8 +1,12 @@
-import { html, render } from "../../../node_modules/lit-html/lit-html"
+import { html, render } from "lit-html"
+import "./text-input"
+import "./idea-list"
+import todoService from "../../service/todo-service"
 
-const template = (greeting: string)=> html`
+const template = ()=> html`
 <div>
-    ${greeting}
+<idea-list></idea-list>
+<text-input></text-input>
 </div>
 `
 
@@ -11,15 +15,17 @@ const template = (greeting: string)=> html`
 // mit lit
 
 class BrainwritingElement extends HTMLElement {
-    greeting: string
+
+    constructor() {
+        super()
+        this.attachShadow({mode:"open"})
+        const todos = todoService.getAll()
+    }
 
     connectedCallback() {
         console.log("connected")
-        this.greeting = "Hello World again!"
-        render(template(this.greeting), this)
+        render(template(), this.shadowRoot)
     }
-
-    //auch als function ausserhalb der class möglich
 }
 
 

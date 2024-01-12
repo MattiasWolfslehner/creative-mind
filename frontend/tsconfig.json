@@ -1,10 +1,24 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "esnext",
+    "target": "es2018",
+    "outDir": "dist",
+    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
-    "module": "es6",
-    "target": "es6",
-    "allowJs": true
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+    }
   },
-  "files": ["src/index.ts"]
+  "exclude": [
+    "test/**/*",
+    "unused/**/*"],
+  "include": [
+    "src/**/*"
+  ]
 }

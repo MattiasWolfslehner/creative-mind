@@ -1,4 +1,4 @@
-import "./components/brainwriting/brainwriting"
+import "./components/app"
 
 console.log("Hallo Welt!")
 
