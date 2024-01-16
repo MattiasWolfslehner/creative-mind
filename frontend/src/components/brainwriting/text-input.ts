@@ -27,11 +27,18 @@ class TextInputElement extends HTMLElement {
             completed: false
         }
 
+        //fetch -> post (await) idea
+
+        //lasd all ideas
+
+        /*
         const model = produce(store.getValue(), draft => {
             draft.todos.push(todo)
         })
 
-        store.next(model)       
+        store.next(model) 
+        */
+             
     }
 
     constructor(){
