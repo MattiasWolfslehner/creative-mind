@@ -1,1 +1,2 @@
 -- insert test data user, room, 5 ideas
+-- insert into room (id, roomstate, roomid, room_type) values (1,true,)
