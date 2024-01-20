@@ -3,16 +3,16 @@ import { store } from "../../model/store"
 import { Model } from "src/model"
 
 function template(model: Model) {
-    const todoTemplates = model.todos.map(todo => html`
+    const ideaTemplates = model.ideas.map(idea => html`
     <li>
-        ${todo.title}: ${todo.id}
+        ${idea.member_id}: ${idea.content}
     </li> 
 
     `)
     return html`
         <table>
             <ul>
-                ${todoTemplates}
+                ${ideaTemplates}
             </ul>
         </table>
         `

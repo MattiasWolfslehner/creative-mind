@@ -1,6 +1,6 @@
 import { produce } from "immer";
 import { html, render } from "lit-html"
-import { Todo, store } from "../../model"
+import { Idea, store } from "../../model"
 
 class TextInputElement extends HTMLElement { 
     
@@ -19,8 +19,8 @@ class TextInputElement extends HTMLElement {
     onButtonClick(){
         console.log("button was clicked");
         const input = this.shadowRoot.querySelector('input').value
-        
-        const todo : Todo = {
+        /*
+        const todo : Idea = {
             userId: 0,
             id: 0,
             title: input,
@@ -31,7 +31,6 @@ class TextInputElement extends HTMLElement {
 
         //lasd all ideas
 
-        /*
         const model = produce(store.getValue(), draft => {
             draft.todos.push(todo)
         })

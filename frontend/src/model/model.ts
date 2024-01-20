@@ -1,6 +1,6 @@
-import { Todo } from "./todo";
+import { Idea } from "./idea";
 
 export interface Model {
-   readonly todos: Todo[]
+   readonly ideas: Idea[]
 }
 

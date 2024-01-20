@@ -2,7 +2,7 @@ import { BehaviorSubject } from "rxjs";
 import { Model } from "./model";
 
 const initialState : Model = {
-    todos: []
+    ideas: []
 }
 
 export const store = new BehaviorSubject<Model> (initialState)

@@ -1,4 +1,4 @@
-import { produce } from 'immer'
+/* import { produce } from 'immer'
 import {Model, Todo, store} from '../model'
 
 class TodoService{
@@ -18,3 +18,4 @@ class TodoService{
 
 const todoService = new TodoService()
 export default todoService
+*/
