@@ -17,8 +17,35 @@ class IdeaService{
 
     }
     
-    async postNewIdea(roomId, memberId){
+    async postNewIdea(idea : Idea){
+        try{
         //fetch
+        const response = await fetch('http://localhost:8080/api/ideas',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(idea)
+        });
+
+        if(response.ok){
+            const responseData = await response.json()
+            console.log("idea has been added successfully: ", responseData);
+            
+            //add idea to store
+            const model = produce(store.getValue(), draft => {
+                draft.ideas.push(idea);
+            })
+
+            store.next(model);
+
+        }else{
+            console.error('Error posting idea: ', response.statusText);
+        }
+        }catch(error){
+            console.error('Error posting idea: ', error);
+            
+        }
     }
 }
 

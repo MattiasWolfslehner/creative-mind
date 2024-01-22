@@ -1,5 +1,6 @@
 
 export interface Idea {
-    "member_id" : number,
+    "roomId" : string,
+    "memberId" : string,
     "content": string,
 }

@@ -1,6 +1,7 @@
 import { produce } from "immer";
 import { html, render } from "lit-html"
 import { Idea, store } from "../../model"
+import ideaService from "../../service/idea-service"
 
 class TextInputElement extends HTMLElement { 
     
@@ -19,24 +20,15 @@ class TextInputElement extends HTMLElement {
     onButtonClick(){
         console.log("button was clicked");
         const input = this.shadowRoot.querySelector('input').value
-        /*
-        const todo : Idea = {
-            userId: 0,
-            id: 0,
-            title: input,
-            completed: false
+
+    
+        const idea : Idea = {  
+            roomId : "100eafb1-32ca-4725-8d27-88560d0a9628",
+            memberId: "6400e021-d369-44eb-9943-f51d0aae14db",
+            content: input
         }
 
-        //fetch -> post (await) idea
-
-        //lasd all ideas
-
-        const model = produce(store.getValue(), draft => {
-            draft.todos.push(todo)
-        })
-
-        store.next(model) 
-        */
+        ideaService.postNewIdea(idea);
              
     }
 

@@ -5,7 +5,7 @@ import { Model } from "src/model"
 function template(model: Model) {
     const ideaTemplates = model.ideas.map(idea => html`
     <li>
-        ${idea.member_id}: ${idea.content}
+        ${idea.memberId}: ${idea.content}
     </li> 
 
     `)

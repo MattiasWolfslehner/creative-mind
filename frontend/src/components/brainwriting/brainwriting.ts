@@ -1,7 +1,7 @@
 import { html, render } from "lit-html"
 import "./text-input"
 import "./idea-list"
-import todoService from "../../service/idea-service"
+import ideaService from "../../service/idea-service"
 
 const template = ()=> html`
 <div style="display: flex; justify-content: space-around">
@@ -21,7 +21,7 @@ class BrainwritingElement extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({mode:"open"})
-        const todos = todoService.getIdeasByRoomId("abdc054f-767a-4d87-a040-70eebee5f1e3");
+        const todos = ideaService.getIdeasByRoomId("100eafb1-32ca-4725-8d27-88560d0a9628");
     }
 
     connectedCallback() {
