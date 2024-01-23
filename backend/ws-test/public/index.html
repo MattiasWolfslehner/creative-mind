@@ -35,7 +35,7 @@
         const roomId = roomIdInput.value;
         const userId = userIdInput.value;
 
-        socket = new WebSocket(`ws://localhost:8080/rooms/join/${roomId}/${userId}`);
+        socket = new WebSocket(`ws://localhost:5432/rooms/join/${roomId}/${userId}`);
 
         socket.onopen = function (event) {
             console.log("WebSocket connection opened:", event);
