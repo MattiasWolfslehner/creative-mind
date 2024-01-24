@@ -17,13 +17,17 @@ public class User {
     public static final String GET_USER_BY_USER_ID = "Participation.getUserByUserId";
     @OneToMany(mappedBy = "member")
     Set<Participation> participations;
+
     @OneToMany(mappedBy = "member")
     Set<Idea> ideas;
+
     @JsonIgnore
     @Id
     @GeneratedValue
     private Integer id;
+
     private UUID userId;
+
     public User() {
         this.userId = UUID.randomUUID();
     }

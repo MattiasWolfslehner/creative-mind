@@ -3,6 +3,8 @@ package com.creative_mind.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @NamedQuery(name = Idea.FIND_IDEA_BY_ROOM, query = "select i from Idea i where i.brainwritingRoom.roomId = :roomId")
 public class Idea {
@@ -27,6 +29,12 @@ public class Idea {
         this.member = member;
     }
     public Idea() {}
+
+
+    public UUID getMemberId() {
+        return member.getUserId();
+    }
+
     public int getId() {
         return id;
     }
