@@ -1,6 +1,7 @@
 import { html, render } from "lit-html"
 import "./text-input"
 import "./idea-list"
+import "./room-list"
 import ideaService from "../../service/idea-service"
 
 const template = ()=> html`
@@ -8,6 +9,9 @@ const template = ()=> html`
     <div>
         <idea-list></idea-list>
         <text-input></text-input>
+    </div>
+    <div>
+        <room-list></room-list>
     </div>
 </div>
 `
