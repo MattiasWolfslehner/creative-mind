@@ -23,8 +23,8 @@ class TextInputElement extends HTMLElement {
 
     
         const idea : Idea = {  
-            roomId : "100eafb1-32ca-4725-8d27-88560d0a9628",
-            memberId: "6400e021-d369-44eb-9943-f51d0aae14db",
+            roomId : "814ae007-7f76-4260-960b-bf7b39b46d30",
+            memberId: "25b447ad-fe0c-4885-b9aa-b36811f87708",
             content: input
         }
 

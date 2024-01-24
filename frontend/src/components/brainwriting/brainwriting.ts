@@ -3,6 +3,7 @@ import "./text-input"
 import "./idea-list"
 import "./room-list"
 import ideaService from "../../service/idea-service"
+import roomService from "../../service/room-list-service"
 
 const template = ()=> html`
 <div style="display: flex; justify-content: space-around">
@@ -25,7 +26,8 @@ class BrainwritingElement extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({mode:"open"})
-        const todos = ideaService.getIdeasByRoomId("100eafb1-32ca-4725-8d27-88560d0a9628");
+        const todos = ideaService.getIdeasByRoomId("814ae007-7f76-4260-960b-bf7b39b46d30");
+        const rooms = roomService.getRooms();
     }
 
     connectedCallback() {
