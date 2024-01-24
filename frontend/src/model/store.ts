@@ -3,7 +3,8 @@ import { Model } from "./model";
 
 const initialState : Model = {
     ideas: [],
-    rooms: []
+    rooms: [],
+    users: []
 }
 
 export const store = new BehaviorSubject<Model> (initialState)
