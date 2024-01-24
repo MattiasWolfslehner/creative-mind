@@ -12,6 +12,7 @@ const template = ()=> html`
         <text-input></text-input>
     </div>
     <div>
+        <center><h1>Room-List</h1></center>
         <room-list></room-list>
     </div>
 </div>
