@@ -27,7 +27,7 @@ class BrainwritingElement extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({mode:"open"})
-        const todos = ideaService.getIdeasByRoomId("814ae007-7f76-4260-960b-bf7b39b46d30");
+        const todos = ideaService.getIdeasByRoomId("5169be8c-4b13-4760-8fad-9a81e1ba240d");
         const rooms = roomService.getRooms();
     }
 
