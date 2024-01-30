@@ -17,10 +17,10 @@ const template = ()=> html`
         <center><h1>Room-List</h1></center>
         <room-list></room-list>
     </div>
-    <!--<div>
+    <div>
         <center><h1>User-List</h1></center>
         <user-list></user-list>
-    </div>-->
+    </div>
 </div>
 `
 
@@ -33,7 +33,7 @@ class BrainwritingElement extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({mode:"open"})
-        const todos = ideaService.getIdeasByRoomId("86d1ffdc-8c76-4f65-aaeb-73e4b5c175eb");
+        const todos = ideaService.getIdeasByRoomId("d1a576b9-df50-4132-8269-1d8dd72ab288");
         const rooms = roomService.getRooms();
         const users = userService.getUsers();
     }
