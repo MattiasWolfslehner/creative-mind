@@ -12,7 +12,12 @@ async function init() {
         console.log(`User is ${authenticated ? 'authenticated': 'not authenticated'}`);
         if(!authenticated){
             await keycloak.login();
+           
+            
         }
+        console.log(keycloak.token);
+
+        //TODO: senden mit bearer an das Backend
     }catch(error){
         console.error('Failed to initialize adapter: ', error);
         

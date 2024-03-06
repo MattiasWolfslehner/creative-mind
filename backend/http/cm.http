@@ -1,0 +1,10 @@
+
+GET http://localhost:8000/realms/cmr/.well-known/openid-configuration
+Accept: application/json
+
+###
+
+POST http://localhost:8000/realms/cmr/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=quarkus&client_secret=gstBIjC7fdgagkMfShG2dqNmDITj45C6&username=testmember&password=test123
