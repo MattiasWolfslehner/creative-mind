@@ -1,12 +1,13 @@
 //brainwriting ts import => see brainwriting.ts
 import { html, render } from "lit-html"
 import "./brainwriting/brainwriting"
+import "./create-room/create-room"
 
 
 function template() {
     return html`
-            <brain-writing></brain-writing>  
-    `
+            <create-room></create-room>
+        `
 }
 
 class AppComponent extends HTMLElement {
