@@ -15,9 +15,28 @@ async function init() {
            
             
         }
-        console.log(keycloak.token);
+        
 
         //TODO: senden mit bearer an das Backend
+        const headers = new Headers({
+            'Authorization': 'Bearer '+ keycloak.token
+        });
+        console.log(keycloak.token);
+        
+        fetch('http://localhost:8080/api/users/register',{
+            method: 'GET',
+            headers: headers,
+        })
+        .then(response => {
+              return response.json();
+        })
+        .then(data => {
+            console.log('Response from Quarkus backend:', data);
+          })
+          .catch(error => {
+            console.error('Error communicating with Quarkus backend:', error);
+          });
+
     }catch(error){
         console.error('Failed to initialize adapter: ', error);
         
