@@ -28,8 +28,11 @@ public class User {
 
     private UUID userId;
 
-    public User(UUID uuid) {
+    private String userName;
+
+    public User(UUID uuid, String userName) {
         this.userId = uuid;
+        this.userName = userName;
     }
 
     public User() {
@@ -41,6 +44,10 @@ public class User {
 
     public Integer getId() {
         return id;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
 }

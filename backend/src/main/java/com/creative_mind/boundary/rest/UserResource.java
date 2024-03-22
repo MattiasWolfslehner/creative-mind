@@ -6,6 +6,7 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.json.Json;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.eclipse.microprofile.jwt.Claims;
@@ -35,9 +36,16 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addUser() {
         UUID uuid = UUID.fromString(jwt.getClaim(Claims.sub));
-        User newUser = new User(uuid);
-        User addedUser = this.userRepository.createUser(newUser);
-        return Response.ok(addedUser).build();
+        String userName = jwt.getClaim(Claims.preferred_username);
+        User newUser = new User(uuid, userName);
+        //check: login or register
+        if(this.userRepository.getUserByUUID(uuid) != null){
+            return Response.ok(Json.createObjectBuilder().add("message","user '"+userName+"' has been logged in").build()).build();
+        }else{
+            User addedUser = this.userRepository.createUser(newUser);
+            return Response.ok(addedUser).build();
+        }
+
     }
 
 }
