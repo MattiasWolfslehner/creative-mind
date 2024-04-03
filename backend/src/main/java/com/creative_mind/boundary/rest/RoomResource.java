@@ -5,6 +5,8 @@ import com.creative_mind.model.Room;
 import com.creative_mind.model.requests.RoomStateRequest;
 import com.creative_mind.repository.ParticipationRepository;
 import com.creative_mind.repository.RoomRepository;
+import jakarta.annotation.security.PermitAll;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -14,6 +16,7 @@ import org.hibernate.Incubating;
 import java.util.UUID;
 
 @Path("/api/rooms")
+@RequestScoped
 public class RoomResource {
     @Inject
     RoomRepository roomRepository;
