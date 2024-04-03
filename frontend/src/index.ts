@@ -16,10 +16,11 @@ async function init() {
             
         }
         
+        localStorage.setItem("token",keycloak.token)
 
         //TODO: senden mit bearer an das Backend
         const headers = new Headers({
-            'Authorization': 'Bearer '+ keycloak.token
+            'Authorization': 'Bearer '+ localStorage.getItem("token")
         });
         console.log(keycloak.token);
         

@@ -4,7 +4,7 @@ import "./idea-list"
 import "./room-list"
 import "./user-list"
 import ideaService from "../../service/idea-service"
-import roomService from "../../service/room-list-service"
+import roomService from "../../service/room-service"
 import userService from "../../service/user-service"
 
 const template = ()=> html`

@@ -1,8 +1,6 @@
 import { html, render } from "lit-html"
+import roomService from "../../service/room-service"
 
-const template = ()=> html`
-
-`
 
 class CreateRoomButtonElement extends HTMLElement {
     template(){
@@ -28,6 +26,8 @@ class CreateRoomButtonElement extends HTMLElement {
     
     createRoom(){
         console.log("create room pressed!");
+
+        const room = roomService.createRoom();
         
     }
 
