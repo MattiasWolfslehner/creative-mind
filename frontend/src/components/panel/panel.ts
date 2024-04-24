@@ -3,6 +3,7 @@ import "../create-room/create-room"
 import "../room/statefullroom"
 import { store } from "../../model"
 import { distinctUntilChanged, map } from "rxjs";
+import {router} from "../../../router";
 
 
 const template = (isInRoom : boolean)=> html`
@@ -22,6 +23,11 @@ class PanelComponent extends HTMLElement {
     connectedCallback() {
         store.pipe(map( model => model.isInRoom ),distinctUntilChanged())
         .subscribe(isInRoom => {render(template(isInRoom), this.shadowRoot)})
+
+        //http://localhost:9000/#/room/5
+        router.on('/room/:roomId', ({data}) => {
+            console.log(`route: `, data);
+        });
     }
 }
 
