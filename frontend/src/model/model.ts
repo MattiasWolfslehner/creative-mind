@@ -6,5 +6,6 @@ export interface Model {
    readonly ideas: Idea[]
    readonly rooms: Room[]
    readonly users: User[]
+   readonly isInRoom : boolean
 }
 

@@ -1,4 +1,5 @@
 export interface Room {
     "roomState": boolean,
-    "roomId": string
+    "roomId": string,
+    "type": "brainwriting" | "brainstorming"
 }

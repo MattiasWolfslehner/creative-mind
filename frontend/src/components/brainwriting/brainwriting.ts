@@ -33,7 +33,7 @@ class BrainwritingElement extends HTMLElement {
     constructor() {
         super()
         this.attachShadow({mode:"open"})
-        const todos = ideaService.getIdeasByRoomId("d1a576b9-df50-4132-8269-1d8dd72ab288");
+        const ideas = ideaService.getIdeasByRoomId("d1a576b9-df50-4132-8269-1d8dd72ab288");
         const rooms = roomService.getRooms();
         const users = userService.getUsers();
     }

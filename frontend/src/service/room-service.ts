@@ -34,9 +34,13 @@ class RoomService {
         })
         const room : Room = await response.json();
 
+        //add idea to store
+        const model = produce(store.getValue(), draft => {
+            draft.rooms.push(room);
+        })
         console.log(room);
 
-        return room; 
+        return room;
     }
 }
 

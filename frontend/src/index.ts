@@ -1,4 +1,5 @@
 import Keycloak from 'keycloak-js';
+import {router} from '../router';
 
 const keycloak = new Keycloak({
     url: 'http://localhost:8000',
@@ -6,7 +7,10 @@ const keycloak = new Keycloak({
     clientId: 'frontend'
 });
 
+router.resolve();
+
 async function init() {
+
     try{
         const authenticated = await keycloak.init({enableLogging:true});
         console.log(`User is ${authenticated ? 'authenticated': 'not authenticated'}`);

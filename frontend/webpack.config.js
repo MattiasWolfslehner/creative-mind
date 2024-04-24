@@ -16,12 +16,16 @@ const config = {
         open: true,
         host: 'localhost',
         port: 9000,
+        historyApiFallback: {
+            index: "/index.html",
+            verbose: true
+        },
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: 'index.html',
             scriptLoading: 'module'
-        }),
+        })
     ],
     module: {
         rules: [

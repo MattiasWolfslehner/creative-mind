@@ -4,7 +4,8 @@ import { Model } from "./model";
 const initialState : Model = {
     ideas: [],
     rooms: [],
-    users: []
+    users: [],
+    isInRoom: false
 }
 
 export const store = new BehaviorSubject<Model> (initialState)

@@ -1,14 +1,13 @@
 //brainwriting ts import => see brainwriting.ts
 import { html, render } from "lit-html"
 import "./brainwriting/brainwriting"
-import "./create-room/create-room"
+import "./panel/panel"
+import {router} from "../../router"
 
 
-function template() {
-    return html`
-            <create-room></create-room>
-        `
-}
+const template = ()=> html`
+            <panel-component></panel-component>
+`;
 
 class AppComponent extends HTMLElement {
 
@@ -18,8 +17,13 @@ class AppComponent extends HTMLElement {
     }
 
     connectedCallback() {
+        //http://localhost:9000/#/room/5
+        router.on('/room/:roomId', ({data}) => {
+            //get Room data (ideas,members,etc.) from backend and set create-room hidden.!
+            console.log(`route: `, data);
+        });
+
         render(template(), this.shadowRoot)
-       
     }
 }
 

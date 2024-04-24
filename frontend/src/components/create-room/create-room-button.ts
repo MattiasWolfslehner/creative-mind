@@ -1,5 +1,8 @@
 import { html, render } from "lit-html"
 import roomService from "../../service/room-service"
+import { Room, store } from "../../model"
+import { router } from "../../../router"
+import { produce } from "immer"
 
 
 class CreateRoomButtonElement extends HTMLElement {
@@ -27,8 +30,14 @@ class CreateRoomButtonElement extends HTMLElement {
     createRoom(){
         console.log("create room pressed!");
 
-        const room = roomService.createRoom();
+        const roomId = roomService.createRoom().then(value => {
+            router.navigate(`/room/` + value.roomId);
+          });  
         
+        const model = produce(store.getValue(), draft => {
+            draft.isInRoom = true;
+        })
+        store.next(model);
     }
 
 }
