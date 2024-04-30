@@ -2,6 +2,7 @@ package com.creative_mind.repository;
 
 import com.creative_mind.model.BrainwritingRoom;
 import com.creative_mind.model.Idea;
+import com.creative_mind.model.IdeaRoom;
 import com.creative_mind.model.User;
 import com.creative_mind.model.requests.IdeaRequest;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,12 +25,12 @@ public class IdeaRepository {
     @Transactional
     public Idea addIdea(IdeaRequest ideaRequest) {
 
-        TypedQuery<BrainwritingRoom> roomQuery = this.entityManager
-                .createNamedQuery(BrainwritingRoom.GET_BRAINWRITING_ROOM_BY_ROOM_ID, BrainwritingRoom.class);
+        TypedQuery<IdeaRoom> roomQuery = this.entityManager
+                .createNamedQuery(IdeaRoom.GET_IDEA_ROOM_BY_ROOM_ID, IdeaRoom.class);
         roomQuery.setParameter("roomId", ideaRequest.getRoomId());
 
         User member = userRepository.getUserByUUID(ideaRequest.getMemberId());
-        BrainwritingRoom room = roomQuery.getSingleResult();
+        IdeaRoom room = roomQuery.getSingleResult();
 
         Idea idea = new Idea(ideaRequest.getContent(), room, member);
 
