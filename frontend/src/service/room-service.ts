@@ -20,7 +20,7 @@ class RoomService {
 
     }
 
-    async createRoom() : Promise<Room> {
+    async createRoom(roomType : string) : Promise<Room> {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'Bearer '+ localStorage.getItem("token")
@@ -29,17 +29,19 @@ class RoomService {
             method: 'POST',
             headers: theHeader,
             body: JSON.stringify({
-                'type': 'brainwritingroom'
+                'type': roomType
             })
         })
+
         const room : Room = await response.json();
 
-        //add idea to store
+
+        //add room to store
         const model = produce(store.getValue(), draft => {
             draft.rooms.push(room);
         })
         console.log(room);
-
+        
         return room;
     }
 }

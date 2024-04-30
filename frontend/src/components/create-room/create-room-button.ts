@@ -30,7 +30,8 @@ class CreateRoomButtonElement extends HTMLElement {
     createRoom(){
         console.log("create room pressed!");
 
-        const roomId = roomService.createRoom().then(value => {
+        // Todo: store type variable in the local storage to read it 
+        const roomId = roomService.createRoom('brainstormingroom').then(value => {
             router.navigate(`/room/` + value.roomId);
           });  
         

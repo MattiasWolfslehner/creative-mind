@@ -21,14 +21,23 @@ class StatefullRoom extends HTMLElement {
 
         //http://localhost:9000/#/room/5
         router.on('/room/:roomId', ({data}) => {
-            console.log(`route: `, data);
-            roomId = data;
+            console.log(`route: `, data.roomId);
+            roomId = data.roomId;
+            var roomType = '';
+
+            // get Room from store
+            store.subscribe(model => {
+                console.log('model:',model);
+                //roomType = model.rooms.find(r=>r.roomId === roomId).type;
+                roomType = 'brainstormingroom';
+                console.log('roomType: ',roomType);
+
+                render(template(roomType,roomId), this.shadowRoot);
+
+            })
+        
         });
 
-        // get Room from store
-       var roomType = store.getValue().rooms.find(r => r.roomId = roomId).type;
-        
-       render(template(roomType,roomId), this.shadowRoot);
     }    
 }
 
