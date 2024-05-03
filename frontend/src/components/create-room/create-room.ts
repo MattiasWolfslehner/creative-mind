@@ -11,7 +11,6 @@ const template = ()=> html`
         <creativity-technique></creativity-technique>
     </div>
 </div>
-<create-room-button></create-room-button>
 `
 
 class CreateRoomElement extends HTMLElement {

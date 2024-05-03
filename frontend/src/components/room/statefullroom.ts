@@ -28,9 +28,13 @@ class StatefullRoom extends HTMLElement {
             // get Room from store
             store.subscribe(model => {
                 console.log('model:',model);
-                //roomType = model.rooms.find(r=>r.roomId === roomId).type;
-                roomType = 'brainstormingroom';
-                console.log('roomType: ',roomType);
+                const room = model.rooms.find(r => r.roomId === roomId);
+                if (room) {
+                    roomType = room.type;
+                } else {
+                    roomType = 'brainwritingroom';
+                }
+                console.log('roomType: ', roomType);
 
                 render(template(roomType,roomId), this.shadowRoot);
 
