@@ -90,7 +90,7 @@ class CreateRoomElement extends HTMLElement {
                 createRoomButton.addEventListener('click', () => {
                     const activeTechniqueContainer = this.shadowRoot.querySelector('.technique-container.active');
                     if (activeTechniqueContainer) {
-                        const roomId = this.createRoom(activeTechniqueContainer.id);
+                        this.createRoom(activeTechniqueContainer.id); // do not assign to room id, gives void
                     }
                 });
             });
@@ -102,8 +102,9 @@ class CreateRoomElement extends HTMLElement {
         const roomId = roomService.createRoom(roomType).then(value => {
             router.navigate(`/room/` + value.roomId);
         });  
-    
+        console.log("herenow");
         roomId.then(roomId => {
+            console.log("got roomid");
             const model = produce(store.getValue(), draft => {
                 draft.isInRoom = true;
             });
