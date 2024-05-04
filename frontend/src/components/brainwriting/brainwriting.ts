@@ -45,4 +45,4 @@ class BrainwritingElement extends HTMLElement {
 }
 
 
-customElements.define("brain-writing", BrainwritingElement)
+customElements.define("brainwriting", BrainwritingElement)
