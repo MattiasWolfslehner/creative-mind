@@ -5,9 +5,12 @@ import { store } from "../../model";
 const template = (roomType:string, roomId:string)=> html `
 <h1>here comes the right view for the room type</h1>
 <p>${roomType} :${roomId}</p>
-
+<p>
+    
+</p>
+${roomType === "brainwritingroom" ? html `<brainwriting-element></brainwriting-element> ` : html ` ` }
+${roomType === "brainstormingroom" ? html `<brainstorming-element></brainstorming-element> ` : html ` ` }
 `
-
 class StatefullRoom extends HTMLElement {
     constructor() {
         super()

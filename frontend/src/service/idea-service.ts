@@ -1,11 +1,12 @@
 import { produce } from "immer"
 import { Idea, store } from "../model"
+import path from "./service-const"
 
 class IdeaService{
 
-    async getIdeasByRoomId(roomId){
+    async getIdeasByRoomId(roomId : string){
         //fetch
-        const response = await fetch(`http://localhost:8080/api/ideas/${roomId}`)
+        const response = await fetch(`${path}/api/ideas/${roomId}`)
         const ideas : Idea[] = await response.json()
         console.log(ideas)
 
@@ -20,7 +21,7 @@ class IdeaService{
     async postNewIdea(idea : Idea){
         try{
         //fetch
-        const response = await fetch('http://localhost:8080/api/ideas',{
+        const response = await fetch(`${path}/api/ideas`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

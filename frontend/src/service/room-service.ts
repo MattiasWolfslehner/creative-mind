@@ -1,7 +1,8 @@
 import { produce } from "immer"
 import { Room, store } from "../model"
+import path from "./service-const"
 
-const path:string= 'http://localhost:8080';
+
 
 class RoomService {
     

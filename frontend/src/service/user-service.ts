@@ -1,11 +1,12 @@
 import { produce } from "immer"
 import { User, store } from "../model"
+import path from "./service-const"
 
 class UserService {
 
     async getUsers(){
         //fetch
-        const response = await fetch(`http://localhost:8080/api/users/list`)
+        const response = await fetch(`${path}/api/users/list`)
         const users : User[] = await response.json()
         console.log(users)
 
