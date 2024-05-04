@@ -85,15 +85,14 @@ class CreateRoomElement extends HTMLElement {
                         tc.classList.add('inactive');
                     }
                 });
-    
-                const createRoomButton = this.shadowRoot.getElementById('createRoomButton');
-                createRoomButton.addEventListener('click', () => {
-                    const activeTechniqueContainer = this.shadowRoot.querySelector('.technique-container.active');
-                    if (activeTechniqueContainer) {
-                        this.createRoom(activeTechniqueContainer.id); // do not assign to room id, gives void
-                    }
-                });
             });
+        });
+        const createRoomButton = this.shadowRoot.getElementById('createRoomButton');
+        createRoomButton.addEventListener('click', () => {
+            const activeTechniqueContainer = this.shadowRoot.querySelector('.technique-container.active');
+            if (activeTechniqueContainer) {
+                this.createRoom(activeTechniqueContainer.id); // do not assign to room id, gives void
+            }
         });
     }
     
