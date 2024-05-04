@@ -99,19 +99,14 @@ class CreateRoomElement extends HTMLElement {
     
     createRoom(roomType: string): void {
         console.log("Creating room with room type:", roomType);
-        const roomId = roomService.createRoom(roomType).then(value => {
+        const roomId: Promise<void | Room> = roomService.createRoom(roomType).then(value => {
             router.navigate(`/room/` + value.roomId);
-        });  
-        console.log("herenow");
-        roomId.then(roomId => {
-            console.log("got roomid");
+
             const model = produce(store.getValue(), draft => {
+                draft.rooms.push(value);
                 draft.isInRoom = true;
             });
             store.next(model);
-            console.log('model in creativity-technique:',model);
-        }).catch(error => {
-            console.error("Error creating room:", error);
         });
     }
     
