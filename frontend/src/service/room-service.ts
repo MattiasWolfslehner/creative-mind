@@ -9,13 +9,19 @@ class RoomService {
 
     async getRooms(){
         //fetch
-        const response = await fetch(`${path}/api/rooms/list`)
-        const rooms : Room[] = await response.json()
-        console.log(rooms)
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+ localStorage.getItem("token")
+        });
+        const response = await fetch(`${path}/api/rooms/list`, {
+            headers: theHeader
+        });
+        const rooms : Room[] = await response.json();
+        console.log(rooms);
 
         const model = produce(store.getValue(), draft => {
-            draft.rooms = rooms
-        })
+            draft.rooms = rooms;
+        });
 
         store.next(model);
 
@@ -32,7 +38,7 @@ class RoomService {
             body: JSON.stringify({
                 'type': roomType
             })
-        })
+        });
 
         const room : Room = await response.json();
 
@@ -48,5 +54,5 @@ class RoomService {
 }
 
 
-const roomService = new RoomService()
-export default roomService
+const roomService = new RoomService();
+export default roomService;
