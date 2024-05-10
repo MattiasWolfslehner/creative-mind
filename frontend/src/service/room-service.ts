@@ -17,14 +17,19 @@ class RoomService {
             headers: theHeader
         });
         const rooms : Room[] = await response.json();
-        console.log(rooms);
+        //console.log(rooms);
 
+        /* LIST GIVES NO type value => call indiv get
         const model = produce(store.getValue(), draft => {
             draft.rooms = rooms;
         });
 
         store.next(model);
+        */
 
+        rooms.forEach((aRoom) => {
+            this.getRoom(aRoom.roomId); // force fetch type!
+        });
     }
 
     async createRoom(roomType : string) : Promise<Room> {
@@ -32,7 +37,7 @@ class RoomService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer '+ localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/create`,{  
+        const response = await fetch(`${path}/api/rooms/create`,{
             method: 'POST',
             headers: theHeader,
             body: JSON.stringify({
@@ -47,8 +52,42 @@ class RoomService {
         const model = produce(store.getValue(), draft => {
             draft.rooms.push(room);
         })
+        store.next(model);
         console.log(room);
-        
+
+        return room;
+    }
+
+    async getRoom(roomId : string) : Promise<Room> {
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+ localStorage.getItem("token")
+        });
+        const response = await fetch(`${path}/api/rooms/get/${roomId}`, {
+            method: 'GET',
+            headers: theHeader
+        });
+
+        // TODO: either must catch empty response here or ?!
+        // no 404 when no row found !?
+        const room : Room = await response.json();
+
+        //add room to store
+        const model = produce(store.getValue(), draft => {
+            let isPresent:boolean = false;
+            draft.rooms.forEach( (aRoom) => {
+                if (aRoom.roomId === roomId) {
+                    isPresent = true;
+                    aRoom.type = room.type;
+                }
+            });
+            if (!isPresent) {
+                draft.rooms.push(room);
+            }
+        })
+
+        store.next(model);
+
         return room;
     }
 }
