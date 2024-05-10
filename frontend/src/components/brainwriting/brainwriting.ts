@@ -23,9 +23,6 @@ class BrainwritingElement extends HTMLElement {
                     <idea-list></idea-list>
                     <text-input></text-input>
                 </div>
-                <div>
-                    <user-list></user-list>
-                </div>
             </div>
         `;
     }
