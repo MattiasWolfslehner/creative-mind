@@ -1,6 +1,6 @@
 import { produce } from "immer";
 import { html, render } from "lit-html"
-import { Idea, store } from "../../model"
+import {Idea, Model, store} from "../../model"
 import ideaService from "../../service/idea-service"
 
 
@@ -25,9 +25,11 @@ class TextInputElement extends HTMLElement {
         const input = this.shadowRoot.querySelector('input').value
 
         if (input !== "") {
+            const model : Model = store.getValue();
+
             const idea : Idea = {
-                roomId : "",
-                memberId: "9c199477-b2ed-4124-b885-985b68f30590",
+                roomId : model.activeRoomId,
+                memberId: model.thisUserId,
                 content: input
             }
 

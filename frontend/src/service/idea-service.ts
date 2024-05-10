@@ -14,7 +14,10 @@ class IdeaService{
             headers: theHeader
         });
         const ideas : Idea[] = await response.json();
-        //console.log(ideas);
+        console.log(ideas);
+
+        //set roomid as it does not come with the API
+        ideas.forEach((idea) => idea.roomId=roomId);
 
         const model = produce(store.getValue(), draft => {
             draft.ideas = ideas;
@@ -46,7 +49,6 @@ class IdeaService{
                 const model = produce(store.getValue(), draft => {
                     draft.ideas.push(idea);
                 });
-
                 store.next(model);
 
             }else{
