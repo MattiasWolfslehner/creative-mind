@@ -2,13 +2,13 @@ package com.creative_mind.boundary.rest;
 
 import com.creative_mind.model.User;
 import com.creative_mind.repository.UserRepository;
-import jakarta.annotation.security.PermitAll;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.json.Json;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
@@ -38,9 +38,10 @@ public class UserResource {
         UUID uuid = UUID.fromString(jwt.getClaim(Claims.sub));
         String userName = jwt.getClaim(Claims.preferred_username);
         User newUser = new User(uuid, userName);
+        User existingUser = this.userRepository.getUserByUUID(uuid);
         //check: login or register
-        if(this.userRepository.getUserByUUID(uuid) != null){
-            return Response.ok(Json.createObjectBuilder().add("message","user '"+userName+"' has been logged in").build()).build();
+        if(existingUser != null){
+            return Response.ok(existingUser).build();//same response object every time needed!
         }else{
             User addedUser = this.userRepository.createUser(newUser);
             return Response.ok(addedUser).build();
