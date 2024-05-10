@@ -17,11 +17,11 @@ class StatefullRoom extends HTMLElement {
     roomId : string = "";
 
     template (roomType:string, roomId:string, userId:string) {
-        return html ` Room ${roomId} User ${userId}
+        return html ` <!-- Room ${roomId} User ${userId} -->
             ${(roomType === "brainwritingroom") ? 
-                    html `BW <brainwriting-element></brainwriting-element>` : nothing }
+                    html ` <brainwriting-element></brainwriting-element>` : nothing }
             ${(roomType === "brainstormingroom") ? 
-                    html `BS <brainstorming-element></brainstorming-element>` : nothing }  
+                    html ` <brainstorming-element></brainstorming-element>` : nothing }  
             ${(roomType === "otherroom") ? html `
                 <p>otherroom</p>
             ` : nothing }
