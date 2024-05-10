@@ -14,7 +14,7 @@ class IdeaService{
             headers: theHeader
         });
         const ideas : Idea[] = await response.json();
-        console.log(ideas);
+        //console.log(ideas);
 
         const model = produce(store.getValue(), draft => {
             draft.ideas = ideas;
@@ -40,7 +40,7 @@ class IdeaService{
 
             if(response.ok){
                 const responseData = await response.json();
-                console.log("idea has been added successfully: ", responseData);
+                //console.log("idea has been added successfully: ", responseData);
             
                 //add idea to store
                 const model = produce(store.getValue(), draft => {
@@ -59,5 +59,5 @@ class IdeaService{
 }
 
 
-const ideaService = new IdeaService()
-export default ideaService
+const ideaService = new IdeaService();
+export default ideaService;
