@@ -58,6 +58,41 @@ class RoomService {
         return room;
     }
 
+    async startRoom(roomId : string)  {
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+ localStorage.getItem("token")
+        });
+        const response = await fetch(`${path}/api/rooms/start/${roomId}`,{
+            method: 'PUT',
+            headers: theHeader
+        });
+
+        const room : boolean = await response.json();
+
+        console.log(`Room started: ${room}`);
+
+        return room;
+    }
+
+    async stopRoom(roomId : string)  {
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+ localStorage.getItem("token")
+        });
+        const response = await fetch(`${path}/api/rooms/stop/${roomId}`,{
+            method: 'PUT',
+            headers: theHeader
+        });
+
+        const room : boolean = await response.json();
+
+        console.log(`Room stopped: ${room}`);
+
+        return room;
+    }
+
+
     async getRoom(roomId : string) : Promise<Room> {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
