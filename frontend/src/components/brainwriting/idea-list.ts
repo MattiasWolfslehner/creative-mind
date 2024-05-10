@@ -23,8 +23,10 @@ class IdeaList extends HTMLElement {
                         </tr>
                     `:nothing
         }`);
+        const thisRoom = model.rooms.filter((room)=> room.roomId===roomId)[0];
+        console.log(thisRoom);
         return html`
-            <!-- let's do some styling -->
+            <!-- let's do some styling --> 
             <style> 
                 .styled-table {
                     border-collapse: collapse;
@@ -48,12 +50,24 @@ class IdeaList extends HTMLElement {
                     border: 1px solid #dddfe1;
                 }
             </style>
-                <h1>List of Ideas so far</h1>
+            <div style="margin-top: 1vh; display: flex; flex-wrap: wrap; justify-content: space-around; cursor:pointer">
+                <h1>List of Ideas</h1>
                 <div @click= "${() => this.onRefresh()}"
-                    style="background-color: white; width: 20vw; height: auto; text-align: center;
+                     style="background-color: white; width: 15vw; height: auto; text-align: center;
                     font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
-                <h2>Refresh</h2>
+                    <h2>Refresh</h2>
                 </div>
+                <div @click= "${() => this.onStartRoom()}"
+                     style="background-color: white; width: 15vw; height: auto; text-align: center;
+                    font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+                    <h2>Start</h2>
+                </div>
+                <div @click= "${() => this.onStopRoom()}"
+                     style="background-color: white; width: 15vw; height: auto; text-align: center;
+                    font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+                    <h2>Stop</h2>
+                </div>
+            </div>
             <table class="styled-table">
                 <thead>
                 <tr>
@@ -78,6 +92,16 @@ class IdeaList extends HTMLElement {
     onRefresh () {
         const model = store.getValue();
         const ideas = ideaService.getIdeasByRoomId(model.activeRoomId);
+    }
+    onStartRoom () {
+        const model = store.getValue();
+        const egal = roomService.startRoom(model.activeRoomId);
+        const ideas = roomService.getRooms();
+    }
+    onStopRoom () {
+        const model = store.getValue();
+        const egal = roomService.stopRoom(model.activeRoomId);
+        const ideas = roomService.getRooms();
     }
 
 }
