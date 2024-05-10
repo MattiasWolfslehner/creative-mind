@@ -1,8 +1,8 @@
 import { html, render, TemplateResult } from "lit-html";
-import roomService from "../../service/room-service"
-import { Room, store } from "../../model"
-import { router } from "../../../router"
-import { produce } from "immer"
+import roomService from "../../service/room-service";
+import { Room, store } from "../../model";
+import { router } from "../../../router";
+import { produce } from "immer";
 import "../../style/create-room/creativity-technique-style.css";
 
 const template: () => TemplateResult = () => html`
@@ -52,8 +52,12 @@ const template: () => TemplateResult = () => html`
 
     <div style="margin-top: 30vh; display: flex; flex-wrap: wrap; justify-content: space-around; cursor:pointer">
         <div id="createRoomButton"
-            style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
+             style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
             <h2 style="user-select: none">Create Room</h2>
+        </div>
+        <div id="showRoomListButton"
+             style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
+            <h2 style="user-select: none">Show Available Rooms</h2>
         </div>
     </div>
 `;
@@ -65,7 +69,7 @@ class CreateRoomElement extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log("connected");
+        //console.log("connected");
         render(template(), this.shadowRoot);
         this.addClickEventListeners();
     }
@@ -94,18 +98,27 @@ class CreateRoomElement extends HTMLElement {
                 this.createRoom(activeTechniqueContainer.id); // do not assign to room id, gives void
             }
         });
+        const showRoomListButton = this.shadowRoot.getElementById('showRoomListButton');
+        showRoomListButton.addEventListener('click', () => {
+            const model = produce(store.getValue(), draft => {
+                draft.isRoomList = true;
+                draft.activeRoomId = "";
+            });
+            store.next(model);
+        });
     }
     
     createRoom(roomType: string): void {
         console.log(`Creating room with room type: ${roomType}<`);
         const roomId: Promise<void | Room> = roomService.createRoom(roomType).then(value => {
-            router.navigate(`/room/${value.roomId}`);
-
             const model = produce(store.getValue(), draft => {
                 draft.rooms.push(value);
-                draft.isInRoom = true;
+                draft.activeRoomId = value.roomId;
+                draft.isRoomList = false;
             });
             store.next(model);
+
+            router.navigate(`/room/${value.roomId}`);
         });
     }
     

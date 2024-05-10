@@ -21,7 +21,7 @@ class CreateRoomElement extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log("connected")
+        //console.log("connected")
         render(template(), this.shadowRoot)
     }
 }

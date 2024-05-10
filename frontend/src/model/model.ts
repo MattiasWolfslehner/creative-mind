@@ -3,9 +3,11 @@ import { Room } from "./room";
 import { User } from "./user";
 
 export interface Model {
-   readonly ideas: Idea[]
-   readonly rooms: Room[]
-   readonly users: User[]
-   readonly isInRoom : boolean
+   readonly ideas: Idea[],
+   readonly rooms: Room[],
+   readonly users: User[],
+   readonly activeRoomId : string,
+   readonly thisUserId : string,
+   readonly isRoomList: boolean
 }
 

@@ -5,7 +5,9 @@ const initialState : Model = {
     ideas: [],
     rooms: [],
     users: [],
-    isInRoom: false
+    activeRoomId: "",
+    thisUserId: "",
+    isRoomList: false
 }
 
 export const store = new BehaviorSubject<Model> (initialState)

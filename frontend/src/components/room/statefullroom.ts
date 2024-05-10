@@ -1,31 +1,35 @@
 import { html, render, nothing } from "lit-html";
 import {router} from "../../../router";
-import { store } from "../../model";
+import {Room, store} from "../../model";
+import roomService from "../../service/room-service";
+import ideaService from "../../service/idea-service";
+import {produce} from "immer";
+import "../brainwriting/brainwriting"
+import "../brainstorming/brainstorming"
 
 
-
-const template = (roomType:string, roomId:string)=> html `
-<h1>here comes the right view for the room type</h1>
-<p>${roomType} :${roomId}</p>
-<p>
-</p>
-${(roomType === "brainwritingroom") ? html `
-    BW
-    <brainwriting-element roomId="${roomId}"></brainwriting-element>
-` : nothing }
-${(roomType === "brainstormingroom") ? html `
-    BS
-    <brainstorming-element roomId="${roomId}"></brainstorming-element>
-` : nothing }
-`
 class StatefullRoom extends HTMLElement {
     constructor() {
-        super()
-        this.attachShadow({mode:"open"})
-
+        super();
+        this.attachShadow({mode:"open"});
     }
 
     roomId : string = "";
+
+    template (roomType:string, roomId:string, userId:string) {
+        return html ` Room ${roomId} User ${userId}
+            ${(roomType === "brainwritingroom") ? 
+                    html `BW <brainwriting-element></brainwriting-element>` : nothing }
+            ${(roomType === "brainstormingroom") ? 
+                    html `BS <brainstorming-element></brainstorming-element>` : nothing }  
+            ${(roomType === "otherroom") ? html `
+                <p>otherroom</p>
+            ` : nothing }
+            ${(roomType === "yetanotherroom") ? html `
+                <p>yetanotherroom</p>
+            ` : nothing }
+            `;
+    }
 
     connectedCallback() {
         console.log("connected");
@@ -34,23 +38,39 @@ class StatefullRoom extends HTMLElement {
 
         //http://localhost:9000/#/room/5
         router.on('/room/:roomId', ({data}) => {
-            console.log(`route: `, data.roomId);
-            this.roomId = data.roomId;
+            //console.log(`route: `, data.roomId);
+            let idxOfSign = data.roomId.indexOf("&");
+            if (idxOfSign<0) {
+                idxOfSign = data.roomId.indexOf("?");
+            }
+            if (idxOfSign<0) {
+                idxOfSign = data.roomId.length;
+            }
+            this.roomId = data.roomId.substring(0,idxOfSign);
             var roomType = '';
+
+            const room: Promise<void | Room> = roomService.getRoom(this.roomId).then(value => {
+                const model = produce(store.getValue(), draft => {
+                    draft.activeRoomId = value.roomId;
+                });
+                store.next(model);
+            });
+
+            // load ideas for rooms
+            const ideas = ideaService.getIdeasByRoomId(this.roomId);
 
             // get Room from store
             store.subscribe(model => {
-                console.log('model:',model);
+                //console.log('model:',model);
                 const room = model.rooms.find(r => r.roomId === this.roomId);
                 if (room) {
                     roomType = room.type;
                 } else {
-                    roomType = 'brainwritingroom';
+                    roomType = 'NoRoomType';
                 }
-                console.log(`sfr roomType: ${roomType} ddd`);
+                console.log(`sfr roomType: ${roomType} User: ${model.thisUserId}`);
 
-                render(template(roomType,this.roomId), this.shadowRoot);
-
+                render(this.template(roomType, this.roomId, model.thisUserId), this.shadowRoot);
             })
         
         });

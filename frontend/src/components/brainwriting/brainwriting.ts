@@ -1,30 +1,13 @@
 import { html, render } from "lit-html"
 import "./text-input"
 import "./idea-list"
-import "./room-list"
 import "./user-list"
 import ideaService from "../../service/idea-service"
 import roomService from "../../service/room-service"
 import userService from "../../service/user-service"
+import {store} from "../../model";
+import {distinctUntilChanged, map} from "rxjs";
 
-const template = (roomId)=> html`
-<div >
-    <h1>BRAINWRITING for ${roomId}</h1>
-    <div>
-        <idea-list></idea-list>
-        <text-input></text-input>
-    </div>
-    <!--
-    <div>
-        <center><h1>Room-List</h1></center>
-        <room-list></room-list>
-    </div> -->
-    <div>
-        <center><h1>User-List</h1></center>
-        <user-list></user-list>
-    </div>
-</div>
-`
 
 //attribute change callback
 // html custom events for save
@@ -32,28 +15,39 @@ const template = (roomId)=> html`
 
 class BrainwritingElement extends HTMLElement {
 
-    roomId : string = 'cb747ba6-88b7-4260-b5ea-45c72bafa299';
-
-    static properties = {
-        roomId: { type: String }
+    template (roomId) {
+        return html` 
+            <div>
+                <h1>BRAINWRITING for ${roomId}</h1>
+                <div>
+                    <idea-list></idea-list>
+                    <text-input></text-input>
+                </div>
+                <div>
+                    <user-list></user-list>
+                </div>
+            </div>
+        `;
     }
 
     constructor() {
-        super()
+        super();
         this.attachShadow({mode:"open"});
         // loads data
-        const ideas = ideaService.getIdeasByRoomId(this.roomId);
-        const rooms = roomService.getRooms();
+        //const ideas = ideaService.getIdeasByRoomId(this.roomid);
+        //const rooms = roomService.getRooms();
         const users = userService.getUsers();
     }
 
     connectedCallback() {
-        console.log(`connected roomId in BrainwritingElement ${this.roomId}`);
-
-        const ideas = ideaService.getIdeasByRoomId(this.roomId);
-        const rooms = roomService.getRooms();
+        console.log(`connected roomId in BrainwritingElement`);
+        //const ideas = ideaService.getIdeasByRoomId(this.roomId);
+        //const rooms = roomService.getRooms();
         const users = userService.getUsers();
-        render(template(this.roomId), this.shadowRoot)
+        store.pipe(map( model => model.activeRoomId ), distinctUntilChanged())
+            .subscribe(activeRoomId => {
+                render(this.template(activeRoomId), this.shadowRoot)
+            });
     }
 }
 
