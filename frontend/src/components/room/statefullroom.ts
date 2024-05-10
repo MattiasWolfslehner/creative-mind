@@ -68,7 +68,6 @@ class StatefullRoom extends HTMLElement {
                 } else {
                     roomType = 'NoRoomType';
                 }
-                console.log(`sfr roomType: ${roomType} User: ${model.thisUserId}`);
 
                 render(this.template(roomType, this.roomId, model.thisUserId), this.shadowRoot);
             })

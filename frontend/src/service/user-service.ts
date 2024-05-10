@@ -14,7 +14,7 @@ class UserService {
             headers: theHeader
         });
         const users : User[] = await response.json();
-        console.log(users);
+        //console.log(users);
 
         const model = produce(store.getValue(), draft => {
             draft.users = users;
