@@ -3,15 +3,12 @@ package com.creative_mind.boundary.rest;
 import com.creative_mind.manager.RoomManager;
 import com.creative_mind.model.Room;
 import com.creative_mind.model.requests.RoomStateRequest;
-import com.creative_mind.repository.ParticipationRepository;
 import com.creative_mind.repository.RoomRepository;
-import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.hibernate.Incubating;
 
 import java.util.UUID;
 
@@ -39,6 +36,13 @@ public class RoomResource {
         return Response.ok(createdRoom).build();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/get/{roomId}")
+    public Response createRoom(@PathParam("roomId") UUID roomId) {
+        Room requestedRoom = this.roomRepository.getRoomByUUID(roomId);
+        return Response.ok(requestedRoom).build();
+    }
     @PUT
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/start/{roomId}")
