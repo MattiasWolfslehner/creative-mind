@@ -48,16 +48,28 @@ public class RoomResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/start/{roomId}")
     public Response startRoom(@PathParam("roomId") UUID roomId) {
-        roomManager.startRoom(roomId);
-        return Response.ok(true).build();
+        Room thisRoom = this.roomRepository.getRoomByUUID(roomId);
+        if (thisRoom.getRoomState() != RoomStatus.STARTED) {
+            roomManager.startRoom(roomId);
+            this.roomRepository.updateRoomState(roomId, RoomStatus.STARTED));
+            return Response.ok(true).build();
+        }
+        // error
+        return Response.status(400).build();
     }
 
     @PUT
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/stop/{roomId}")
     public Response stopRoom(@PathParam("roomId") UUID roomId) {
-        roomManager.stopRoom(roomId);
-        return Response.ok(true).build();
+        Room thisRoom = this.roomRepository.getRoomByUUID(roomId);
+        if (thisRoom.getRoomState() == RoomStatus.STARTED) {
+            roomManager.stopRoom(roomId);
+            this.roomRepository.updateRoomState(roomId, RoomStatus.STOPPED));
+            return Response.ok(true).build();
+        }
+        // error
+        return Response.status(400).build();
     }
 
     @PUT
@@ -65,6 +77,7 @@ public class RoomResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/updateState/{roomId}")
     public Response createRoom(@PathParam("roomId") UUID roomId, RoomStateRequest roomStateRequest) {
+        // TODO: check wether changes are valid
         RoomStatus state = this.roomRepository.updateRoomState(roomId, roomStateRequest.getRoomState());
         return Response.ok(state).build();
     }
