@@ -30,6 +30,8 @@ class RoomService {
         rooms.forEach((aRoom) => {
             this.getRoom(aRoom.roomId); // force fetch type!
         });
+
+        console.log("the rooms: ", rooms);
     }
 
     async createRoom(roomType : string) : Promise<Room> {
@@ -58,6 +60,23 @@ class RoomService {
         return room;
     }
 
+    async updateState(roomId : string, roomState: string)  {
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+ localStorage.getItem("token")
+        });
+        const response = await fetch(`${path}/api/rooms/updateState/${roomId}`,{
+            method: 'PUT',
+            headers: theHeader,
+            body: JSON.stringify({roomState: roomState})
+        });
+
+        const room : boolean = await response.json();
+
+        console.log(`Room state changed: ${room}`);
+
+        return room;
+    }
     async startRoom(roomId : string)  {
         const theHeader = new Headers({
             'Content-Type': 'application/json',

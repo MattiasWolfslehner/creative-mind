@@ -18,10 +18,10 @@ class RoomList extends HTMLElement {
         const roomTemplates = model.rooms.map(room => html`
         <tr>
         <td>${room.roomId}</td>
-        <td>${room.roomState?"closed":"open"}</td>
+        <td>${room.roomState}</td>
         <td>${room.type}</td>
         <td>
-            <div id="${room.roomId}"  ?hidden = ${room.roomState} @click="${() => this._roomJoined(room.roomId)}"
+            <div id="${room.roomId}"  ?hidden = ${!["OPEN", "CREATED"].includes(room.roomState)} @click="${() => this._roomJoined(room.roomId)}"
                  style="background-color: white; width: 20vw; height: auto; text-align: center; 
                  font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
             <h2 style="user-select: none">Join</h2>
@@ -35,7 +35,7 @@ class RoomList extends HTMLElement {
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Room</th>
+                <th>State</th>
                 <th>Type</th>
                 <th>Join</th>
             </tr>
