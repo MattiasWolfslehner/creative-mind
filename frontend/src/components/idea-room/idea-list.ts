@@ -17,7 +17,6 @@ class IdeaList extends HTMLElement {
     }
 
     checkShowIdeaInRoom(idea:Idea, room:Room, userId : string) : boolean {
-        console.log(idea, room, userId);
         if (!room) {
             return false;
         }
@@ -37,6 +36,7 @@ class IdeaList extends HTMLElement {
     }
 
     template(model: Model, room:Room, userId:string) {
+        // for each idea check whether to show it (is in same room and correct for roomtype)
         const ideaTemplates = model.ideas.map( (idea : Idea) =>
                     html`${(this.checkShowIdeaInRoom(idea, room, userId))?
                         html`
