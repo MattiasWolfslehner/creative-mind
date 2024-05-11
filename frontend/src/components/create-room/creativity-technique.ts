@@ -119,7 +119,7 @@ class CreateRoomElement extends HTMLElement {
         // create the room and navigate into it
         const roomId: Promise<void | Room> = roomService.createRoom(roomType).then(value => {
             const model = produce(store.getValue(), draft => {
-                draft.rooms.push(value);
+                //draft.rooms.push(value); push done in createRoom in Roomservice
                 draft.activeRoomId = value.roomId;
                 draft.isRoomList = false;
             });
