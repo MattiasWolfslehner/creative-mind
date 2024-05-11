@@ -35,6 +35,7 @@ public abstract class Room {
     @Id
     @GeneratedValue
     private Integer id;
+    @Enumerated(EnumType.STRING)
     private RoomStatus roomState;
     private UUID roomId;
 
