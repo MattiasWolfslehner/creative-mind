@@ -1,5 +1,6 @@
 package com.creative_mind.boundary.rest;
 
+import com.creative_mind.manager.RoomManager;
 import com.creative_mind.model.Idea;
 import com.creative_mind.model.requests.IdeaRequest;
 import com.creative_mind.repository.IdeaRepository;
@@ -16,11 +17,17 @@ public class IdeaResource {
     @Inject
     IdeaRepository ideaRepository;
 
+    @Inject
+    RoomManager roomManager;
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addIdea(IdeaRequest ideaRequest) {
+        // create idea and ...
         Idea idea = this.ideaRepository.addIdea(ideaRequest);
+        // broadcast news to others.
+        roomManager.newsForAllSessions(ideaRequest.getRoomId());
         return Response.ok(idea).build();
     }
 

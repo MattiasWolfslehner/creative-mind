@@ -147,6 +147,21 @@ public class RoomManager {
         }
     }
 
+    public void newsForAllSessions (UUID roomId){
+        try{
+            String jsonString = new JSONObject()
+                    .put("response_type", "new_ideas_in_room")
+                    .put("message", "there are new ideas in the Room!")
+                    .toString();
+
+            this.broadcastMessageToRoom(roomId, jsonString);
+
+        }catch (Exception e){
+            throw new CreativeMindException("Room is not available!",e);
+        }
+    }
+
+
     public void broadcastMessageToRoom(UUID roomId, String jsonObject) {
         Set<Session> sessions = roomSessions.get(roomId);
         if (sessions != null) {
