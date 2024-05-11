@@ -1,15 +1,17 @@
 package com.creative_mind.manager;
+
 import com.creative_mind.exception.CreativeMindException;
+import com.creative_mind.model.Room;
 import com.creative_mind.model.requests.ParticipantionRequest;
 import com.creative_mind.repository.ParticipationRepository;
 import com.creative_mind.repository.RoomRepository;
+import io.quarkus.logging.Log;
 import io.vertx.core.Vertx;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.websocket.Session;
 import org.json.JSONException;
 import org.json.JSONObject;
-import jakarta.websocket.Session;
-
 
 import java.util.Map;
 import java.util.Set;
@@ -30,17 +32,21 @@ public class RoomManager {
 
     public void startRoom(UUID roomId) {
 
+        Log.info(String.format("start room [%s]", roomId ));
+        Room thisRoom = roomRepository.getRoomByUUID(roomId);
         // ToDo: Implement dynamic room-counters
         long delay = 1000L;
-        long maxTime = 300000L;
+        long maxTime = thisRoom.getMaxTimerForRoom();
 
         if (!this.roomTimers.containsKey(roomId)) {
+            Log.info(String.format("addTimers room [%s] ... maximum [%d]", roomId, maxTime ));
             long startTime = System.currentTimeMillis();
 
             long timerId = vertx.setPeriodic(delay, timer -> {
                 long currentTime = System.currentTimeMillis();
                 long elapsedTime = currentTime - startTime;
                 long remainingTime = maxTime - elapsedTime;
+                //Log.info(String.format("Timer fired room [%s]", roomId ));
 
                 if (remainingTime >= 0) {
                     // Convert remaining time to seconds
@@ -82,9 +88,9 @@ public class RoomManager {
                     .toString();
 
             Long timerId = roomTimers.remove(roomId);
-        if (timerId != null) {
-            vertx.cancelTimer(timerId);
-        }
+            if (timerId != null) {
+                vertx.cancelTimer(timerId);
+            }
             this.broadcastMessageToRoom(roomId, jsonString);
 
         } catch (JSONException e) {
@@ -123,11 +129,11 @@ public class RoomManager {
             roomSessions.computeIfPresent(roomId, (k, v) -> {
                 for (Session iterator : this.roomSessions.get(roomId)) {
                     if(iterator.getId().equals(sessionId)){
-                        v.remove(iterator);
+                        v.remove(iterator); // delete session from room
                         break;
                     }
                 }
-                return v.isEmpty() ? null : v;
+                return v.isEmpty() ? null : v; // delete room from list
             });
             String jsonString = new JSONObject()
                     .put("response_type", "room_notification")

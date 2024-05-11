@@ -39,6 +39,8 @@ public abstract class Room {
     private RoomStatus roomState;
     private UUID roomId;
 
+    public abstract long getMaxTimerForRoom();
+
     public Room() {
         roomId = UUID.randomUUID();
         roomState = RoomStatus.CREATED;

@@ -8,6 +8,11 @@ import jakarta.persistence.Entity;
 public class BrainstormingRoom extends IdeaRoom{
     private static final String ROOM_TYPE = String.valueOf(RoomType.BRAINSTORMING);
 
+    @Override
+    public long getMaxTimerForRoom() {
+        return 400000L;
+    }
+
     public BrainstormingRoom() {
         super();
     }
