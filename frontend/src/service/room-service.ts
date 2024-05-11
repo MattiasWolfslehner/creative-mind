@@ -30,8 +30,6 @@ class RoomService {
         rooms.forEach((aRoom) => {
             this.getRoom(aRoom.roomId); // force fetch type!
         });
-
-        console.log("the rooms: ", rooms);
     }
 
     async createRoom(roomType : string) : Promise<Room> {

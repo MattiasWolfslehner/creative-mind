@@ -59,7 +59,6 @@ async function init() {
                         idxSign = url.length;
                     }
                     let roomId = url.substring(7, idxSign);
-                    console.log(roomId);
                     const room: Promise<void | Room> = roomService.getRoom(roomId).then(value => {
                         const model = produce(store.getValue(), draft => {
                             draft.activeRoomId = roomId;

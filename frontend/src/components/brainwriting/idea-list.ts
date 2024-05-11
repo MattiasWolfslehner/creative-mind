@@ -17,6 +17,7 @@ class IdeaList extends HTMLElement {
     }
 
     checkShowIdeaInRoom(idea:Idea, room:Room, userId : string) : boolean {
+        console.log(idea, room, userId);
         if (!room) {
             return false;
         }
@@ -25,7 +26,8 @@ class IdeaList extends HTMLElement {
                 return (idea.roomId === room.roomId);
             }
             case "brainstormingroom": {
-                return ((idea.roomId === room.roomId) && (idea.memberId === userId))
+                // only see my ideas when started, others and mine when stopped
+                return ((idea.roomId === room.roomId) && ((idea.memberId === userId) || (room.roomState == "STOPPED")))
             }
             default:
                 console.error("should never be here!");
@@ -113,6 +115,7 @@ class IdeaList extends HTMLElement {
             } else {
                 this.roomState = "INVALID";
             }
+            console.log(thisRooms, ":", this.roomState);
 
             render(this.template(model, thisRoom, model.thisUserId), this.shadowRoot)
         });

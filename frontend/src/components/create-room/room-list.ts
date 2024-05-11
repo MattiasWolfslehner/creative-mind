@@ -75,7 +75,7 @@ class RoomList extends HTMLElement {
         console.log(`Joining room with room id: ${_roomId}<`);
         const roomId: Promise<void | Room> = roomService.getRoom(_roomId).then(value => {
             const model = produce(store.getValue(), draft => {
-                draft.rooms.push(value);
+                //draft.rooms.push(value);
                 draft.activeRoomId = value.roomId;
             });
             store.next(model);
