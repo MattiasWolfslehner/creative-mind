@@ -10,7 +10,7 @@ public class BrainwritingRoom extends IdeaRoom {
 
     @Override
     public long getMaxTimerForRoom() {
-        return 400000L;
+        return 300000L;
     }
 
     public BrainwritingRoom() {
