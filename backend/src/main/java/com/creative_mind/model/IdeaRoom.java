@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @NamedQuery(name = BrainwritingRoom.GET_IDEA_ROOM_BY_ROOM_ID, query = "select r from IdeaRoom r where r.roomId = :roomId")
-public class IdeaRoom extends Room{
+public abstract class IdeaRoom extends Room{
 
     public static final String GET_IDEA_ROOM_BY_ROOM_ID = "Participation.getBrainWritingRoomByRoomId";
     @OneToMany(mappedBy = "ideaRoom")
