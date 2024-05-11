@@ -53,7 +53,7 @@ class RoomService {
             draft.rooms.push(room);
         })
         store.next(model);
-        console.log(room);
+        //console.log(room);
 
         return room;
     }
@@ -88,7 +88,7 @@ class RoomService {
 
         const room : boolean = await response.json();
 
-        console.log(`Room started: ${room}`);
+        //console.log(`Room started: ${room}`);
         // fetch new status
         const x = this.getRoom(roomId);
 
@@ -107,7 +107,7 @@ class RoomService {
 
         const room : boolean = await response.json();
 
-        console.log(`Room stopped: ${room}`);
+        //console.log(`Room stopped: ${room}`);
         // fetch new status
         const x = this.getRoom(roomId);
 
