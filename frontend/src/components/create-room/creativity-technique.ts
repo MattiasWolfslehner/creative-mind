@@ -100,6 +100,9 @@ class CreateRoomElement extends HTMLElement {
         });
         const showRoomListButton = this.shadowRoot.getElementById('showRoomListButton');
         showRoomListButton.addEventListener('click', () => {
+            // read (possibly changed) roomstates
+            const x = roomService.getRooms();
+            // then change application state
             const model = produce(store.getValue(), draft => {
                 draft.isRoomList = true;
                 draft.activeRoomId = "";
@@ -110,6 +113,7 @@ class CreateRoomElement extends HTMLElement {
     
     createRoom(roomType: string): void {
         console.log(`Creating room with room type: ${roomType}<`);
+        // create the room and navigate into it
         const roomId: Promise<void | Room> = roomService.createRoom(roomType).then(value => {
             const model = produce(store.getValue(), draft => {
                 draft.rooms.push(value);
