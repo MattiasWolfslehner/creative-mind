@@ -49,9 +49,10 @@ public class RoomResource {
     @Path("/start/{roomId}")
     public Response startRoom(@PathParam("roomId") UUID roomId) {
         Room thisRoom = this.roomRepository.getRoomByUUID(roomId);
+        // not already started?
         if (thisRoom.getRoomState() != RoomStatus.STARTED) {
             roomManager.startRoom(roomId);
-            this.roomRepository.updateRoomState(roomId, RoomStatus.STARTED));
+            this.roomRepository.updateRoomState(roomId, RoomStatus.STARTED);
             return Response.ok(true).build();
         }
         // error
@@ -63,9 +64,10 @@ public class RoomResource {
     @Path("/stop/{roomId}")
     public Response stopRoom(@PathParam("roomId") UUID roomId) {
         Room thisRoom = this.roomRepository.getRoomByUUID(roomId);
+        // ONLY Started Rooms can be stopped
         if (thisRoom.getRoomState() == RoomStatus.STARTED) {
             roomManager.stopRoom(roomId);
-            this.roomRepository.updateRoomState(roomId, RoomStatus.STOPPED));
+            this.roomRepository.updateRoomState(roomId, RoomStatus.STOPPED);
             return Response.ok(true).build();
         }
         // error
