@@ -117,7 +117,6 @@ class RoomService {
 
     async getRoom(roomId : string | null) : Promise<Room> {
         if (!roomId) {
-            console.log("no roomId given... update activeRoomId");
             const model = store.getValue();
             roomId  = model.activeRoomId;
         }
