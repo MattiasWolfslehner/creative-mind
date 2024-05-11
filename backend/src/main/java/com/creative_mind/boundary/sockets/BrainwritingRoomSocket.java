@@ -37,9 +37,9 @@ public class BrainwritingRoomSocket {
         ParticipantionRequest participantionRequest = new ParticipantionRequest(parsedRoomId, parsedUserId, sessionId);
 
         CompletableFuture.runAsync(() -> {
-            Log.info(String.format("New Socket opened for room [%s] and user [%s]", parsedRoomId, parsedUserId));
             roomManager.addParticipantToRoom(participantionRequest);
             roomManager.addSessionToRoom(parsedRoomId, session);
+            Log.info(String.format("New Socket went well opened for room [%s] and user [%s]", parsedRoomId, parsedUserId));
 
         }, managedExecutor).exceptionally(throwable -> {
             throw new CompletionException(throwable);
@@ -67,6 +67,8 @@ public class BrainwritingRoomSocket {
 
             roomManager.removeParticipant(participantionRequest);
             roomManager.removeSessionFromRoom(parsedRoomId, sessionId);
+
+            Log.info(String.format("REMOVE Socket went well opened for room [%s] and user [%s]", parsedRoomId, parsedUserId));
 
         }, managedExecutor).exceptionally(throwable -> {
             throw new CompletionException(throwable);
