@@ -72,6 +72,18 @@ public class RoomManager {
             });
 
             this.roomTimers.put(roomId, timerId);
+
+            try {
+                String jsonString = new JSONObject()
+                        .put("response_type", "room_started")
+                        .put("message", String.format("Room [%s] has started!", roomId.toString()))
+                        .put("roomId", roomId.toString())
+                        .toString();
+
+                this.broadcastMessageToRoom(roomId, jsonString);
+            } catch (JSONException e) {
+                throw new CreativeMindException(String.format("could not broadcast to room[%s] ([%s])!", roomId.toString(), e.toString()));
+            }
         } else {
             throw new CreativeMindException(String.format("Timer for room[%s] is already running!", roomId.toString()));
         }
