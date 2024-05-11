@@ -2,6 +2,7 @@ package com.creative_mind.repository;
 
 import com.creative_mind.exception.CreativeMindException;
 import com.creative_mind.model.Room;
+import com.creative_mind.model.RoomStatus;
 import com.creative_mind.services.IdeaCsvService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -33,7 +34,7 @@ public class RoomRepository {
     }
 
     @Transactional
-    public boolean updateRoomState(UUID roomId, boolean state) {
+    public RoomStatus updateRoomState(UUID roomId, RoomStatus state) {
         Room room = this.getRoomByUUID(roomId);
         room.setRoomState(state);
         return room.getRoomState();

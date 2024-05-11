@@ -5,12 +5,13 @@ import com.creative_mind.model.Participation;
 import com.creative_mind.model.Room;
 import com.creative_mind.model.User;
 import com.creative_mind.model.requests.ParticipantionRequest;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -35,9 +36,11 @@ public class ParticipationRepository {
         User member = userRepository.getUserByUUID(participationRequest.getMemberId());
         Room room = roomRepository.getRoomByUUID(participationRequest.getRoomId());
 
+        Log.info(String.format("try new Participation for user [%s] in room [%s]", member.getId(), room.getId()));
         Participation participation = new Participation(room, member, sessionId);
 
         if (!this.isUserInRoom(member.getId(), room.getId())) {
+            Log.info(String.format("user [%s] added to room [%s]", member.getId(), room.getId()));
             this.entityManager.persist(participation);
         } else {
             throw new CreativeMindException(String.format("User[%s] is already in Room[%s]!", member.getId(), room.getId()));
