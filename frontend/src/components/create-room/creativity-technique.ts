@@ -50,7 +50,7 @@ const template: () => TemplateResult = () => html`
         </div>
     </div>
 
-    <div style="margin-top: 30vh; display: flex; flex-wrap: wrap; justify-content: space-around; cursor:pointer">
+    <div style="margin-top: 30vh; display: flex; flex-wrap: wrap; justify-content: space-around">
         <div id="createRoomButton"
              style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
             <h2 style="user-select: none">Create Room</h2>
@@ -95,11 +95,14 @@ class CreateRoomElement extends HTMLElement {
         createRoomButton.addEventListener('click', () => {
             const activeTechniqueContainer = this.shadowRoot.querySelector('.technique-container.active');
             if (activeTechniqueContainer) {
+                // simply create the room for the selected type over container id
                 this.createRoom(activeTechniqueContainer.id); // do not assign to room id, gives void
             }
         });
+
         const showRoomListButton = this.shadowRoot.getElementById('showRoomListButton');
         showRoomListButton.addEventListener('click', () => {
+            // change view type to room list (join other rooms rather than create it)
             // read (possibly changed) roomstates
             const x = roomService.getRooms();
             // then change application state
