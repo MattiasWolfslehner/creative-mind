@@ -68,7 +68,7 @@ async function init() {
                     });
                 } else {
                     // nope
-                    router.navigate("/");
+                    router.navigate("");
                 }
             }
           })
@@ -89,10 +89,14 @@ import "./components/app";
 
 const homeButton = document.getElementById('homeButtonId');
 homeButton.addEventListener('click', () => {
+    router.navigate("");
+});
+
+router.on('', () => {
+    console.log("go home");
     const model = produce(store.getValue(), draft => {
         draft.isRoomList = false;
         draft.activeRoomId = "";
     });
     store.next(model);
-    router.navigate("/");
 });
