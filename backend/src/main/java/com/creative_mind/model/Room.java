@@ -40,6 +40,7 @@ public abstract class Room {
 
     public Room() {
         roomId = UUID.randomUUID();
+        roomState = RoomStatus.CREATED;
     }
     public UUID getRoomId() {
         return roomId;
