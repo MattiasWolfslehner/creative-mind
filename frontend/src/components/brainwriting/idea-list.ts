@@ -1,6 +1,6 @@
 import { html, render, nothing } from "lit-html"
 import { store } from "../../model/store"
-import { Model } from "src/model"
+import {Idea, Model, Room} from "src/model"
 import roomService from "../../service/room-service";
 import ideaService from "../../service/idea-service";
 
@@ -8,14 +8,35 @@ import ideaService from "../../service/idea-service";
 class IdeaList extends HTMLElement {
 
 
+    roomState : string = "INVALID";
+    roomType : string = "INVALID";
+
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
     }
 
-    template(model: Model, roomId) {
-        const ideaTemplates = model.ideas.map(idea =>
-                    html`${(idea.roomId===roomId)?
+    checkShowIdeaInRoom(idea:Idea, room:Room, userId : string) : boolean {
+        if (!room) {
+            return false;
+        }
+        switch (room.type) {
+            case "brainwritingroom": {
+                return (idea.roomId === room.roomId);
+            }
+            case "brainstormingroom": {
+                return ((idea.roomId === room.roomId) && (idea.memberId === userId))
+            }
+            default:
+                console.error("should never be here!");
+                let x = 1/0;
+        }
+        return false;
+    }
+
+    template(model: Model, room:Room, userId:string) {
+        const ideaTemplates = model.ideas.map( (idea : Idea) =>
+                    html`${(this.checkShowIdeaInRoom(idea, room, userId))?
                         html`
                         <tr>
                             <td>${idea.memberId}</td>
@@ -23,8 +44,6 @@ class IdeaList extends HTMLElement {
                         </tr>
                     `:nothing
         }`);
-        const thisRoom = model.rooms.filter((room)=> room.roomId===roomId)[0];
-        console.log(thisRoom);
         return html`
             <!-- let's do some styling --> 
             <style> 
@@ -50,19 +69,19 @@ class IdeaList extends HTMLElement {
                     border: 1px solid #dddfe1;
                 }
             </style>
-            <div style="margin-top: 1vh; display: flex; flex-wrap: wrap; justify-content: space-around; cursor:pointer">
+            <div style="margin-top: 1vh; display: flex; flex-wrap: wrap; justify-content: space-around">
                 <h1>List of Ideas</h1>
                 <div @click= "${() => this.onRefresh()}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
                     font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                     <h2>Refresh</h2>
                 </div>
-                <div @click= "${() => this.onStartRoom()}"
+                <div @click= "${() => this.onStartRoom()}" .hidden="${((this.roomState==='STARTED')||(this.roomState==='INVALID'))}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
                     font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                     <h2>Start</h2>
                 </div>
-                <div @click= "${() => this.onStopRoom()}"
+                <div @click= "${() => this.onStopRoom()}" .hidden="${((this.roomState!=='STARTED'))}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
                     font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                     <h2>Stop</h2>
@@ -85,7 +104,17 @@ class IdeaList extends HTMLElement {
     connectedCallback() {
         store.subscribe(model => {
             //console.log(model);
-            render(this.template(model, model.activeRoomId), this.shadowRoot)
+            const thisRooms = model.rooms.filter((room)=> room.roomId===model.activeRoomId);
+            //console.log(thisRoom);
+            let thisRoom: Room = null;
+            if (thisRooms.length==1){
+                this.roomState = thisRooms[0].roomState;
+                thisRoom = thisRooms[0];
+            } else {
+                this.roomState = "INVALID";
+            }
+
+            render(this.template(model, thisRoom, model.thisUserId), this.shadowRoot)
         });
     }
 
