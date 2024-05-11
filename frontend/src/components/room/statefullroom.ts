@@ -32,13 +32,7 @@ class StatefullRoom extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log("connected");
-        
-        //var roomId = null;
-
-        //http://localhost:9000/#/room/5
         router.on('/room/:roomId', ({data}) => {
-            //console.log(`route: `, data.roomId);
             let idxOfSign = data.roomId.indexOf("&");
             if (idxOfSign<0) {
                 idxOfSign = data.roomId.indexOf("?");
@@ -61,7 +55,6 @@ class StatefullRoom extends HTMLElement {
 
             // get Room from store
             store.subscribe(model => {
-                //console.log('model:',model);
                 const room = model.rooms.find(r => r.roomId === this.roomId);
                 if (room) {
                     roomType = room.type;

@@ -45,7 +45,6 @@ class TextInputElement extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log("connected")
         store.subscribe(model => {
             //console.log(model);
             const thisRooms = model.rooms.filter((room)=> room.roomId===model.activeRoomId);
