@@ -2,6 +2,8 @@ import {html, render} from 'lit-html';
 import {Idea, Model, store} from "../../model";
 import {produce} from "immer";
 import {distinctUntilChanged, map} from "rxjs";
+import roomService from "../../service/room-service";
+import ideaService from "../../service/idea-service";
 
 class IdeaSocketService extends HTMLElement {
 
@@ -27,13 +29,24 @@ class IdeaSocketService extends HTMLElement {
         const message = JSON.parse(event.data);
 
         switch (message.response_type) {
+            case "room_closed":
+            case "room_started":
             case "room_notification": {
-                this.socketStatus = `got room notification: "${message.message}"`;
+                this.socketStatus = `got room nfctn (${message.response_type}): "${message.message}"`;
+                const x = roomService.getRoom(null);
                 this.refresh();
                 break;
             }
             case "get_remaining_room_time": {
                 this.socketStatus = `got room timer: "${message.remaining}"`;
+                //const x = roomService.getRoom(null);
+                this.refresh();
+                break;
+            }
+            case "new_ideas_in_room": {
+                console.log("new_ideas_in_room");
+                this.socketStatus = 'new ideas';
+                const x = ideaService.getIdeasByRoomId(this.roomId);
                 this.refresh();
                 break;
             }

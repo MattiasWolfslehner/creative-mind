@@ -21,10 +21,10 @@ class IdeaList extends HTMLElement {
             return false;
         }
         switch (room.type) {
-            case "brainwritingroom": {
+            case "brainstormingroom": { // everybody can see mine
                 return (idea.roomId === room.roomId);
             }
-            case "brainstormingroom": {
+            case "brainwritingroom": { // 6-3-5
                 // only see my ideas when started, others and mine when stopped
                 return ((idea.roomId === room.roomId) && ((idea.memberId === userId) || (room.roomState == "STOPPED")))
             }
@@ -115,7 +115,6 @@ class IdeaList extends HTMLElement {
             } else {
                 this.roomState = "INVALID";
             }
-            console.log(thisRooms, ":", this.roomState);
 
             render(this.template(model, thisRoom, model.thisUserId), this.shadowRoot)
         });

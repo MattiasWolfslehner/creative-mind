@@ -75,6 +75,7 @@ class RoomService {
 
         return room;
     }
+
     async startRoom(roomId : string)  {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
@@ -88,6 +89,8 @@ class RoomService {
         const room : boolean = await response.json();
 
         console.log(`Room started: ${room}`);
+        // fetch new status
+        const x = this.getRoom(roomId);
 
         return room;
     }
@@ -105,12 +108,19 @@ class RoomService {
         const room : boolean = await response.json();
 
         console.log(`Room stopped: ${room}`);
+        // fetch new status
+        const x = this.getRoom(roomId);
 
         return room;
     }
 
 
-    async getRoom(roomId : string) : Promise<Room> {
+    async getRoom(roomId : string | null) : Promise<Room> {
+        if (!roomId) {
+            console.log("no roomId given... update activeRoomId");
+            const model = store.getValue();
+            roomId  = model.activeRoomId;
+        }
         const theHeader = new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'Bearer '+ localStorage.getItem("token")
@@ -131,6 +141,7 @@ class RoomService {
                 if (aRoom.roomId === roomId) {
                     isPresent = true;
                     aRoom.type = room.type;
+                    aRoom.roomState = room.roomState;
                 }
             });
             if (!isPresent) {
