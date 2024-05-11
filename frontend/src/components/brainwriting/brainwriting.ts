@@ -37,7 +37,6 @@ class BrainwritingElement extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log(`connected roomId in BrainwritingElement`);
         //const ideas = ideaService.getIdeasByRoomId(this.roomId);
         //const rooms = roomService.getRooms();
         const users = userService.getUsers();

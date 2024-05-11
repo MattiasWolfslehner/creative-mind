@@ -35,7 +35,6 @@ class BrainstormingElement extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log(`connected roomId in BrainstormingElement`);
         // const ideas = ideaService.getIdeasByRoomId(this.roomid);
         // const rooms = roomService.getRooms();
         const users = userService.getUsers();
