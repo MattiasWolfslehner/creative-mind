@@ -86,3 +86,13 @@ init();
 
 
 import "./components/app";
+
+const homeButton = document.getElementById('homeButtonId');
+homeButton.addEventListener('click', () => {
+    const model = produce(store.getValue(), draft => {
+        draft.isRoomList = false;
+        draft.activeRoomId = "";
+    });
+    store.next(model);
+    router.navigate("/");
+});
