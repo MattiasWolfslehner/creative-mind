@@ -105,6 +105,8 @@ public class RoomManager {
             }
             this.broadcastMessageToRoom(roomId, jsonString);
 
+            roomSessions.remove(roomId);
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
