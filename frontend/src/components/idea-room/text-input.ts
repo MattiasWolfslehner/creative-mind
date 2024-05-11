@@ -24,7 +24,6 @@ class TextInputElement extends HTMLElement {
     } 
 
     onButtonClick(){
-        console.log("button was clicked");
         const input = this.shadowRoot.querySelector('input').value
 
         if (input !== "") {

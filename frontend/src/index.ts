@@ -3,7 +3,7 @@ import {router} from '../router';
 import roomService from './service/room-service';
 import {Room, User, store} from "./model";
 import {produce} from "immer";
-
+import path from "./service/service-const"
 
 const keycloak = new Keycloak({
     url: 'http://localhost:8000',
@@ -30,7 +30,7 @@ async function init() {
         });
         console.log(keycloak.token);
         
-        fetch('http://localhost:8080/api/users/register',{
+        fetch(`${path}/api/users/register`,{
             method: 'GET',
             headers: headers,
         })

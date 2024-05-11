@@ -44,7 +44,7 @@ class IdeaSocketService extends HTMLElement {
                 break;
             }
             case "new_ideas_in_room": {
-                console.log("new_ideas_in_room");
+                //console.log("new_ideas_in_room");
                 this.socketStatus = 'new ideas';
                 const x = ideaService.getIdeasByRoomId(this.roomId);
                 this.refresh();
@@ -118,18 +118,18 @@ class IdeaSocketService extends HTMLElement {
         this.socket = null;
 
         if (this.roomId && this.userId) {
-            // eslint-disable-next-line @typescript-eslint/no-this-alias
+            // keep the "this" pointer for onOpen... handlers later
             const roomChatContext : IdeaSocketService = this; // not to be mistaken with websocket inside
 
+            // create websocket url
             let url = `ws://localhost:8080/rooms/join/${this.roomId}/${this.userId}`;
-            console.log(url)
             this.socket = new WebSocket(url);
             this.socketStatus = "created";
             this.refresh();
 
             this.socket.onopen = function (event: Event) {
                 event.preventDefault();
-                console.log('WebSocket connection opened:', event);
+                //console.log('WebSocket connection opened:', event);
                 roomChatContext.socketStatus = "opened";
                 // Wait for the updateComplete promise to resolve
                 roomChatContext.refresh();
@@ -139,7 +139,7 @@ class IdeaSocketService extends HTMLElement {
             };
             this.socket.onclose = function (event: Event) {
                 event.preventDefault();
-                console.log('WebSocket connection closed:', event);
+                //console.log('WebSocket connection closed:', event);
                 roomChatContext.socketStatus = "closed";
                 roomChatContext.refresh();
             };
