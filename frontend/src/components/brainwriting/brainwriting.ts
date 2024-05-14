@@ -18,7 +18,6 @@ class BrainwritingElement extends HTMLElement {
     template (roomId) {
         return html` 
             <div>
-                <h1>BRAINWRITING for ${roomId}</h1>
                 <div>
                     <idea-list></idea-list>
                     <text-input></text-input>

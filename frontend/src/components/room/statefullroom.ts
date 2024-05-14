@@ -55,6 +55,7 @@ class StatefullRoom extends HTMLElement {
 
             // get Room from store
             store.subscribe(model => {
+                console.log('model in statefullroom:', model);
                 const room = model.rooms.find(r => r.roomId === this.roomId);
                 if (room) {
                     roomType = room.type;

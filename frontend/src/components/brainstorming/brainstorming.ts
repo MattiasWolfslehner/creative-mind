@@ -16,7 +16,6 @@ class BrainstormingElement extends HTMLElement {
     template (roomId:string) {
         return html` 
             <div>
-                <h1>BRAINSTORMING for ${roomId}</h1>
                 <div>
                     <idea-list></idea-list>
                     <text-input></text-input>
