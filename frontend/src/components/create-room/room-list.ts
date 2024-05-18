@@ -15,7 +15,7 @@ class RoomList extends HTMLElement {
     }
 
     template(model: Model) {
-        const roomTemplates = model.rooms.map(room => html`
+        const roomTemplates = model.rooms.map((room : Room) => html`
         <tr>
         <td>${room.roomId}</td>
         <td>${room.roomState}</td>
