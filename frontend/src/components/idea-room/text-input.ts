@@ -14,9 +14,10 @@ class TextInputElement extends HTMLElement {
         <div>
             <!-- <textarea name="textarea" id="area" cols="30" rows="10"></textarea> -->
             <input type="text" name="" .disabled="${(!(isRoomStarted && canAddIdeas))}" placeholder="${(isRoomStarted?(canAddIdeas?"enter new idea":"maximum number of ideas added"):"wait till room is started")}">
+            <!-- does not work properly {((isRoomStarted && canAddIdeas)?"display: flex;":"")} flex-wrap: wrap;-->
             <div @click= "${() => this.onButtonClick()}" .hidden="${!isRoomStarted}" 
                  style="background-color: ${(canAddIdeas?"white":"grey")}; width: 20vw; height: auto; 
-                 <!-- does not work properly ${((isRoomStarted && canAddIdeas)?"display: flex;":"")} flex-wrap: wrap;--> justify-content: space-around; text-align: center; 
+                 justify-content: space-around; text-align: center; 
                  font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                 <h2 style="user-select: none">Send</h2>
             </div>
@@ -36,7 +37,7 @@ class TextInputElement extends HTMLElement {
             }
 
             this.shadowRoot.querySelector('input').value = "";
-            const promise = ideaService.postNewIdea(idea);
+            ideaService.postNewIdea(idea);
         }
     }
 
