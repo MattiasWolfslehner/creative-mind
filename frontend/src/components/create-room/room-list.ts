@@ -22,7 +22,8 @@ class RoomList extends HTMLElement {
         <td>${room.type}</td>
         <td>
             <div id="${room.roomId}"  ?hidden = ${!["OPEN", "CREATED"].includes(room.roomState)} @click="${() => this._roomJoined(room.roomId)}"
-                 style="background-color: white; width: 20vw; height: auto; text-align: center; 
+                 style="background-color: white; width: 20vw; height: auto; 
+                 display: flex; flex-wrap: wrap; justify-content: space-around; text-align: center; 
                  font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
             <h2 style="user-select: none">Join</h2>
             </div>
