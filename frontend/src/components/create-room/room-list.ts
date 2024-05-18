@@ -1,5 +1,5 @@
 import { html, render } from "lit-html"
-import { store } from "../../model/store"
+import { store } from "../../model"
 import {Model, Room} from "src/model"
 import {produce} from "immer";
 import roomService from "../../service/room-service";
@@ -75,7 +75,7 @@ class RoomList extends HTMLElement {
     }
     private async _roomJoined(_roomId: string) {
         console.log(`Joining room with room id: ${_roomId}<`);
-        const roomId: Promise<void | Room> = roomService.getRoom(_roomId).then(value => {
+        roomService.getRoom(_roomId).then(value => {
             const model = produce(store.getValue(), draft => {
                 //draft.rooms.push(value);
                 draft.activeRoomId = value.roomId;

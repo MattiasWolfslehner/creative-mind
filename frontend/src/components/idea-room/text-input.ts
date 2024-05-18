@@ -1,4 +1,3 @@
-import { produce } from "immer";
 import { html, render, nothing } from "lit-html"
 import {Idea, Model, Room, store} from "../../model"
 import ideaService from "../../service/idea-service"
@@ -37,7 +36,7 @@ class TextInputElement extends HTMLElement {
             }
 
             this.shadowRoot.querySelector('input').value = "";
-            const newIdea = ideaService.postNewIdea(idea);
+            const promise = ideaService.postNewIdea(idea);
         }
     }
 
@@ -82,4 +81,4 @@ class TextInputElement extends HTMLElement {
 
 }
 
-customElements.define("text-input", TextInputElement)
+customElements.define("text-input", TextInputElement);
