@@ -21,9 +21,9 @@ class RoomList extends HTMLElement {
         <td>${room.roomState}</td>
         <td>${room.type}</td>
         <td>
-            <div id="${room.roomId}"  ?hidden = ${!["OPEN", "CREATED"].includes(room.roomState)} @click="${() => this._roomJoined(room.roomId)}"
+            <div id="${room.roomId}"  .hidden = ${!["OPEN", "CREATED"].includes(room.roomState)} @click="${() => this._roomJoined(room.roomId)}"
                  style="background-color: white; width: 20vw; height: auto; 
-                 display: flex; flex-wrap: wrap; justify-content: space-around; text-align: center; 
+                 ${(!["OPEN", "CREATED"].includes(room.roomState)?"":"display: flex;")} flex-wrap: wrap; justify-content: space-around; text-align: center; 
                  font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
             <h2 style="user-select: none">Join</h2>
             </div>
@@ -45,10 +45,11 @@ class RoomList extends HTMLElement {
             ${roomTemplates}
             </tbody>
         </table>
-
+        
         <div id="showRoomButton"
-             style="background-color: white; width: 20vw; height: auto; text-align: center; 
-             font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+             style="background-color: white; width: 20vw; height: auto; margin-top: 5vw;
+             display: flex; flex-wrap: wrap; justify-content: space-around; text-align: center; 
+                font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
             <h2 style="user-select: none">Show Create Room</h2>
         </div>
         `;
