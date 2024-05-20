@@ -57,7 +57,7 @@ class StatefullRoom extends HTMLElement {
             // get Room from store
             store.pipe(map(model => ({rooms: model.rooms, thisUserId: model.thisUserId})),distinctUntilChanged())
                 .subscribe(reduced_model => {
-                console.log('model in statefullroom:', reduced_model);
+                //console.log('model in statefullroom:', reduced_model);
                 const room = reduced_model.rooms.find(r => r.roomId === this.roomId);
                 if (room) {
                     roomType = room.type;

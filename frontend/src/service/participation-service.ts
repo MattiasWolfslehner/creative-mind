@@ -23,7 +23,7 @@ class ParticipationService {
             headers: theHeader
         });
         const participations : Participation[] = await response.json();
-        console.log(participations);
+        //console.log(participations);
 
         const model = produce(store.getValue(), draft => {
             draft.participations = participations;
