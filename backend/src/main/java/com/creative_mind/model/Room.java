@@ -39,6 +39,7 @@ public abstract class Room {
     private RoomStatus roomState;
     private UUID roomId;
 
+    @JsonIgnore
     public abstract long getMaxTimerForRoom();
 
     public Room() {

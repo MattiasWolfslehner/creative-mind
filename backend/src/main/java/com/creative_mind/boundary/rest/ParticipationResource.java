@@ -7,6 +7,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.UUID;
+
 @Path("/api/participations")
 public class ParticipationResource {
 
@@ -19,6 +21,15 @@ public class ParticipationResource {
     public Response listRooms() {
         return Response
                 .ok(participationRepository.getAllParticipation())
+                .build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/room/{roomId}")
+    public Response getRoomParticipants(@PathParam("roomId") UUID roomId) {
+        return Response
+                .ok(participationRepository.getParticipationForRoom(roomId))
                 .build();
     }
 

@@ -38,6 +38,15 @@ public class ParticipationRepository {
         return participation;
     }
 
+    public List<Participation> getParticipationForRoom(UUID roomId ) {
+        TypedQuery<Participation> query = entityManager.createNamedQuery(Participation.QUERY_FIND_ONE_ROOM, Participation.class);
+        List<Participation> participations = query
+                .setParameter("roomId", roomId)
+                .getResultList();
+
+        return participations;
+    }
+
     @Transactional
     public void addParticipation(ParticipantionRequest participationRequest) {
         String sessionId = participationRequest.getSessionId();
