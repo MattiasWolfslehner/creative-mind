@@ -4,6 +4,7 @@ import { Idea, Model, Room } from "src/model";
 import roomService from "../../service/room-service";
 import ideaService from "../../service/idea-service";
 import {distinctUntilChanged, map} from "rxjs";
+import {Participation} from "../../model/participation";
 
 class IdeaList extends HTMLElement {
     roomState: string = "INVALID";
@@ -42,10 +43,18 @@ class IdeaList extends HTMLElement {
         return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    template(ideas: Idea[], room: Room, userId: string) {
+    getUserName(userId, participations: Participation[]) {
+        let p = participations.filter(p => p.member.userId === userId)
+        if (p.length > 0) {
+            return (p[0].member.userName);
+        }
+        return ("Unknown");
+    }
+
+    template(ideas: Idea[], participations: Participation[], room: Room, userId: string) {
         const ideaTemplates = ideas.map((idea: Idea) =>
             this.checkShowIdeaInRoom(idea, room, userId)
-                ? html`<div style="background-color: ${this.getRandomColor()};"><p>${idea.content}</p></div>`
+                ? html`<div style="background-color: ${this.getRandomColor()};"><p>${idea.content}  \n <span style="font-size: smaller">(${this.getUserName(idea.memberId, participations)})</span></p></div>`
                 : nothing
         );
 
@@ -108,6 +117,7 @@ class IdeaList extends HTMLElement {
         store.pipe(map(model => ({
             ideas: model.ideas,
             rooms: model.rooms,
+            participations: model.participations,
             activeRoomId: model.activeRoomId,
             thisUserId: model.thisUserId
         })),distinctUntilChanged())
@@ -123,7 +133,7 @@ class IdeaList extends HTMLElement {
                 this.roomState = "INVALID";
             }
 
-            render(this.template(reduced_model.ideas, thisRoom, reduced_model.thisUserId), this.shadowRoot);
+            render(this.template(reduced_model.ideas, reduced_model.participations, thisRoom, reduced_model.thisUserId), this.shadowRoot);
         });
     }
 
