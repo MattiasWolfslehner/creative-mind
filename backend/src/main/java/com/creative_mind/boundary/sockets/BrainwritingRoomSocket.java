@@ -4,10 +4,7 @@ import com.creative_mind.manager.RoomManager;
 import com.creative_mind.model.requests.ParticipantionRequest;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
+import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import org.eclipse.microprofile.context.ManagedExecutor;
@@ -74,4 +71,29 @@ public class BrainwritingRoomSocket {
             throw new CompletionException(throwable);
         });
     }
+
+    @OnError
+    public void onError(Session session, @PathParam("roomId") String roomId, @PathParam("userId") String userId, Throwable t) {
+        UUID parsedRoomId = UUID.fromString(roomId);
+        UUID parsedUserId = UUID.fromString(userId);
+        String sessionId = session.getId();
+
+        Log.error(String.format("ERROR in socket for [%s] [%s]: [%s]", parsedRoomId, parsedUserId, t.toString()));
+
+        ParticipantionRequest participantionRequest = new ParticipantionRequest(parsedRoomId, parsedUserId, sessionId);
+
+        CompletableFuture.runAsync(() -> {
+
+            roomManager.removeParticipant(participantionRequest);
+            roomManager.removeSessionFromRoom(parsedRoomId, sessionId);
+
+            Log.info(String.format("REMOVE Socket went well opened for room [%s] and user [%s]", parsedRoomId, parsedUserId));
+
+        }, managedExecutor).exceptionally(throwable -> {
+            Log.error(String.format("ERROR in ERRORHANDLING for [%s] [%s]: [%s]", parsedRoomId, parsedUserId, throwable.toString()));
+
+            throw new CompletionException(throwable);
+        });
+    }
+
 }
