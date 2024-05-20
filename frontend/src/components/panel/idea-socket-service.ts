@@ -4,6 +4,7 @@ import {produce} from "immer";
 import {distinctUntilChanged, map} from "rxjs";
 import roomService from "../../service/room-service";
 import ideaService from "../../service/idea-service";
+import participationService from "../../service/participation-service";
 
 class IdeaSocketService extends HTMLElement {
 
@@ -33,6 +34,7 @@ class IdeaSocketService extends HTMLElement {
             case "room_started":
             case "room_notification": {
                 this.socketStatus = `got room nfctn (${message.response_type}): "${message.message}"`;
+                const y = participationService.getParticipantsInRoom(null);
                 const x = roomService.getRoom(null);
                 this.refresh();
                 break;
@@ -151,6 +153,8 @@ class IdeaSocketService extends HTMLElement {
                 roomChatContext.refresh();
             };
         }
+        // update members in room now
+        const y = participationService.getParticipantsInRoom(null);
         // ...do other stuff...
         return 'done';
     }

@@ -5,6 +5,7 @@ const initialState : Model = {
     ideas: [],
     rooms: [],
     users: [],
+    participations: [],
     activeRoomId: "",
     thisUserId: "",
     isRoomList: false

@@ -19,6 +19,7 @@ class BrainstormingElement extends HTMLElement {
                 <div>
                     <idea-list></idea-list>
                     <text-input></text-input>
+                    <participant-list></participant-list>
                 </div>
             </div>
             `;

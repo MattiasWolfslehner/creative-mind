@@ -1,7 +1,7 @@
 import { html, render } from "lit-html"
 import "../idea-room/text-input"
 import "../idea-room/idea-list"
-import "../idea-room/user-list"
+import "../idea-room/participant-list"
 import ideaService from "../../service/idea-service"
 import roomService from "../../service/room-service"
 import userService from "../../service/user-service"
@@ -21,6 +21,7 @@ class BrainwritingElement extends HTMLElement {
                 <div>
                     <idea-list></idea-list>
                     <text-input></text-input>
+                    <participant-list></participant-list>
                 </div>
             </div>
         `;
