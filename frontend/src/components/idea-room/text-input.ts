@@ -1,6 +1,7 @@
 import { html, render, nothing } from "lit-html"
 import {Idea, Model, Room, store} from "../../model"
 import ideaService from "../../service/idea-service"
+import {distinctUntilChanged, map} from "rxjs";
 
 
 class TextInputElement extends HTMLElement {
@@ -47,9 +48,15 @@ class TextInputElement extends HTMLElement {
     }
 
     connectedCallback() {
-        store.subscribe(model => {
+        store.pipe(map(model => ({
+            ideas: model.ideas,
+            rooms: model.rooms,
+            activeRoomId: model.activeRoomId,
+            thisUserId: model.thisUserId
+        })),distinctUntilChanged())
+            .subscribe(reduced_model => {
             //console.log(model);
-            const thisRooms = model.rooms.filter((room)=> room.roomId===model.activeRoomId);
+            const thisRooms = reduced_model.rooms.filter((room)=> room.roomId===reduced_model.activeRoomId);
             //console.log(thisRoom);
             let thisRoom: Room = null;
             let thisRoomStarted = false;
@@ -58,7 +65,7 @@ class TextInputElement extends HTMLElement {
                 thisRoom = thisRooms[0];
                 thisRoomStarted = (thisRoom.roomState==="STARTED");
 
-                let ideas_of_this_user = model.ideas.filter((idea)=> idea.memberId===model.thisUserId && idea.roomId===model.activeRoomId).length;
+                let ideas_of_this_user = reduced_model.ideas.filter((idea)=> idea.memberId===reduced_model.thisUserId && idea.roomId===reduced_model.activeRoomId).length;
                 switch (thisRoom.type) {
                     case "brainstormingroom":
                         canAddIdeas=true;
@@ -76,7 +83,7 @@ class TextInputElement extends HTMLElement {
 
             }
 
-            render(this.template(model.activeRoomId!=="", thisRoomStarted, canAddIdeas), this.shadowRoot);
+            render(this.template(reduced_model.activeRoomId!=="", thisRoomStarted, canAddIdeas), this.shadowRoot);
         });
     }
 

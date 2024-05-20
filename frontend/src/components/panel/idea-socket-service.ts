@@ -73,6 +73,8 @@ class IdeaSocketService extends HTMLElement {
         this.attachShadow({ mode: "open" });
     }
 
+    
+
     setRoomId(roomId : string | null) : boolean {
         let oldRoomId : string|null = this.roomId;
         this.roomId = roomId;

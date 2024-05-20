@@ -24,9 +24,13 @@ class PanelComponent extends HTMLElement {
     }
 
     connectedCallback() {
-        store.pipe(map( model => [model.activeRoomId.length!=0, model.isRoomList] ),distinctUntilChanged())
-        .subscribe(roomDenominators => {
-            render(template(roomDenominators[0], roomDenominators[1]), this.shadowRoot)
+        store.pipe(
+            map( model => ({
+                activeRoomId: model.activeRoomId,
+                isRoomList: model.isRoomList
+            })),distinctUntilChanged())
+        .subscribe(reduced_model => {
+            render(template(reduced_model.activeRoomId.length!=0, reduced_model.isRoomList), this.shadowRoot)
         });
     }
 }

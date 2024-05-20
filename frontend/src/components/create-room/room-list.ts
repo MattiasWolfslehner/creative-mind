@@ -4,6 +4,7 @@ import {Model, Room} from "src/model"
 import {produce} from "immer";
 import roomService from "../../service/room-service";
 import {router} from "../../../router";
+import {distinctUntilChanged, map} from "rxjs";
 
 
 class RoomList extends HTMLElement {
@@ -14,8 +15,8 @@ class RoomList extends HTMLElement {
         this.attachShadow({ mode: "open" });
     }
 
-    template(model: Model) {
-        const roomTemplates = model.rooms.map((room : Room) => html`
+    template(rooms: Room[]) {
+        const roomTemplates = rooms.map((room : Room) => html`
         <tr>
         <td>${room.roomId}</td>
         <td>${room.roomState}</td>
@@ -56,10 +57,10 @@ class RoomList extends HTMLElement {
     }
 
     connectedCallback() {
-        store.subscribe(model => {
-            //console.log(model);
-            render(this.template(model), this.shadowRoot)
-        });
+        store.pipe(map( model => model.rooms ),distinctUntilChanged())
+            .subscribe(rooms => {
+                render(this.template(rooms), this.shadowRoot)
+            });
 
         this.addClickEventListeners();
     }

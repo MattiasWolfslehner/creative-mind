@@ -6,6 +6,7 @@ import ideaService from "../../service/idea-service";
 import {produce} from "immer";
 import "../brainwriting/brainwriting"
 import "../brainstorming/brainstorming"
+import {distinctUntilChanged, map} from "rxjs";
 
 
 class StatefullRoom extends HTMLElement {
@@ -54,17 +55,18 @@ class StatefullRoom extends HTMLElement {
             const ideas = ideaService.getIdeasByRoomId(this.roomId);
 
             // get Room from store
-            store.subscribe(model => {
-                console.log('model in statefullroom:', model);
-                const room = model.rooms.find(r => r.roomId === this.roomId);
+            store.pipe(map(model => ({rooms: model.rooms, thisUserId: model.thisUserId})),distinctUntilChanged())
+                .subscribe(reduced_model => {
+                console.log('model in statefullroom:', reduced_model);
+                const room = reduced_model.rooms.find(r => r.roomId === this.roomId);
                 if (room) {
                     roomType = room.type;
                 } else {
                     roomType = 'NoRoomType';
                 }
 
-                render(this.template(roomType, this.roomId, model.thisUserId), this.shadowRoot);
-            })
+                render(this.template(roomType, this.roomId, reduced_model.thisUserId), this.shadowRoot);
+            });
         
         });
 

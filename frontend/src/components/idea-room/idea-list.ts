@@ -3,6 +3,7 @@ import { store } from "../../model/store";
 import { Idea, Model, Room } from "src/model";
 import roomService from "../../service/room-service";
 import ideaService from "../../service/idea-service";
+import {distinctUntilChanged, map} from "rxjs";
 
 class IdeaList extends HTMLElement {
     roomState: string = "INVALID";
@@ -41,8 +42,8 @@ class IdeaList extends HTMLElement {
         return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    template(model: Model, room: Room, userId: string) {
-        const ideaTemplates = model.ideas.map((idea: Idea) =>
+    template(ideas: Idea[], room: Room, userId: string) {
+        const ideaTemplates = ideas.map((idea: Idea) =>
             this.checkShowIdeaInRoom(idea, room, userId)
                 ? html`<div style="background-color: ${this.getRandomColor()};"><p>${idea.content}</p></div>`
                 : nothing
@@ -104,9 +105,15 @@ class IdeaList extends HTMLElement {
     }
 
     connectedCallback() {
-        store.subscribe((model) => {
-            const thisRooms = model.rooms.filter(
-                (room) => room.roomId === model.activeRoomId
+        store.pipe(map(model => ({
+            ideas: model.ideas,
+            rooms: model.rooms,
+            activeRoomId: model.activeRoomId,
+            thisUserId: model.thisUserId
+        })),distinctUntilChanged())
+            .subscribe(reduced_model => {
+            const thisRooms = reduced_model.rooms.filter(
+                (room) => room.roomId === reduced_model.activeRoomId
             );
             let thisRoom: Room = null;
             if (thisRooms.length == 1) {
@@ -116,7 +123,7 @@ class IdeaList extends HTMLElement {
                 this.roomState = "INVALID";
             }
 
-            render(this.template(model, thisRoom, model.thisUserId), this.shadowRoot);
+            render(this.template(reduced_model.ideas, thisRoom, reduced_model.thisUserId), this.shadowRoot);
         });
     }
 
