@@ -12,16 +12,71 @@ class TextInputElement extends HTMLElement {
             return nothing;
         }
         return html`
-        <div>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #fff !important;
+            }
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                margin-top: 10vh;
+            }
+            .styled-input {
+                width: 100%;
+                max-width: 1070px;
+                height: 60px;
+                background-color: #8D63D0;
+                color: #fff;
+                border: 5px solid #9D75EF;
+                box-sizing: border-box;
+                font-size: 16px;
+                padding: 0 10px;
+                outline: none;
+                margin-bottom: 20px;
+                border-radius: 5px;
+            }
+            .send-button {
+                background-color: white;
+                width: 100%;
+                max-width: 240px;
+                height: auto;
+                text-align: center;
+                font-family: 'sans-serif';
+                margin-bottom: 20px;
+                border-radius: 10px;
+                cursor: pointer;
+            }
+            .send-button h2 {
+                user-select: none;
+            }
+            @media (max-width: 600px) {
+                .styled-input {
+                    font-size: 14px;
+                    padding: 0 8px;
+                }
+                .send-button {
+                    max-width: 100%;
+                }
+            }
+        </style>
+
+        <div class="container">
             <!-- <textarea name="textarea" id="area" cols="30" rows="10"></textarea> -->
-            <input type="text" name="" .disabled="${(!(isRoomStarted && canAddIdeas))}" placeholder="${(isRoomStarted?(canAddIdeas?"enter new idea":"maximum number of ideas added"):"wait till room is started")}">
+            <input type="text" class="styled-input" name="" .disabled="${(!(isRoomStarted && canAddIdeas))}" placeholder="${(isRoomStarted?(canAddIdeas?"enter new idea":"maximum number of ideas added"):"wait till room is started")}">
             <!-- does not work properly {((isRoomStarted && canAddIdeas)?"display: flex;":"")} flex-wrap: wrap;-->
             <div @click= "${() => this.onButtonClick()}" .hidden="${!isRoomStarted}" 
                  style="background-color: ${(canAddIdeas?"white":"grey")}; width: 20vw; height: auto; 
                  justify-content: space-around; text-align: center; 
                  font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                 <h2 style="user-select: none">Send</h2>
-            </div>
+        </div>
         `
     } 
 
