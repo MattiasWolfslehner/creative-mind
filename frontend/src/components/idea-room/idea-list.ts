@@ -124,6 +124,7 @@ class IdeaList extends HTMLElement {
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                     padding: 0 10px;
                     box-sizing: border-box;
+                    cursor:pointer;
                 }        
                 .share-box img {
                     width: 48px;
@@ -134,6 +135,37 @@ class IdeaList extends HTMLElement {
                     margin-left: 10px;
                     font-size: 1.5em;
                     color: #000;
+                }
+                .tooltip {
+                    visibility: hidden;
+                    width: 140px;
+                    background-color: #555;
+                    color: #fff;
+                    text-align: center;
+                    border-radius: 5px;
+                    padding: 5px;
+                    position: absolute;
+                    z-index: 1;
+                    top: 120%;
+                    left: 12vw;
+                    transform: translateX(-50%);
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                    margin-top: 5px;
+                }        
+                .share-box:hover .tooltip {
+                    visibility: visible;
+                    opacity: 1;
+                }        
+                .tooltip::after {
+                    content: "";
+                    position: absolute;
+                    top: -18%;
+                    left: 4vw;
+                    transform: translateX(-50%);
+                    border-width: 5px;
+                    border-style: solid;
+                    border-color: transparent transparent #555 transparent;
                 }
                 .ideas {
                     display: grid;
@@ -164,9 +196,10 @@ class IdeaList extends HTMLElement {
                 <div class="menu-item member-count">
                     1
                 </div>
-                <div class="menu-item share-box">
+                <div class="menu-item share-box" @click="${() => this.shareRoom()}">
                     <img src="https://png.pngtree.com/png-vector/20191004/ourmid/pngtree-person-icon-png-image_1788612.jpg" alt="Person Icon">
                     <span>Share</span>
+                    <div class="tooltip">Copy link to clipboard</div>
                 </div>
             </div>
             <div style="margin-top: 1vh; display: flex; flex-wrap: wrap; justify-content: space-around">
@@ -211,6 +244,14 @@ class IdeaList extends HTMLElement {
         });
     }
 
+    shareRoom() {
+        const currentUrl = window.location.href;
+        navigator.clipboard.writeText(currentUrl).then(() => {
+            alert('Link copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });        
+    }
     onRefresh() {
         const model = store.getValue();
         const ideas = ideaService.getIdeasByRoomId(model.activeRoomId);
