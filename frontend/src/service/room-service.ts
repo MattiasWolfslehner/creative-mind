@@ -54,7 +54,6 @@ class RoomService {
         })
         store.next(model);
         //console.log(room);
-
         return room;
     }
 

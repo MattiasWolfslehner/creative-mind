@@ -10,6 +10,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.util.UUID;
 
@@ -20,6 +22,9 @@ public class RoomResource {
     RoomRepository roomRepository;
     @Inject
     RoomManager roomManager;
+
+    @Inject
+    JsonWebToken jwt;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -33,6 +38,8 @@ public class RoomResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/create")
     public Response createRoom(Room room) {
+        UUID adminId = UUID.fromString(jwt.getClaim(Claims.sub));
+        room.setAdminId(adminId);
         Room createdRoom = this.roomRepository.createRoom(room);
         return Response.ok(createdRoom).build();
     }

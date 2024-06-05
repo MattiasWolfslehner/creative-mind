@@ -39,13 +39,23 @@ public abstract class Room {
     private RoomStatus roomState;
     private UUID roomId;
 
+    private UUID adminId;
+
     @JsonIgnore
     public abstract long getMaxTimerForRoom();
-
+/*
+    public Room(UUID adminIdToSet) {
+        roomId = UUID.randomUUID();
+        roomState = RoomStatus.CREATED;
+        this.adminId = adminIdToSet;
+    }
+*/
     public Room() {
         roomId = UUID.randomUUID();
         roomState = RoomStatus.CREATED;
+        this.adminId = null;
     }
+
     public UUID getRoomId() {
         return roomId;
     }
@@ -54,6 +64,13 @@ public abstract class Room {
     }
     public RoomStatus getRoomState() {
         return roomState;
+    }
+
+    public UUID getAdminId() {
+        return adminId;
+    }
+    public void setAdminId(UUID adminId) {
+        this.adminId = adminId;
     }
 
     public void setRoomState(RoomStatus started) {
