@@ -67,7 +67,73 @@ class IdeaList extends HTMLElement {
                     justify-content: center;
                     align-items: center;
                     min-height: 100vh;
-                    background-color: #fff !important;
+                    background: #fff !important;
+                }
+                #roomMenu {
+                    position: absolute;
+                    top: 1vw;
+                    left: 20vw;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 312px;
+                    height: 67px;
+                    border-radius: 5px;
+                    background-color: #8D63D0;
+                    padding: 0 10px;
+                    box-sizing: border-box;
+                    font-family: 'sans-serif';
+                }        
+                .menu-item {
+                    display: flex;
+                    align-items: center;
+                }        
+                .burger-menu {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                    width: 45px;
+                    height: 24px;
+                    cursor: pointer;
+                }
+                .burger-menu div {
+                    width: 100%;
+                    height: 6px;
+                    background-color: #fff;
+                    border-radius: 2px;
+                    margin: 5%;
+                }
+                .member-count {
+                    width: 49px;
+                    height: 49px;
+                    border-radius: 50%;
+                    background-color: #fff;
+                    border: 3px solid #7A49C9;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 1.5em;
+                }
+                .share-box {
+                    display: flex;
+                    align-items: center;
+                    width: 141px;
+                    height: 48px;
+                    background-color: #fff;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    padding: 0 10px;
+                    box-sizing: border-box;
+                }        
+                .share-box img {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 5px;
+                }        
+                .share-box span {
+                    margin-left: 10px;
+                    font-size: 1.5em;
+                    color: #000;
                 }
                 .ideas {
                     display: grid;
@@ -88,14 +154,22 @@ class IdeaList extends HTMLElement {
                     text-align: center;
                 }
             </style>
-
-            <div style="margin-top: 1vh; display: flex; flex-wrap: wrap; justify-content: space-around">
-                <h1>List of Ideas</h1>
-                <div @click="${() => this.onRefresh()}"
-                     style="background-color: white; width: 15vw; height: auto; text-align: center;
-                    font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
-                    <h2>Refresh</h2>
+            
+            <div id="roomMenu">
+                <div class="menu-item burger-menu">
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
+                <div class="menu-item member-count">
+                    1
+                </div>
+                <div class="menu-item share-box">
+                    <img src="https://png.pngtree.com/png-vector/20191004/ourmid/pngtree-person-icon-png-image_1788612.jpg" alt="Person Icon">
+                    <span>Share</span>
+                </div>
+            </div>
+            <div style="margin-top: 1vh; display: flex; flex-wrap: wrap; justify-content: space-around">
                 <div @click="${() => this.onStartRoom()}" .hidden="${this.roomState === 'STARTED' || this.roomState === 'INVALID'}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
                     font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
