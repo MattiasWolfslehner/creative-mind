@@ -15,6 +15,50 @@ class ParticipantList extends HTMLElement {
 
     `)
         return html`
+        <style>
+            :host {
+                display: block;
+                font-family: sans-serif;
+                padding: 20px;
+                background-color: #f9f9f9;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                max-width: 300px;
+                margin: auto;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+                color: #333;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            li {
+                background-color: #fff;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 10px;
+                margin-bottom: 10px;
+                font-size: 1em;
+                color: #555;
+                text-align: center;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+
+            li:hover {
+                background-color: #8D63D0;
+                color: #fff;
+            }
+        </style>
+
             <h1>Participants</h1>
         <table>
             <ul>

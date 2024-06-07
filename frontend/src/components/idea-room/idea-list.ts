@@ -69,10 +69,28 @@ class IdeaList extends HTMLElement {
                     min-height: 100vh;
                     background: #fff !important;
                 }
+                #roomInfo {
+                    position: absolute;
+                    top: 1vw;
+                    left: 2vw;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: auto;
+                    height: 67px;
+                    border-radius: 5px;
+                    background-color: #8D63D0;
+                    padding: 0 10px;
+                    font-family: 'sans-serif';
+                    color: white;
+                }
+                #roomInfo div {
+                    padding: 0 1rem;
+                }
                 #roomMenu {
                     position: absolute;
                     top: 1vw;
-                    left: 20vw;
+                    left: 31vw;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
@@ -187,6 +205,17 @@ class IdeaList extends HTMLElement {
                 }
             </style>
             
+            <div id="roomInfo">
+                <div>
+                    <h1 id="homeButtonId">Creative Minds</h1>
+                </div>
+                <div>
+                    <h2>|<h2>
+                </div>
+                <div>
+                    <h2 id="roomName">roomName</h2>
+                </div>
+            </div>  
             <div id="roomMenu">
                 <div class="menu-item burger-menu">
                     <div></div>
@@ -205,7 +234,7 @@ class IdeaList extends HTMLElement {
             <div style="margin-top: 1vh; display: flex; flex-wrap: wrap; justify-content: space-around">
                 <div @click="${() => this.onStartRoom()}" .hidden="${this.roomState === 'STARTED' || this.roomState === 'INVALID'}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
-                    font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+                    font-family: 'sans-serif'; margin-top: 3vh; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                     <h2>Start</h2>
                 </div>
                 <div @click="${() => this.onStopRoom()}" .hidden="${this.roomState !== 'STARTED'}"

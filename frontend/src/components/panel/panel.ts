@@ -8,6 +8,17 @@ import { distinctUntilChanged, map } from "rxjs";
 
 
 const template = (isInRoom : boolean, isRoomList : boolean)=> html`
+    <style>
+        h1 {
+            margin-top: 3vh;
+            margin-left: 3vw;
+            color: white;
+            font-family: 'sans-serif';
+            cursor: pointer;
+        }
+    </style>
+
+    <h1 id="homeButtonId">Creative Minds</h1>
     <div>
         <create-room ?hidden = ${(isInRoom || isRoomList)} ></create-room>
         <room-list ?hidden = ${(isInRoom || !isRoomList)} ></room-list>
