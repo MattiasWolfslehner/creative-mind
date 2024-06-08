@@ -76,7 +76,7 @@ class IdeaList extends HTMLElement {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    width: auto;
+                    width: 60vw;
                     height: 67px;
                     border-radius: 5px;
                     background-color: #8D63D0;
@@ -89,12 +89,12 @@ class IdeaList extends HTMLElement {
                 }
                 #roomMenu {
                     position: absolute;
-                    top: 1vw;
-                    left: 31vw;
+                    top: 6vw;
+                    left: 2vw;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    width: 312px;
+                    width: 400px;
                     height: 67px;
                     border-radius: 5px;
                     background-color: #8D63D0;
@@ -110,7 +110,7 @@ class IdeaList extends HTMLElement {
                     display: flex;
                     flex-direction: column;
                     justify-content: space-around;
-                    width: 45px;
+                    width: 40px;
                     height: 24px;
                     cursor: pointer;
                 }
@@ -223,7 +223,7 @@ class IdeaList extends HTMLElement {
                     <div></div>
                 </div>
                 <div class="menu-item member-count">
-                    1
+                    ${(participations)?(participations.length):0}
                 </div>
                 <div class="menu-item share-box" @click="${() => this.shareRoom()}">
                     <img src="https://png.pngtree.com/png-vector/20191004/ourmid/pngtree-person-icon-png-image_1788612.jpg" alt="Person Icon">
