@@ -4,4 +4,5 @@ export interface Room {
     "type": "brainwritingroom" | "brainstormingroom",
     "adminId": string,
     "name": string,
+    "description": string,
 }
