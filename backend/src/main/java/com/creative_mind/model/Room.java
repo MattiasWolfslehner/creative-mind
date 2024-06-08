@@ -40,6 +40,7 @@ public abstract class Room {
     private UUID roomId;
 
     private String name;
+    private String description;
 
     private UUID adminId;
 
@@ -69,6 +70,7 @@ public abstract class Room {
     }
 
     public String getName() { return name; }
+    public String getDescription() { return description; }
 
     public UUID getAdminId() {
         return adminId;
@@ -80,5 +82,7 @@ public abstract class Room {
     public void setRoomState(RoomStatus started) {
         roomState = started;
     }
+
+    public void setDescription(String description) {this.description = description;}
 }
 
