@@ -54,7 +54,7 @@ class RoomService {
             draft.rooms.push(room);
         })
         store.next(model);
-        //console.log(room);
+        console.log(room);
         return room;
     }
 
