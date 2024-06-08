@@ -32,7 +32,7 @@ class RoomService {
         });
     }
 
-    async createRoom(roomType : string, roomName: string) : Promise<Room> {
+    async createRoom(roomType : string, roomName: string, description: string|null) : Promise<Room> {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'Bearer '+ localStorage.getItem("token")
@@ -42,7 +42,8 @@ class RoomService {
             headers: theHeader,
             body: JSON.stringify({
                 'type': roomType,
-                'name': roomName
+                'name': roomName,
+                'description': description
             })
         });
 
