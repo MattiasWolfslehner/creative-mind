@@ -39,6 +39,8 @@ public abstract class Room {
     private RoomStatus roomState;
     private UUID roomId;
 
+    private String name;
+
     private UUID adminId;
 
     @JsonIgnore
@@ -65,6 +67,8 @@ public abstract class Room {
     public RoomStatus getRoomState() {
         return roomState;
     }
+
+    public String getName() { return name; }
 
     public UUID getAdminId() {
         return adminId;
