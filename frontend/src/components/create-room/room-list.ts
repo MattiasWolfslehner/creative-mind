@@ -15,8 +15,8 @@ class RoomList extends HTMLElement {
         this.attachShadow({ mode: "open" });
     }
 
-    template(rooms: Room[]) {
-        const roomTemplates = rooms.map((room : Room) => html`
+    template(rooms: Room[], userId:String) {
+        const roomTemplates = rooms.filter(room => room.adminId === userId).map((room : Room) => html`
         <tr>
             <td>${room.roomId}</td>
             <td>${room.name}</td>
@@ -61,9 +61,9 @@ class RoomList extends HTMLElement {
     }
 
     connectedCallback() {
-        store.pipe(map( model => model.rooms ),distinctUntilChanged())
-            .subscribe(rooms => {
-                render(this.template(rooms), this.shadowRoot)
+        store.pipe(map( model => ({'userId': model.thisUserId, 'rooms': model.rooms}) ),distinctUntilChanged())
+            .subscribe(model_values => {
+                render(this.template(model_values.rooms, model_values.userId), this.shadowRoot)
             });
 
         this.addClickEventListeners();
