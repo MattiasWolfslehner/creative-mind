@@ -86,13 +86,17 @@ init();
 
 import "./components/app";
 
-const homeButton = document.getElementById('homeButtonId');
-homeButton.addEventListener('click', () => {
-    router.navigate("");
-});
 
+router.on('/', () => {
+    console.log("go home ccc");
+    const model = produce(store.getValue(), draft => {
+        draft.isRoomList = false;
+        draft.activeRoomId = "";
+    });
+    store.next(model);
+});
 router.on('', () => {
-    console.log("go home");
+    console.log("go home ddd");
     const model = produce(store.getValue(), draft => {
         draft.isRoomList = false;
         draft.activeRoomId = "";
