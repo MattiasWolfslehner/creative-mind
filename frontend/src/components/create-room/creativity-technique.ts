@@ -16,7 +16,29 @@ const template: () => TemplateResult = () => html`
     background-color: rgba(141, 99, 208, 0.4);
     color: rgba(255, 255, 255, 0.4);
     }
-
+    
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-top: 10vh;
+    }
+    .styled-input {
+        width: 100%;
+        max-width: 1070px;
+        height: 60px;
+        background-color: #8D63D0;
+        color: #fff;
+        border: 5px solid #9D75EF;
+        box-sizing: border-box;
+        font-size: 16px;
+        padding: 0 10px;
+        outline: none;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+    
     #creativityTechniques {
     margin-top: 3vh;
     display: flex;
@@ -50,11 +72,11 @@ const template: () => TemplateResult = () => html`
         </div>
     </div>
 
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-around">
+    <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-around">
         <input id="room-name" type="text" class="styled-input" name="" placeholder="enter name of new room">
     </div>
     
-    <div style="margin-top: 30vh; display: flex; flex-wrap: wrap; justify-content: space-around">
+    <div style="margin-top: 15vh; display: flex; flex-wrap: wrap; justify-content: space-around">
         <div id="createRoomButton"
              style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
             <h2 style="user-select: none">Create Room</h2>
