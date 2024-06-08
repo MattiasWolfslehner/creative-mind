@@ -5,6 +5,7 @@ import roomService from "../../service/room-service";
 import ideaService from "../../service/idea-service";
 import {distinctUntilChanged, map} from "rxjs";
 import {Participation} from "../../model/participation";
+import {router} from "../../../router";
 
 class IdeaList extends HTMLElement {
     roomState: string = "INVALID";
@@ -57,6 +58,8 @@ class IdeaList extends HTMLElement {
                 ? html`<div style="background-color: ${this.getRandomColor()};"><p>${idea.content}  \n <span style="font-size: smaller">(${this.getUserName(idea.memberId, participations)})</span></p></div>`
                 : nothing
         );
+
+        const adminId = room?room.adminId:"";
 
         return html`
             <style>
@@ -231,17 +234,30 @@ class IdeaList extends HTMLElement {
                     <div class="tooltip">Copy link to clipboard</div>
                 </div>
             </div>
-            <div style="margin-top: 1vh; display: flex; flex-wrap: wrap; justify-content: space-around">
-                <div @click="${() => this.onStartRoom()}" .hidden="${this.roomState === 'STARTED' || this.roomState === 'INVALID'}"
+            <div style="margin-left: 460px; margin-top: 1vh; display: flex; flex-wrap: wrap">
+                <div @click="${() => this.onStartRoom()}" .hidden="${adminId!=userId || (this.roomState === 'STARTED' || this.roomState === 'INVALID')}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
                     font-family: 'sans-serif'; margin-top: 3vh; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                     <h2>Start</h2>
                 </div>
-                <div @click="${() => this.onStopRoom()}" .hidden="${this.roomState !== 'STARTED'}"
+                
+                <div @click="${() => this.onStopRoom()}" .hidden="${adminId!=userId || this.roomState !== 'STARTED'}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
-                    font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+                    font-family: 'sans-serif'; margin-left: 10px; margin-top: 3vh; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                     <h2>Stop</h2>
                 </div>
+                
+                <div @click="${() => {router.navigate("/");} }" .hidden="${this.roomState==="STARTED"}"
+                     style="background-color: white; width: 15vw; height: auto; text-align: center;
+                    font-family: 'sans-serif'; margin-top: 3vh; margin-left: 10px; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+                    <h2>Leave</h2>
+                </div>
+                
+                <div style="width: 15vw; height: auto; text-align: center;
+                    font-family: 'sans-serif'; margin-top: 3vh; margin-left: 10px; margin-bottom: 20px; border-radius: 10px">
+                    <h2>${(this.roomState==="STARTED")?("BE CREATIVE MIND."):"You are in the room now!"}</h2>
+                </div>
+
             </div>
             <div class="ideas">
                 ${ideaTemplates}
