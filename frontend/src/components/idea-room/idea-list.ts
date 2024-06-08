@@ -207,13 +207,13 @@ class IdeaList extends HTMLElement {
             
             <div id="roomInfo">
                 <div>
-                    <h1 id="homeButtonId">Creative Minds</h1>
+                    <h1 id="homeButtonId2">Creative Minds</h1>
                 </div>
                 <div>
                     <h2>|<h2>
                 </div>
                 <div>
-                    <h2 id="roomName">roomName</h2>
+                    <h2 id="roomName">${room?(room.name?room.name:"NONAME2"):"NONAME"}</h2>
                 </div>
             </div>  
             <div id="roomMenu">
