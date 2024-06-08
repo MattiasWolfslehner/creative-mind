@@ -50,6 +50,10 @@ const template: () => TemplateResult = () => html`
         </div>
     </div>
 
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-around">
+        <input id="room-name" type="text" class="styled-input" name="" placeholder="enter name of new room">
+    </div>
+    
     <div style="margin-top: 30vh; display: flex; flex-wrap: wrap; justify-content: space-around">
         <div id="createRoomButton"
              style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
@@ -95,8 +99,9 @@ class CreateRoomElement extends HTMLElement {
         createRoomButton.addEventListener('click', () => {
             const activeTechniqueContainer = this.shadowRoot.querySelector('.technique-container.active');
             if (activeTechniqueContainer) {
+                const roomName:string = this.shadowRoot.querySelector("input").value;
                 // simply create the room for the selected type over container id
-                this.createRoom(activeTechniqueContainer.id); // do not assign to room id, gives void
+                this.createRoom(activeTechniqueContainer.id, roomName); // do not assign to room id, gives void
             }
         });
 
@@ -114,10 +119,10 @@ class CreateRoomElement extends HTMLElement {
         });
     }
     
-    createRoom(roomType: string): void {
+    createRoom(roomType: string, roomName: string): void {
         console.log(`Creating room with room type: ${roomType}<`);
         // create the room and navigate into it
-        const roomId: Promise<void | Room> = roomService.createRoom(roomType).then(value => {
+        const roomId: Promise<void | Room> = roomService.createRoom(roomType, roomName).then(value => {
             const model = produce(store.getValue(), draft => {
                 //draft.rooms.push(value); push done in createRoom in Roomservice
                 draft.activeRoomId = value.roomId;
