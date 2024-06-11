@@ -7,7 +7,7 @@ import roomService from "../../service/room-service";
 class RoomInputElement extends HTMLElement {
 
 
-    template(isInRoom:boolean, thisRoom:Room, isAdmin:boolean) {
+    template(isInRoom:boolean, thisRoom:Room, isAdmin:boolean, remaining:number) {
         if (isInRoom == false) {
             return nothing;
         }
@@ -71,11 +71,18 @@ class RoomInputElement extends HTMLElement {
                 <input type="text" class="styled-input" id="room-description" .disabled="${(!(isAdmin))}" placeholder="a valueable description should be added by room admin" value="${thisRoom.description}">
             </div>
             <!-- does not work properly {((isRoomStarted && canAddIdeas)?"display: flex;":"")} flex-wrap: wrap;-->
-            <div @click= "${() => this.onButtonClick()}" .hidden="${!isAdmin}" 
-                 style="background-color: ${(isAdmin?"white":"grey")}; 
-                 width: 15vw; height: auto; text-align: center;
-                 font-family: 'sans-serif'; margin-bottom: 20px; margin-left: 20px; border-radius: 10px; cursor:pointer">
-                <h2 style="user-select: none">Update</h2>
+            <div style="margin-left: 20px;">
+                <div style="background-color: grey;
+                        width: 15vw; height: 60px; text-align: center; margin-bottom: 20px;
+                        font-family: 'sans-serif'; border-radius: 10px;">
+                    <h2>Remaining: ${remaining?remaining:"not started"}</h2>
+                </div>
+                <div @click= "${() => this.onButtonClick()}" .hidden="${!isAdmin}" 
+                     style="background-color: ${(isAdmin?"white":"grey")}; 
+                     width: 15vw; height: 60px; text-align: center; margin-bottom: 20px;
+                     font-family: 'sans-serif'; border-radius: 10px; cursor:pointer">
+                    <h2 style="user-select: none">Update</h2>
+                </div>
             </div>
         </div>
         `
@@ -120,7 +127,8 @@ class RoomInputElement extends HTMLElement {
         store.pipe(map(model => ({
             activeRoom: model.rooms.filter(r => r.roomId === model.activeRoomId),
             activeRoomId: model.activeRoomId,
-            thisUserId: model.thisUserId
+            thisUserId: model.thisUserId,
+            remaining: model.remaining
         })),distinctUntilChanged())
             .subscribe(reduced_model => {
             //console.log(model);
@@ -134,7 +142,7 @@ class RoomInputElement extends HTMLElement {
                 isAdmin = (reduced_model.thisUserId === thisRoom.adminId);
             }
 
-            render(this.template(reduced_model.activeRoomId!=="", thisRoom, isAdmin), this.shadowRoot);
+            render(this.template(reduced_model.activeRoomId!=="", thisRoom, isAdmin,reduced_model.remaining), this.shadowRoot);
         });
     }
 

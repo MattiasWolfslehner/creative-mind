@@ -32,7 +32,7 @@ class IdeaSocketService extends HTMLElement {
         switch (message.response_type) {
             case "room_closed":
             case "room_started":
-            case "room_changed":
+            case "room_changed": // new response_type when admin changes desc/name
             case "room_notification": {
                 this.socketStatus = `got room nfctn (${message.response_type}): "${message.message}"`;
                 const y = participationService.getParticipantsInRoom(null);
@@ -40,13 +40,18 @@ class IdeaSocketService extends HTMLElement {
                 this.refresh();
                 break;
             }
-            case "get_remaining_room_time": {
+            case "get_remaining_room_time": { // timer fired (can be pushed into model)
                 this.socketStatus = `got room timer: "${message.remaining}"`;
+                let remaining : number = message.remaining;
+                const model = produce(store.getValue(), draft => {
+                    draft.remaining = remaining;
+                });
+                store.next(model);
                 //const x = roomService.getRoom(null);
                 this.refresh();
                 break;
             }
-            case "new_ideas_in_room": {
+            case "new_ideas_in_room": { // notification from backend about new "idea"
                 //console.log("new_ideas_in_room");
                 this.socketStatus = 'new ideas';
                 const x = ideaService.getIdeasByRoomId(this.roomId);

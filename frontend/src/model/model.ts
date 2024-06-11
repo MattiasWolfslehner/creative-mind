@@ -10,6 +10,7 @@ export interface Model {
    readonly participations: Participation[];
    readonly activeRoomId : string,
    readonly thisUserId : string,
-   readonly isRoomList: boolean
+   readonly isRoomList : boolean,
+   readonly remaining : number | null
 }
 

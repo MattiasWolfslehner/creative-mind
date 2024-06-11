@@ -8,7 +8,8 @@ const initialState : Model = {
     participations: [],
     activeRoomId: "",
     thisUserId: "",
-    isRoomList: false
+    isRoomList: false,
+    remaining: null
 }
 
 export const store = new BehaviorSubject<Model> (initialState)
