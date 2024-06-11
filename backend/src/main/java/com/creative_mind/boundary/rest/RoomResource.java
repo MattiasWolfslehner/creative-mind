@@ -3,6 +3,7 @@ package com.creative_mind.boundary.rest;
 import com.creative_mind.manager.RoomManager;
 import com.creative_mind.model.Room;
 import com.creative_mind.model.RoomStatus;
+import com.creative_mind.model.requests.RoomRequest;
 import com.creative_mind.model.requests.RoomStateRequest;
 import com.creative_mind.repository.RoomRepository;
 import jakarta.enterprise.context.RequestScoped;
@@ -94,8 +95,8 @@ public class RoomResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/update/{roomId}")
-    public Response updateRoom(@PathParam("roomId") UUID roomId, Room room) {
-        Room changedRoom = this.roomRepository.updateRoom(roomId, room);
+    public Response updateRoom(@PathParam("roomId") UUID roomId, RoomRequest roomRequest) {
+        Room changedRoom = this.roomRepository.updateRoom(roomId, roomRequest);
         return Response.ok(changedRoom).build();
     }
 
