@@ -72,13 +72,13 @@ public class ParticipationRepository {
         User member = userRepository.getUserByUUID(participationRequest.getMemberId());
         Room room = roomRepository.getRoomByUUID(participationRequest.getRoomId());
 
-        Participation participation = getParticipation(room.getId(), member.getId());
+        Participation participation = getParticipation(member.getId(), room.getId());
 
         if (participation != null) {
             //Participation p = this.entityManager.merge(participation); // recommended with persistance
             this.entityManager.remove(participation);
-            Log.info(String.format("delete participation User[%s] in Room[%s] ([%s] <> [%s])!", member.getId(), room.getId(), participation.getSessionId(), sessionId));
         } else {
+            Log.error(String.format("could not delete participation User[%s] in Room[%s] ([%s])!", member.getId(), room.getId(), sessionId));
             throw new CreativeMindException(String.format("User[%s] is not in Room[%s]!", member.getId(), room.getId()));
         }
     }

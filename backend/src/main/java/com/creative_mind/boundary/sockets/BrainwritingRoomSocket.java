@@ -42,6 +42,7 @@ public class BrainwritingRoomSocket {
             } catch (CreativeMindException | NoResultException e) {
                 // ignore that it is not existent in this case
                 Log.warn(String.format("No existing Session for room [%s] and user [%s]", parsedRoomId, parsedUserId));
+                Log.warn(String.format("Exc: [%s]", e.toString()));
             }
 
             roomManager.addParticipantToRoom(participantionRequest);
