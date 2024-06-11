@@ -53,7 +53,6 @@ public class ParticipationRepository {
         User member = userRepository.getUserByUUID(participationRequest.getMemberId());
         Room room = roomRepository.getRoomByUUID(participationRequest.getRoomId());
 
-        Log.info(String.format("try new Participation for user [%s] in room [%s]", member.getId(), room.getId()));
         Participation participation = new Participation(room, member, sessionId);
 
         if (!this.isUserInRoom(member.getId(), room.getId())) {
