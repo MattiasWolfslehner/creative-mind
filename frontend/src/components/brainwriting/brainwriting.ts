@@ -19,12 +19,10 @@ class BrainwritingElement extends HTMLElement {
     template (roomId) {
         return html` 
             <div>
-                <div>
                     <room-input></room-input>
                     <idea-list></idea-list>
                     <text-input></text-input>
                     <participant-list></participant-list>
-                </div>
             </div>
         `;
     }

@@ -17,12 +17,10 @@ class BrainstormingElement extends HTMLElement {
     template (roomId:string) {
         return html` 
             <div>
-                <div>
                     <room-input></room-input>
                     <idea-list></idea-list>
                     <text-input></text-input>
                     <participant-list></participant-list>
-                </div>
             </div>
             `;
     }

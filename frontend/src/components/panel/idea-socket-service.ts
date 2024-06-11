@@ -32,6 +32,7 @@ class IdeaSocketService extends HTMLElement {
         switch (message.response_type) {
             case "room_closed":
             case "room_started":
+            case "room_changed":
             case "room_notification": {
                 this.socketStatus = `got room nfctn (${message.response_type}): "${message.message}"`;
                 const y = participationService.getParticipantsInRoom(null);

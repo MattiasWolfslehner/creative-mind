@@ -23,7 +23,7 @@ class RoomInputElement extends HTMLElement {
             }
             .container {
                 display: flex;
-                flex-direction: column;
+                flex-wrap: wrap;
                 align-items: center;
                 width: 100%;
                 margin-top: 10vh;
@@ -61,22 +61,22 @@ class RoomInputElement extends HTMLElement {
                     font-size: 14px;
                     padding: 0 8px;
                 }
-                .send-button {
-                    max-width: 100%;
-                }
             }
         </style>
 
         <div class="container">
-            <!-- <textarea name="textarea" id="area" cols="30" rows="10"></textarea> -->
-            <input type="text" class="styled-input" id="room-name" .disabled="${(!(isAdmin))}" placeholder="" value="${thisRoom.name}">
-            <input type="text" class="styled-input" id="room-description" .disabled="${(!(isAdmin))}" placeholder="a valueable description should be added by room admin" value="${thisRoom.description}">
+            <div style="width: 70vw; margin-left: 2vw; ">
+                <!-- <textarea name="textarea" id="area" cols="30" rows="10"></textarea> -->
+                <input type="text" class="styled-input" id="room-name" .disabled="${(!(isAdmin))}" placeholder="" value="${thisRoom.name}">
+                <input type="text" class="styled-input" id="room-description" .disabled="${(!(isAdmin))}" placeholder="a valueable description should be added by room admin" value="${thisRoom.description}">
+            </div>
             <!-- does not work properly {((isRoomStarted && canAddIdeas)?"display: flex;":"")} flex-wrap: wrap;-->
             <div @click= "${() => this.onButtonClick()}" .hidden="${!isAdmin}" 
-                 style="background-color: ${(isAdmin?"white":"grey")}; width: 20vw; height: auto; 
-                 justify-content: space-around; text-align: center; 
-                 font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+                 style="background-color: ${(isAdmin?"white":"grey")}; 
+                 width: 15vw; height: auto; text-align: center;
+                 font-family: 'sans-serif'; margin-bottom: 20px; margin-left: 20px; border-radius: 10px; cursor:pointer">
                 <h2 style="user-select: none">Update</h2>
+            </div>
         </div>
         `
     } 
