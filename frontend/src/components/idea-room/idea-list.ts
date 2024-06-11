@@ -214,7 +214,7 @@ class IdeaList extends HTMLElement {
             
             <div id="roomInfo">
                 <div>
-                    <a href="#"><h1 id="homeButtonId2">Creative Minds</h1></a>
+                    <a href="#"><h1>Creative Minds</h1></a>
                 </div>
                 <div>
                     <h2>|<h2>
@@ -247,7 +247,7 @@ class IdeaList extends HTMLElement {
                 
                 <div @click="${() => this.onStopRoom()}" .hidden="${adminId!=userId || this.roomState !== 'STARTED'}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
-                    font-family: 'sans-serif'; margin-left: 10px; margin-top: 3vh; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+                    font-family: 'sans-serif'; margin-top: 3vh; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                     <h2>Stop</h2>
                 </div>
                 
