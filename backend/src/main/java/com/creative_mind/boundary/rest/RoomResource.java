@@ -85,10 +85,18 @@ public class RoomResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/updateState/{roomId}")
-    public Response createRoom(@PathParam("roomId") UUID roomId, RoomStateRequest roomStateRequest) {
-        // TODO: check wether changes are valid
+    public Response updateRoomState(@PathParam("roomId") UUID roomId, RoomStateRequest roomStateRequest) {
         RoomStatus state = this.roomRepository.updateRoomState(roomId, roomStateRequest.getRoomState());
         return Response.ok(state).build();
+    }
+
+    @PUT
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/update/{roomId}")
+    public Response updateRoom(@PathParam("roomId") UUID roomId, Room room) {
+        Room changedRoom = this.roomRepository.updateRoom(roomId, room);
+        return Response.ok(changedRoom).build();
     }
 
     @GET
