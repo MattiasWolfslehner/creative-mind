@@ -83,7 +83,7 @@ const template: () => TemplateResult = () => html`
         </div>
         <div id="showRoomListButton"
              style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
-            <h2 style="user-select: none">Show Available Rooms</h2>
+            <h2 style="user-select: none">Show My Rooms</h2>
         </div>
     </div>
 `;
