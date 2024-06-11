@@ -72,6 +72,10 @@ class IdeaList extends HTMLElement {
                     min-height: 100vh;
                     background: #fff !important;
                 }
+                a {
+                    color: #fff;
+                    text-decoration: none;
+                }
                 #roomInfo {
                     position: absolute;
                     top: 1vw;
@@ -79,8 +83,8 @@ class IdeaList extends HTMLElement {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    width: 60vw;
-                    height: 67px;
+                    width: 30vw;
+                    height: 65px;
                     border-radius: 5px;
                     background-color: #8D63D0;
                     padding: 0 10px;
@@ -92,13 +96,13 @@ class IdeaList extends HTMLElement {
                 }
                 #roomMenu {
                     position: absolute;
-                    top: 6vw;
-                    left: 2vw;
+                    top: 1vw;
+                    left: 35vw;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    width: 400px;
-                    height: 67px;
+                    width: 15vw;
+                    height: 65px;
                     border-radius: 5px;
                     background-color: #8D63D0;
                     padding: 0 10px;
@@ -159,7 +163,7 @@ class IdeaList extends HTMLElement {
                 }
                 .tooltip {
                     visibility: hidden;
-                    width: 140px;
+                    width: 133px;
                     background-color: #555;
                     color: #fff;
                     text-align: center;
@@ -168,7 +172,7 @@ class IdeaList extends HTMLElement {
                     position: absolute;
                     z-index: 1;
                     top: 120%;
-                    left: 12vw;
+                    left: 10.8vw;
                     transform: translateX(-50%);
                     opacity: 0;
                     transition: opacity 0.3s;
@@ -210,7 +214,7 @@ class IdeaList extends HTMLElement {
             
             <div id="roomInfo">
                 <div>
-                    <h1 id="homeButtonId2">Creative Minds</h1>
+                    <a href="#"><h1 id="homeButtonId2">Creative Minds</h1></a>
                 </div>
                 <div>
                     <h2>|<h2>
@@ -234,7 +238,7 @@ class IdeaList extends HTMLElement {
                     <div class="tooltip">Copy link to clipboard</div>
                 </div>
             </div>
-            <div style="margin-left: 460px; margin-top: 1vh; display: flex; flex-wrap: wrap">
+            <div style="margin-left: 35vw; margin-top: 1vh; display: flex; flex-wrap: wrap">
                 <div @click="${() => this.onStartRoom()}" .hidden="${adminId!=userId || (this.roomState === 'STARTED' || this.roomState === 'INVALID')}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
                     font-family: 'sans-serif'; margin-top: 3vh; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
@@ -252,12 +256,6 @@ class IdeaList extends HTMLElement {
                     font-family: 'sans-serif'; margin-top: 3vh; margin-left: 10px; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                     <h2>Leave</h2>
                 </div>
-                
-                <div style="width: 15vw; height: auto; text-align: center;
-                    font-family: 'sans-serif'; margin-top: 3vh; margin-left: 10px; margin-bottom: 20px; border-radius: 10px">
-                    <h2>${(this.roomState==="STARTED")?("BE CREATIVE MIND."):"You are in the room now!"}</h2>
-                </div>
-
             </div>
             <div class="ideas">
                 ${ideaTemplates}
