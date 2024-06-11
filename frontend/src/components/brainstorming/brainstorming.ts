@@ -1,5 +1,6 @@
 import { html, render } from "lit-html"
 import "../idea-room/text-input"
+import "../idea-room/room-input"
 import "../idea-room/idea-list"
 import "../idea-room/user-list"
 import ideaService from "../../service/idea-service"
@@ -17,6 +18,7 @@ class BrainstormingElement extends HTMLElement {
         return html` 
             <div>
                 <div>
+                    <room-input></room-input>
                     <idea-list></idea-list>
                     <text-input></text-input>
                     <participant-list></participant-list>

@@ -1,0 +1,143 @@
+import { html, render, nothing } from "lit-html"
+import {Model, Room, store} from "../../model"
+import {distinctUntilChanged, map} from "rxjs";
+import roomService from "../../service/room-service";
+
+
+class RoomInputElement extends HTMLElement {
+
+
+    template(isInRoom:boolean, thisRoom:Room, isAdmin:boolean) {
+        if (isInRoom == false) {
+            return nothing;
+        }
+        return html`
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #fff !important;
+            }
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                margin-top: 10vh;
+            }
+            .styled-input {
+                width: 100%;
+                max-width: 1070px;
+                height: 60px;
+                background-color: #8D63D0;
+                color: #fff;
+                border: 5px solid #9D75EF;
+                box-sizing: border-box;
+                font-size: 16px;
+                padding: 0 10px;
+                outline: none;
+                margin-bottom: 20px;
+                border-radius: 5px;
+            }
+            .send-button {
+                background-color: white;
+                width: 100%;
+                max-width: 240px;
+                height: auto;
+                text-align: center;
+                font-family: 'sans-serif';
+                margin-bottom: 20px;
+                border-radius: 10px;
+                cursor: pointer;
+            }
+            .send-button h2 {
+                user-select: none;
+            }
+            @media (max-width: 600px) {
+                .styled-input {
+                    font-size: 14px;
+                    padding: 0 8px;
+                }
+                .send-button {
+                    max-width: 100%;
+                }
+            }
+        </style>
+
+        <div class="container">
+            <!-- <textarea name="textarea" id="area" cols="30" rows="10"></textarea> -->
+            <input type="text" class="styled-input" id="room-name" .disabled="${(!(isAdmin))}" placeholder="" value="${thisRoom.name}">
+            <input type="text" class="styled-input" id="room-description" .disabled="${(!(isAdmin))}" placeholder="a valueable description should be added by room admin" value="${thisRoom.description}">
+            <!-- does not work properly {((isRoomStarted && canAddIdeas)?"display: flex;":"")} flex-wrap: wrap;-->
+            <div @click= "${() => this.onButtonClick()}" .hidden="${!isAdmin}" 
+                 style="background-color: ${(isAdmin?"white":"grey")}; width: 20vw; height: auto; 
+                 justify-content: space-around; text-align: center; 
+                 font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+                <h2 style="user-select: none">Update</h2>
+        </div>
+        `
+    } 
+
+    onButtonClick(){
+        const name_element : HTMLInputElement = this.shadowRoot.querySelector('#room-name')
+        const description_element : HTMLInputElement = this.shadowRoot.querySelector('#room-description')
+
+        const name = name_element.value
+        console.log(name);
+        const description = description_element.value
+        console.log(description);
+
+
+        if (name !== "" || description !== "") {
+            const model : Model = store.getValue();
+            const activeRooms = model.rooms.filter(room => room.roomId === model.activeRoomId);
+            if (activeRooms.length>0) { // can happen (no active room?)
+                const r = activeRooms[0]
+                // copy and make writeable
+                let room = {...r};
+
+                if (name !== "") {
+                    room.name = name;
+                }
+                if (description !== "") {
+                    room.description = description;
+                }
+
+                const x = roomService.updateRoom(room);
+            }
+        }
+    }
+
+    constructor(){
+        super()
+        this.attachShadow({mode:"open"})
+    }
+
+    connectedCallback() {
+        store.pipe(map(model => ({
+            activeRoom: model.rooms.filter(r => r.roomId === model.activeRoomId),
+            activeRoomId: model.activeRoomId,
+            thisUserId: model.thisUserId
+        })),distinctUntilChanged())
+            .subscribe(reduced_model => {
+            //console.log(model);
+            const thisRooms = reduced_model.activeRoom;
+            let thisRoom: Room = null;
+            let thisRoomStarted = false;
+            let isAdmin : boolean = false;
+            if (thisRooms.length==1){
+                thisRoom = thisRooms[0];
+                thisRoomStarted = (thisRoom.roomState==="STARTED");
+                isAdmin = (reduced_model.thisUserId === thisRoom.adminId);
+            }
+
+            render(this.template(reduced_model.activeRoomId!=="", thisRoom, isAdmin), this.shadowRoot);
+        });
+    }
+
+}
+
+customElements.define("room-input", RoomInputElement);
