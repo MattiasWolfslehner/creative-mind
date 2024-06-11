@@ -34,6 +34,41 @@ class RoomList extends HTMLElement {
         </tr>
         `);
         return html`
+        <style>
+            
+            h1 {
+                font-size: 1.5em;
+                font-family: sans-serif;
+                color: white;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            table{
+                border-spacing: 30px;
+            }
+
+            th {   
+                font-size: 1em;
+                font-family: sans-serif;    
+                color: white;
+                margin-bottom: 10px;
+            }
+
+
+            tr{
+                font-size: 1em;
+                font-family: sans-serif;    
+                color: white;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+
+            tr td:last-child {
+                white-space: nowrap;
+            }
+        </style>
+
         <h1>Room List</h1>
         <table>
             <thead>
