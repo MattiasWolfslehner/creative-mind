@@ -41,8 +41,7 @@ public class BrainwritingRoomSocket {
                 Log.warn(String.format("Had to delete existing Session for room [%s] and user [%s]", parsedRoomId, parsedUserId));
             } catch (CreativeMindException | NoResultException e) {
                 // ignore that it is not existent in this case
-                Log.warn(String.format("No existing Session for room [%s] and user [%s]", parsedRoomId, parsedUserId));
-                Log.warn(String.format("Exc: [%s]", e.toString()));
+                Log.info(String.format("No existing Session for room [%s] and user [%s]", parsedRoomId, parsedUserId));
             }
 
             roomManager.addParticipantToRoom(participantionRequest);
