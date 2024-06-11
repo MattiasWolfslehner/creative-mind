@@ -175,6 +175,20 @@ public class RoomManager {
         }
     }
 
+    public void roomChanged (UUID roomId){
+        try{
+            String jsonString = new JSONObject()
+                    .put("response_type", "room_changed")
+                    .put("message", "new description or name of Room!")
+                    .toString();
+
+            this.broadcastMessageToRoom(roomId, jsonString);
+
+        }catch (Exception e){
+            throw new CreativeMindException("Room is not available!",e);
+        }
+    }
+
 
     public void broadcastMessageToRoom(UUID roomId, String jsonObject) {
         Set<Session> sessions = roomSessions.get(roomId);

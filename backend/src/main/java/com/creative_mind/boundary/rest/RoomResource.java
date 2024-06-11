@@ -97,6 +97,7 @@ public class RoomResource {
     @Path("/update/{roomId}")
     public Response updateRoom(@PathParam("roomId") UUID roomId, RoomRequest roomRequest) {
         Room changedRoom = this.roomRepository.updateRoom(roomId, roomRequest);
+        this.roomManager.roomChanged(roomId);
         return Response.ok(changedRoom).build();
     }
 
