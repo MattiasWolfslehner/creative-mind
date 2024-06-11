@@ -30,12 +30,11 @@ public class ParticipationRepository {
     }
     public Participation getParticipation(Integer userId, Integer roomId ) {
         TypedQuery<Participation> query = entityManager.createNamedQuery(Participation.QUERY_FIND_ONE, Participation.class);
-        Participation participation = query
+
+        return query
                 .setParameter("userId", userId)
                 .setParameter("roomId", roomId)
                 .getSingleResult();
-
-        return participation;
     }
 
     public List<Participation> getParticipationForRoom(UUID roomId ) {
