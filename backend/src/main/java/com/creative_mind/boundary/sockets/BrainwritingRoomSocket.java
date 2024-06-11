@@ -5,6 +5,7 @@ import com.creative_mind.manager.RoomManager;
 import com.creative_mind.model.requests.ParticipantionRequest;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
+import jakarta.persistence.NoResultException;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
@@ -38,9 +39,9 @@ public class BrainwritingRoomSocket {
             try {
                 roomManager.removeParticipant(participantionRequest);
                 Log.warn(String.format("Had to delete existing Session for room [%s] and user [%s]", parsedRoomId, parsedUserId));
-            } catch (CreativeMindException e) {
+            } catch (CreativeMindException | NoResultException e) {
                 // ignore that it is not existent in this case
-                Log.info(String.format("No existing Session for room [%s] and user [%s]", parsedRoomId, parsedUserId));
+                Log.warn(String.format("No existing Session for room [%s] and user [%s]", parsedRoomId, parsedUserId));
             }
 
             roomManager.addParticipantToRoom(participantionRequest);
@@ -48,6 +49,7 @@ public class BrainwritingRoomSocket {
             Log.info(String.format("New Socket went well opened for room [%s] and user [%s]", parsedRoomId, parsedUserId));
 
         }, managedExecutor).exceptionally(throwable -> {
+            Log.error(String.format("error in onOpen [%s]", throwable.toString()));
             throw new CompletionException(throwable);
         });
     }
