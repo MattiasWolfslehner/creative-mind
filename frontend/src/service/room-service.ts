@@ -77,6 +77,29 @@ class RoomService {
         return room;
     }
 
+    async updateRoom(room: Room)  {
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+ localStorage.getItem("token")
+        });
+        const response = await fetch(`${path}/api/rooms/update/${room.roomId}`,{
+            method: 'PUT',
+            headers: theHeader,
+            body: JSON.stringify({name: room.name, description: room.description})
+        });
+
+        const updated_room : Room = await response.json();
+
+        //remove old room and add new room to store
+        const model = produce(store.getValue(), draft => {
+            draft.rooms = draft.rooms.filter(r => r.roomId !== room.roomId);
+            draft.rooms.push(updated_room);
+        })
+        store.next(model);
+        console.log(updated_room);
+        return updated_room;
+    }
+
     async startRoom(roomId : string)  {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
