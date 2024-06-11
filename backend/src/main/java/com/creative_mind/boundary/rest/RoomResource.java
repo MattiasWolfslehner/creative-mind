@@ -92,7 +92,7 @@ public class RoomResource {
     }
 
     @PUT
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/update/{roomId}")
     public Response updateRoom(@PathParam("roomId") UUID roomId, RoomRequest roomRequest) {
