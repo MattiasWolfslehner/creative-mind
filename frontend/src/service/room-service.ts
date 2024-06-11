@@ -159,17 +159,10 @@ class RoomService {
 
         //add room to store
         const model = produce(store.getValue(), draft => {
-            let isPresent:boolean = false;
-            draft.rooms.forEach( (aRoom) => {
-                if (aRoom.roomId === roomId) {
-                    isPresent = true;
-                    aRoom.type = room.type;
-                    aRoom.roomState = room.roomState;
-                }
-            });
-            if (!isPresent) {
-                draft.rooms.push(room);
-            }
+            // delete if there
+            draft.rooms = draft.rooms.filter(r => r.roomId !== roomId);
+            // push new version
+            draft.rooms.push(room);
         })
 
         store.next(model);
