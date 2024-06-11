@@ -3,7 +3,6 @@ package com.creative_mind.model.requests;
 import java.util.UUID;
 
 public class ParticipantionRequest {
-    private String roomType;
     private UUID roomId;
     private UUID memberId;
 
@@ -20,14 +19,6 @@ public class ParticipantionRequest {
 
     public String getSessionId() {
         return sessionId;
-    }
-
-    public String getRoomType() {
-        return roomType;
-    }
-
-    public void setRoomType(String roomType) {
-        this.roomType = roomType;
     }
 
     public UUID getRoomId() {
