@@ -24,11 +24,12 @@ class RoomList extends HTMLElement {
             <td>${room.roomState}</td>
             <td>${room.type}</td>
         <td>
-            <div id="${room.roomId}"  .hidden = ${!["OPEN", "CREATED"].includes(room.roomState)} @click="${() => this._roomJoined(room.roomId)}"
-                 style="background-color: white; width: 20vw; height: auto; 
+            <!--                     .hidden = ${!["OPEN", "CREATED"].includes(room.roomState)} -->
+            <div id="${room.roomId}"   @click="${() => this._roomJoined(room.roomId)}"
+                 style="background-color: white; height: auto;
                  ${(!["OPEN", "CREATED"].includes(room.roomState)?"":"display: flex;")} flex-wrap: wrap; justify-content: space-around; text-align: center; 
                  font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
-            <h2 style="user-select: none">Join</h2>
+            <p style="user-select: none;color:#000;padding: 10px">Join</p>
             </div>
         </td>
         </tr>
@@ -115,15 +116,19 @@ class RoomList extends HTMLElement {
     }
     private async _roomJoined(_roomId: string) {
         console.log(`Joining room with room id: ${_roomId}<`);
+        /** 
         roomService.getRoom(_roomId).then(value => {
             const model = produce(store.getValue(), draft => {
                 //draft.rooms.push(value);
                 draft.activeRoomId = value.roomId;
             });
             store.next(model);
-
+        
             router.navigate(`/room/${value.roomId}`);
         });
+        */
+       router.navigate(`/room/${_roomId}`)
+
     }
 
 }

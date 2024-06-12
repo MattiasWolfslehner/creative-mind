@@ -81,7 +81,7 @@ class RoomInputElement extends HTMLElement {
                      style="background-color: ${(isAdmin?"white":"grey")}; 
                      width: 15vw; height: 60px; text-align: center; margin-bottom: 20px;
                      font-family: 'sans-serif'; border-radius: 10px; cursor:pointer">
-                    <h2 style="user-select: none">Update</h2>
+                    <h2 style="user-select: none">Update Description</h2>
                 </div>
             </div>
         </div>
