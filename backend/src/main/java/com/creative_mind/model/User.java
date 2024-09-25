@@ -18,9 +18,10 @@ public class User {
     @OneToMany(mappedBy = "member")
     Set<Participation> participations;
 
+    /*
     @OneToMany(mappedBy = "member")
     Set<Idea> ideas;
-
+*/
     @JsonIgnore
     @Id
     @GeneratedValue
