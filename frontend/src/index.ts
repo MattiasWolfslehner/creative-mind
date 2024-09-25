@@ -77,29 +77,27 @@ async function init() {
 
     }catch(error){
         console.error('Failed to initialize adapter: ', error);
-        
     }
 }
 
-init();
-
+init().then(() => {
+    router.on('/', () => {
+        console.log("go home ccc");
+        const model = produce(store.getValue(), draft => {
+            draft.isRoomList = false;
+            draft.activeRoomId = "";
+        });
+        store.next(model);
+    });
+    router.on('', () => {
+        console.log("go home ddd");
+        const model = produce(store.getValue(), draft => {
+            draft.isRoomList = false;
+            draft.activeRoomId = "";
+        });
+        store.next(model);
+    });
+});
 
 import "./components/app";
 
-
-router.on('/', () => {
-    console.log("go home ccc");
-    const model = produce(store.getValue(), draft => {
-        draft.isRoomList = false;
-        draft.activeRoomId = "";
-    });
-    store.next(model);
-});
-router.on('', () => {
-    console.log("go home ddd");
-    const model = produce(store.getValue(), draft => {
-        draft.isRoomList = false;
-        draft.activeRoomId = "";
-    });
-    store.next(model);
-});

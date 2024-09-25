@@ -26,9 +26,10 @@ class StatefullRoom extends HTMLElement {
             ${(roomType === "otherroom") ? html `
                 <p>otherroom</p>
             ` : nothing }
-            ${(roomType === "yetanotherroom") ? html `
-                <p>yetanotherroom</p>
-            ` : nothing }
+            ${(roomType) ? nothing :
+            html `
+                <p>NO ROOM Found</p>
+                `}
             `;
     }
 
@@ -46,28 +47,34 @@ class StatefullRoom extends HTMLElement {
 
             const room: Promise<void | Room> = roomService.getRoom(this.roomId).then(value => {
                 const model = produce(store.getValue(), draft => {
-                    draft.activeRoomId = value.roomId;
+                    if (value) {
+                        draft.activeRoomId = value.roomId;
+                    }
+                    else {
+                        draft.activeRoomId = '';
+                    }
                 });
                 store.next(model);
             });
 
-            // load ideas for rooms
-            const ideas = ideaService.getIdeasByRoomId(this.roomId);
+            if (this.roomId) {
+                // load ideas for rooms
+                const ideas = ideaService.getIdeasByRoomId(this.roomId);
 
-            // get Room from store
-            store.pipe(map(model => ({rooms: model.rooms, thisUserId: model.thisUserId})),distinctUntilChanged())
-                .subscribe(reduced_model => {
-                //console.log('model in statefullroom:', reduced_model);
-                const room = reduced_model.rooms.find(r => r.roomId === this.roomId);
-                if (room) {
-                    roomType = room.type;
-                } else {
-                    roomType = 'NoRoomType';
-                }
+                // get Room from store
+                store.pipe(map(model => ({rooms: model.rooms, thisUserId: model.thisUserId})), distinctUntilChanged())
+                    .subscribe(reduced_model => {
+                        //console.log('model in statefullroom:', this.roomId);
+                        const room = reduced_model.rooms.find(r => r.roomId === this.roomId);
+                        if (room) {
+                            roomType = room.type;
+                        } else {
+                            roomType = '';
+                        }
 
-                render(this.template(roomType, this.roomId, reduced_model.thisUserId), this.shadowRoot);
-            });
-        
+                        render(this.template(roomType, this.roomId, reduced_model.thisUserId), this.shadowRoot);
+                    });
+            }
         });
 
     }    
