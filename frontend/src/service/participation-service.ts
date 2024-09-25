@@ -22,14 +22,19 @@ class ParticipationService {
         const response = await fetch(`${path}/api/participations/room/${roomId}`, {
             headers: theHeader
         });
-        const participations : Participation[] = await response.json();
-        //console.log(participations);
 
-        const model = produce(store.getValue(), draft => {
-            draft.participations = participations;
-        })
+        try {
+            const participations: Participation[] = await response.json();
+            //console.log(participations);
 
-        store.next(model);
+            const model = produce(store.getValue(), draft => {
+                draft.participations = participations;
+            })
+
+            store.next(model);
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 

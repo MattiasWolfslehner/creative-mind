@@ -8,6 +8,7 @@ import com.creative_mind.model.requests.RoomStateRequest;
 import com.creative_mind.repository.RoomRepository;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.NoResultException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -49,8 +50,13 @@ public class RoomResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/get/{roomId}")
     public Response createRoom(@PathParam("roomId") UUID roomId) {
-        Room requestedRoom = this.roomRepository.getRoomByUUID(roomId);
-        return Response.ok(requestedRoom).build();
+        try {
+            Room requestedRoom = this.roomRepository.getRoomByUUID(roomId);
+            return Response.ok(requestedRoom).build();
+        }
+        catch (NoResultException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
     @PUT
     @Produces(MediaType.TEXT_PLAIN)

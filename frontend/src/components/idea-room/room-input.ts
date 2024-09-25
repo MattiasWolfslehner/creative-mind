@@ -141,8 +141,12 @@ class RoomInputElement extends HTMLElement {
                 thisRoomStarted = (thisRoom.roomState==="STARTED");
                 isAdmin = (reduced_model.thisUserId === thisRoom.adminId);
             }
+            let remaining = reduced_model.remaining;
+            if (!thisRoomStarted) {
+                remaining = null;
+            }
 
-            render(this.template(reduced_model.activeRoomId!=="", thisRoom, isAdmin,reduced_model.remaining), this.shadowRoot);
+            render(this.template(reduced_model.activeRoomId!=="", thisRoom, isAdmin,remaining), this.shadowRoot);
         });
     }
 

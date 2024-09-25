@@ -13,16 +13,21 @@ class IdeaService{
         const response = await fetch(`${path}/api/ideas/${roomId}`, {
             headers: theHeader
         });
-        const ideas : Idea[] = await response.json();
+        try {
+            const ideas: Idea[] = await response.json();
 
-        //set roomid as it does not come with the API
-        ideas.forEach((idea) => idea.roomId=roomId);
+            //set roomid as it does not come with the API
+            ideas.forEach((idea) => idea.roomId = roomId);
 
-        const model = produce(store.getValue(), draft => {
-            draft.ideas = ideas;
-        })
+            const model = produce(store.getValue(), draft => {
+                draft.ideas = ideas;
+            })
 
-        store.next(model);
+            store.next(model);
+        }
+        catch (error) {
+            console.log(error);
+        }
 
     }
     
