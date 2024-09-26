@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morphologischer Kasten</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid black; text-align: center; }
+        th { background-color: #f2f2f2; }
+        td.clickable { cursor: pointer; }
+        td.selected { background-color: #8fc1e3; color: white; }
+        td.empty { background-color: #f9f9f9; cursor: not-allowed; }
+        td[contenteditable="true"] { outline: none; }
+        td.placeholder { color: #999; } /* Platzhalter-Style */
+        #output { margin-top: 20px; }
+        .param-row td:first-child { text-align: left; }
+        input { width: 100%; border: none; outline: none; text-align: center; }
+        
+        /* Styling für das Plus-Zeichen */
+        th.plus { cursor: pointer; font-size: 24px; color: green; }
+        th.plus:hover { color: darkgreen; }
+    </style>
+</head>
+<body>
+
+<h2>Morphologischer Kasten</h2>
+
+<!-- Tabelle zur direkten Eingabe und Anzeige der Parameter und Ausprägungen -->
+<table id="morphGrid">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Option 1</th>
+            <th>Option 2</th>
+            <th class="plus" onclick="addOption()">+</th> <!-- Plus-Zeichen zum Hinzufügen -->
+        </tr>
+    </thead>
+    <tbody id="parameterBody">
+        <!-- Dynamisch hinzugefügte Parameterzeilen -->
+    </tbody>
+</table>
+
+<!-- Buttons zur Verwaltung -->
+<button type="button" onclick="addParameter()">Parameter hinzufügen</button>
+<button type="button" onclick="generateCombination()">Kombination generieren</button>
+
+<!-- Anzeige der erstellten Kombinationen -->
+<div id="output">
+    <h3>Erstellte Kombinationen:</h3>
+    <ul id="combinationsList">
+        <!-- Generierte Kombinationen werden hier angezeigt -->
+    </ul>
+</div>
+
+<script>
+    let parameterIndex = 0;
+
+    // Funktion, um eine neue Parameterzeile hinzuzufügen
+    function addParameter() {
+        parameterIndex++;
+
+        const tbody = document.getElementById('parameterBody');
+        const row = document.createElement('tr');
+        row.classList.add('param-row');
+
+        // Erste Zelle: Parametername, jetzt auch als contentEditable
+        const paramCell = document.createElement('td');
+        paramCell.contentEditable = true;
+        paramCell.classList.add('clickable');
+        paramCell.classList.add('placeholder');
+        paramCell.innerText = `Parameter ${parameterIndex}`;
+        paramCell.addEventListener('focus', clearPlaceholder);
+        paramCell.addEventListener('blur', restorePlaceholder);
+        row.appendChild(paramCell);
+
+        // Füge Zellen für die vorhandenen Optionen hinzu (minus das Plus-Symbol)
+        const existingOptions = document.querySelectorAll('thead th').length - 2; // Minus 1 für den Parameter, minus 1 für das Plus-Zeichen
+        for (let i = 0; i < existingOptions; i++) {
+            const valueCell = document.createElement('td');
+            valueCell.contentEditable = true;
+            valueCell.classList.add('clickable');
+            valueCell.classList.add('empty', 'placeholder');
+            valueCell.innerText = `Option ${i + 1}`;
+            valueCell.addEventListener('focus', clearPlaceholder);
+            valueCell.addEventListener('blur', restorePlaceholder);
+
+            // Klick-Event für Auswahl
+            valueCell.addEventListener('click', function () {
+                if (!this.classList.contains('empty')) {
+                    // Entferne die vorherige Auswahl in dieser Zeile
+                    const siblings = this.parentNode.querySelectorAll('.selected');
+                    siblings.forEach(sibling => sibling.classList.remove('selected'));
+
+                    // Markiere die angeklickte Zelle als ausgewählt
+                    this.classList.add('selected');
+                }
+            });
+
+            row.appendChild(valueCell);
+        }
+
+        tbody.appendChild(row);
+    }
+
+    // Funktion, um eine neue Ausprägungsspalte hinzuzufügen
+    function addOption() {
+        const thead = document.querySelector('#morphGrid thead tr');
+        const tbody = document.getElementById('parameterBody');
+
+        // Neue Option-Nummer, basierend auf der aktuellen Anzahl der Spalten (minus Parameter und Plus)
+        const newOptionIndex = thead.children.length - 1; // Minus 1 für das Plus-Zeichen
+
+        // Füge eine neue Spalte in der Tabellenüberschrift direkt vor dem Plus-Zeichen hinzu
+        const th = document.createElement('th');
+        th.innerText = `Option ${newOptionIndex}`;
+        thead.insertBefore(th, thead.querySelector('.plus'));
+
+        // Füge eine neue Zelle zu jeder Parameterzeile hinzu
+        const rows = document.querySelectorAll('.param-row');
+        rows.forEach(row => {
+            const valueCell = document.createElement('td');
+            valueCell.contentEditable = true;
+            valueCell.classList.add('clickable');
+            valueCell.classList.add('empty', 'placeholder');
+            valueCell.innerText = `Option ${newOptionIndex}`;
+            valueCell.addEventListener('focus', clearPlaceholder);
+            valueCell.addEventListener('blur', restorePlaceholder);
+
+            // Klick-Event für Auswahl
+            valueCell.addEventListener('click', function () {
+                if (!this.classList.contains('empty')) {
+                    // Entferne die vorherige Auswahl in dieser Zeile
+                    const siblings = this.parentNode.querySelectorAll('.selected');
+                    siblings.forEach(sibling => sibling.classList.remove('selected'));
+
+                    // Markiere die angeklickte Zelle als ausgewählt
+                    this.classList.add('selected');
+                }
+            });
+
+            row.insertBefore(valueCell, row.lastChild); // Füge vor der letzten Zelle (dem Plus) ein
+        });
+    }
+
+    // Funktion, um die ausgewählte Kombination zu generieren und anzuzeigen
+    function generateCombination() {
+        const selectedValues = [];
+        const rows = document.querySelectorAll('.param-row');
+        
+        rows.forEach(row => {
+            const paramName = row.querySelector('td:first-child').innerText.trim() || 'N/A';
+            const selected = row.querySelector('.selected');
+            if (selected) {
+                selectedValues.push(paramName + ': ' + selected.innerText.trim());
+            } else {
+                selectedValues.push(paramName + ': N/A'); // Falls keine Auswahl getroffen wurde
+            }
+        });
+
+        // Neue Kombination zur Liste hinzufügen
+        const combinationsList = document.getElementById('combinationsList');
+        const listItem = document.createElement('li');
+        listItem.innerText = selectedValues.join(' | ');
+        combinationsList.appendChild(listItem);
+    }
+
+    // Event-Listener für die Bearbeitung von Zellen: Entferne die "empty"-Klasse, wenn die Zelle befüllt ist
+    document.addEventListener('input', function (event) {
+        if (event.target.closest('td') && event.target.textContent.trim() !== '') {
+            event.target.classList.remove('empty');
+        } else if (event.target.closest('td') && event.target.textContent.trim() === '') {
+            event.target.classList.add('empty');
+        }
+    });
+
+    // Platzhalter für Parameter und Optionen entfernen, wenn der Benutzer sie bearbeitet
+    function clearPlaceholder(event) {
+        const target = event.target;
+        if (target.classList.contains('placeholder')) {
+            target.innerText = '';
+            target.classList.remove('placeholder');
+        }
+    }
+
+    // Platzhalter wiederherstellen, wenn der Benutzer das Feld leer lässt
+    function restorePlaceholder(event) {
+        const target = event.target;
+        if (target.innerText.trim() === '') {
+            target.classList.add('placeholder');
+            if (target.parentNode.firstChild === target) {
+                target.innerText = `Parameter ${parameterIndex}`;
+            } else {
+                const optionIndex = [...target.parentNode.children].indexOf(target);
+                target.innerText = `Option ${optionIndex}`;
+            }
+        }
+    }
+
+    // Initialisiere die ersten Parameterzeilen und Optionen
+    addParameter(); // Füge die erste Parameterzeile hinzu
+    addParameter(); // Füge die zweite Parameterzeile hinzu
+
+</script>
+
+</body>
+</html>

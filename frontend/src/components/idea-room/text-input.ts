@@ -75,7 +75,7 @@ class TextInputElement extends HTMLElement {
                  style="background-color: ${(canAddIdeas?"white":"grey")}; width: 20vw; height: auto; 
                  justify-content: space-around; text-align: center; 
                  font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
-                <h2 style="user-select: none">Send</h2>
+                <h2 style="user-select: none">${(canAddIdeas)?"Send":"No More Ideas"}</h2>
         </div>
         `
     } 

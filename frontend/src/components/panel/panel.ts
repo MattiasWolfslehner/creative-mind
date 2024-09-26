@@ -42,7 +42,7 @@ class PanelComponent extends HTMLElement {
                 isRoomList: model.isRoomList
             })),distinctUntilChanged())
         .subscribe(reduced_model => {
-            render(template(reduced_model.activeRoomId.length!=0, reduced_model.isRoomList), this.shadowRoot)
+            render(template(((reduced_model.activeRoomId)?reduced_model.activeRoomId.length!=0:false), reduced_model.isRoomList), this.shadowRoot)
         });
     }
 }

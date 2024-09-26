@@ -5,6 +5,7 @@ import com.creative_mind.model.Idea;
 import com.creative_mind.model.requests.IdeaRequest;
 import com.creative_mind.repository.IdeaRepository;
 import jakarta.inject.Inject;
+import jakarta.persistence.NoResultException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -35,8 +36,13 @@ public class IdeaResource {
     @Path("/{roomId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getIdeasByRoomId(@PathParam("roomId") String roomId) {
-        UUID parsedRoomId = UUID.fromString(roomId);
-        List<Idea> ideasByRoom = this.ideaRepository.findByRoomId(parsedRoomId);
-        return Response.ok(ideasByRoom).build();
+        try {
+            UUID parsedRoomId = UUID.fromString(roomId);
+            List<Idea> ideasByRoom = this.ideaRepository.findByRoomId(parsedRoomId);
+            return Response.ok(ideasByRoom).build();
+        }
+        catch (NoResultException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 }
