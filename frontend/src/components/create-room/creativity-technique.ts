@@ -87,11 +87,11 @@ class CreateRoomElement extends HTMLElement {
     </div>
     
     <div style="margin-top: 15vh; display: flex; flex-wrap: wrap; justify-content: space-around">
-        <div id="createRoomButton" .disabled="${((activeUserId)?true:false)}"
+        <div id="createRoomButton" .disabled="${((activeUserId)?"true":"false")}"
              style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
             <h2 style="user-select: none">Create Room</h2>
         </div>
-        <div id="showRoomListButton"
+        <div id="showRoomListButton" .disabled="${((activeUserId)?"true":"false")}"
              style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
             <h2 style="user-select: none">Show My Rooms</h2>
         </div>
