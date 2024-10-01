@@ -1,6 +1,5 @@
 import { html, render } from "lit-html"
 import "./creativity-technique"
-import "./create-room-button"
 import "../../style/create-room/create-room-style.css"
 
 const template = ()=> html`

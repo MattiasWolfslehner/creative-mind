@@ -2,6 +2,8 @@
 import { html, render } from "lit-html"
 import "./brainwriting/brainwriting"
 import "./panel/panel"
+import keycloakService from '../service/keycloak';
+import {store} from "../model";
 
 
 const template = ()=> html`
@@ -16,6 +18,22 @@ class AppComponent extends HTMLElement {
     }
 
     connectedCallback() {
+
+        document.addEventListener('click', (event) => {
+            const v = event.composedPath();
+            if (v) {
+                if (v[0]) {
+                    if (v[0]["id"] === "logoutButton") {
+                        const model = store.getValue();
+                        if (model.thisUserId) {
+                            keycloakService.logout();
+                        } else {
+                            keycloakService.login().then(()=>{console.log("logged in!")});
+                        }
+                    }
+                }
+            }
+        });
 
         render(template(), this.shadowRoot)
     }
