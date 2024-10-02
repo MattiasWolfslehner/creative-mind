@@ -21,7 +21,8 @@ import static jakarta.persistence.InheritanceType.SINGLE_TABLE;
         property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = BrainwritingRoom.class, name = "brainwritingroom"),
-        @JsonSubTypes.Type(value = BrainstormingRoom.class,name = "brainstormingroom")
+        @JsonSubTypes.Type(value = BrainstormingRoom.class,name = "brainstormingroom"),
+        @JsonSubTypes.Type(value = MorphologicalRoom.class,name = "morphologicalroom")
 })
 @NamedQuery(name = Room.GET_ROOM_BY_ROOM_ID, query = "select r from Room r where r.roomId = :roomId")
 @NamedQuery(name = Room.GET_ALL_ROOMS, query = "select r from Room r")
