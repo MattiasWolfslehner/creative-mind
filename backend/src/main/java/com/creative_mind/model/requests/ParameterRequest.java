@@ -5,20 +5,16 @@ import java.util.UUID;
 public class ParameterRequest {
     private String title;
     private UUID roomId;
-    private UUID memberId;
-
     public ParameterRequest() {
     }
 
-    public ParameterRequest(UUID roomId, UUID memberId) {
+    public ParameterRequest(UUID roomId) {
         this.roomId = roomId;
-        this.memberId = memberId;
     }
 
-    public ParameterRequest(String content, UUID roomId, UUID memberId) {
+    public ParameterRequest(String content, UUID roomId) {
         this.title = content;
         this.roomId = roomId;
-        this.memberId = memberId;
     }
 
     public String getTitle() {
@@ -35,13 +31,5 @@ public class ParameterRequest {
 
     public void setRoomId(UUID roomId) {
         this.roomId = roomId;
-    }
-
-    public UUID getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(UUID memberId) {
-        this.memberId = memberId;
     }
 }

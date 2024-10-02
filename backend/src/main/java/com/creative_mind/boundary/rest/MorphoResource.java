@@ -3,17 +3,21 @@ package com.creative_mind.boundary.rest;
 
 import com.creative_mind.manager.RoomManager;
 import com.creative_mind.model.MBParameter;
+import com.creative_mind.model.MorphologicalRoom;
+import com.creative_mind.model.Realization;
 import com.creative_mind.model.requests.ParameterRequest;
+import com.creative_mind.model.requests.RealizationRequest;
 import com.creative_mind.repository.MorphoRepository;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.lang.reflect.Parameter;
+import java.util.List;
+import java.util.UUID;
 
 @Path("/api/morpho")
 public class MorphoResource {
@@ -25,15 +29,44 @@ public class MorphoResource {
     MorphoRepository morphoRepository;
 
     @POST
+    @Path("/parameter")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addParameter(ParameterRequest parameter) {
+    public Response addParameter(ParameterRequest parameterRequest) {
         // create parameter and ...
-        // Parameter newParam = this.morphoRepository.addParameter(parameter);
+        MBParameter parameter = this.morphoRepository.addParameter(parameterRequest);
         // broadcast news to others.
-        // roomManager.newsForAllSessions(ParameterRequest);
-        //return Response.ok(newParam).build();
-        return null;
+        roomManager.newsForAllSessions(parameterRequest.getRoomId());
+        return Response.ok(parameter).build();
     }
+
+    @GET
+    @Path("/{roomId}/parameter")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getParameterByRoomId(@PathParam("roomId") String roomId) {
+        try {
+            UUID parsedRoomId = UUID.fromString(roomId);
+            List<MBParameter> parametersByRoom = this.morphoRepository.findParameterByRoomId(parsedRoomId);
+
+            return Response.ok(parametersByRoom).build();
+        } catch (NoResultException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+    }
+
+    @POST
+    @Path("/realization")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addRealization(RealizationRequest realizationRequest){
+        Realization realization = this.morphoRepository.addRealization(realizationRequest);
+
+        return Response.ok(realization).build();
+    }
+
+    //TODO: put => update Parameter
+
+
 
 }

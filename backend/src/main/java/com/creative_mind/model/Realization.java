@@ -15,12 +15,24 @@ public class Realization {
     @JoinColumn(name = "param_id")
     private MBParameter mbParameter;
 
+    public Realization(String content, MBParameter mbParameter) {
+        this.content = content;
+        this.mbParameter = mbParameter;
+    }
+
+    public Realization() {
+    }
+
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getContentId() {
+        return contentId;
     }
 }
 

@@ -1,8 +1,6 @@
 package com.creative_mind.model;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.Set;
 
@@ -10,12 +8,11 @@ import java.util.Set;
 @DiscriminatorValue("Morphological Room")
 public class MorphologicalRoom extends Room{
     private static final String ROOM_TYPE = String.valueOf(RoomType.MORPHOLOGICAL);
-
     @Override
     public long getMaxTimerForRoom() {
         return 0;
     }
 
-    @OneToMany(mappedBy = "morphologicalRoom")
+    @OneToMany(mappedBy = "morphologicalRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MBParameter> parameters;
 }
