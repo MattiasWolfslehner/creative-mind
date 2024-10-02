@@ -163,7 +163,7 @@ class CreateRoomElement extends HTMLElement {
     }
     
     createRoom(roomType: string, roomName: string): void {
-        console.log(`Creating room with room type: ${roomType}<`);
+        console.log(`Creating room with room type: ${roomType}`);
         // create the room and navigate into it
         const roomId: Promise<void | Room> = roomService.createRoom(roomType, roomName, null).then(value => {
             const model = produce(store.getValue(), draft => {

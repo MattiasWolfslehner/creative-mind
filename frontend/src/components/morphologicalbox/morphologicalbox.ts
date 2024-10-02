@@ -1,5 +1,6 @@
 import { html, render } from "lit-html"
 import "../custom-elements/roomInfoMenu"
+import "../custom-elements/morphologicalBox"
 import "../idea-room/participant-list"
 import userService from "../../service/user-service"
 import { store } from "../../model";
@@ -16,7 +17,7 @@ class MorphologicalBoxElement extends HTMLElement {
         return html` 
             <div>
                     <room-info-menu></room-info-menu>
-                    <participant-list></participant-list>
+                    <morphological-box style="font-family: 'sans-serif'"></morphological-box>
             </div>
         `;
     }
