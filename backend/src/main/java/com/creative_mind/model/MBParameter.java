@@ -3,6 +3,7 @@ package com.creative_mind.model;
 import jakarta.persistence.*;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 public class MBParameter {

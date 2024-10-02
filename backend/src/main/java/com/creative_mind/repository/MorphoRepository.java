@@ -5,7 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
 @ApplicationScoped
-public class morphoRepository {
+public class MorphoRepository {
 
     @Inject
     EntityManager entityManager;
