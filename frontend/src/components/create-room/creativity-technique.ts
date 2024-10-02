@@ -4,8 +4,18 @@ import { Room, store } from "../../model";
 import { router } from "../../../router";
 import { produce } from "immer";
 import "../../style/create-room/creativity-technique-style.css";
+import {distinctUntilChanged, map} from "rxjs";
 
-const template: () => TemplateResult = () => html`
+
+
+class CreateRoomElement extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+    }
+
+    template (activeUserId: string) {
+        return (html`
     <style>
     .active {
     background-color: #8D63D0;
@@ -77,26 +87,27 @@ const template: () => TemplateResult = () => html`
     </div>
     
     <div style="margin-top: 15vh; display: flex; flex-wrap: wrap; justify-content: space-around">
-        <div id="createRoomButton"
+        <div id="createRoomButton" .disabled="${((activeUserId)?"true":"false")}"
              style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
             <h2 style="user-select: none">Create Room</h2>
         </div>
-        <div id="showRoomListButton"
+        <div id="showRoomListButton" .disabled="${((activeUserId)?"true":"false")}"
              style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
             <h2 style="user-select: none">Show My Rooms</h2>
         </div>
     </div>
-`;
-
-class CreateRoomElement extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: "open" });
+`);
     }
 
     connectedCallback() {
         //console.log("connected");
-        render(template(), this.shadowRoot);
+
+        // add change ...
+        store.pipe(map( model => model.thisUserId ), distinctUntilChanged())
+            .subscribe(thisUserId => {
+                render(this.template(thisUserId), this.shadowRoot)
+            });
+
         this.addClickEventListeners();
     }
     
@@ -119,25 +130,35 @@ class CreateRoomElement extends HTMLElement {
         });
         const createRoomButton = this.shadowRoot.getElementById('createRoomButton');
         createRoomButton.addEventListener('click', () => {
-            const activeTechniqueContainer = this.shadowRoot.querySelector('.technique-container.active');
-            if (activeTechniqueContainer) {
-                const roomName:string = this.shadowRoot.querySelector("input").value;
-                // simply create the room for the selected type over container id
-                this.createRoom(activeTechniqueContainer.id, roomName); // do not assign to room id, gives void
+            const model = store.getValue();
+            if (model.thisUserId) {
+                const activeTechniqueContainer = this.shadowRoot.querySelector('.technique-container.active');
+                if (activeTechniqueContainer) {
+                    const roomName: string = this.shadowRoot.querySelector("input").value;
+                    // simply create the room for the selected type over container id
+                    this.createRoom(activeTechniqueContainer.id, roomName); // do not assign to room id, gives void
+                }
+            } else {
+                alert("Please Login first"); // trivial message
             }
         });
 
         const showRoomListButton = this.shadowRoot.getElementById('showRoomListButton');
         showRoomListButton.addEventListener('click', () => {
-            // change view type to room list (join other rooms rather than create it)
-            // read (possibly changed) roomstates
-            const x = roomService.getRooms();
-            // then change application state
-            const model = produce(store.getValue(), draft => {
-                draft.isRoomList = true;
-                draft.activeRoomId = "";
-            });
-            store.next(model);
+            const model = store.getValue();
+            if (model.thisUserId) {
+                // change view type to room list (join other rooms rather than create it)
+                // read (possibly changed) roomstates
+                const x = roomService.getRooms();
+                // then change application state
+                const model = produce(store.getValue(), draft => {
+                    draft.isRoomList = true;
+                    draft.activeRoomId = "";
+                });
+                store.next(model);
+            } else {
+                alert("Please Login first"); // trivial message
+            }
         });
     }
     
