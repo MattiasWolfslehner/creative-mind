@@ -17,7 +17,7 @@ public class MBParameter {
     @JoinColumn(name = "room_id")
     private MorphologicalRoom morphologicalRoom;
 
-    @OneToMany(mappedBy = "mbParameter")
+    @OneToMany(mappedBy = "mbParameter", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Realization> realizations;
 
 
