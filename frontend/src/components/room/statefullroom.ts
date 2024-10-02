@@ -6,6 +6,7 @@ import ideaService from "../../service/idea-service";
 import {produce} from "immer";
 import "../brainwriting/brainwriting"
 import "../brainstorming/brainstorming"
+import "../morphologicalbox/morphologicalbox"
 import {distinctUntilChanged, map} from "rxjs";
 
 
@@ -22,7 +23,9 @@ class StatefullRoom extends HTMLElement {
             ${(roomType === "brainwritingroom") ? 
                     html ` <brainwriting-element></brainwriting-element>` : nothing }
             ${(roomType === "brainstormingroom") ? 
-                    html ` <brainstorming-element></brainstorming-element>` : nothing }  
+                    html ` <brainstorming-element></brainstorming-element>` : nothing }
+            ${(roomType === "morphologicalroom") ? 
+                html ` <morphologicalbox-element></morphologicalbox-element>` : nothing }  
             ${(roomType === "otherroom") ? html `
                 <p>otherroom</p>
             ` : nothing }

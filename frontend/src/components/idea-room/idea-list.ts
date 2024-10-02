@@ -6,6 +6,7 @@ import ideaService from "../../service/idea-service";
 import {distinctUntilChanged, map} from "rxjs";
 import {Participation} from "../../model/participation";
 import {router} from "../../../router";
+import "../custom-elements/roomInfoMenu";
 
 class IdeaList extends HTMLElement {
     roomState: string = "INVALID";
@@ -76,122 +77,6 @@ class IdeaList extends HTMLElement {
                     color: #fff;
                     text-decoration: none;
                 }
-                #roomInfo {
-                    position: absolute;
-                    top: 1vw;
-                    left: 2vw;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    width: 30vw;
-                    height: 65px;
-                    border-radius: 5px;
-                    background-color: #8D63D0;
-                    padding: 0 10px;
-                    font-family: 'sans-serif';
-                    color: white;
-                }
-                #roomInfo div {
-                    padding: 0 1rem;
-                }
-                #roomMenu {
-                    position: absolute;
-                    top: 1vw;
-                    left: 35vw;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    width: 15vw;
-                    height: 65px;
-                    border-radius: 5px;
-                    background-color: #8D63D0;
-                    padding: 0 10px;
-                    box-sizing: border-box;
-                    font-family: 'sans-serif';
-                }        
-                .menu-item {
-                    display: flex;
-                    align-items: center;
-                }        
-                .burger-menu {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-around;
-                    width: 40px;
-                    height: 24px;
-                    cursor: pointer;
-                }
-                .burger-menu div {
-                    width: 100%;
-                    height: 6px;
-                    background-color: #fff;
-                    border-radius: 2px;
-                    margin: 5%;
-                }
-                .member-count {
-                    width: 49px;
-                    height: 49px;
-                    border-radius: 50%;
-                    background-color: #fff;
-                    border: 3px solid #7A49C9;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 1.5em;
-                }
-                .share-box {
-                    display: flex;
-                    align-items: center;
-                    width: 141px;
-                    height: 48px;
-                    background-color: #fff;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                    padding: 0 10px;
-                    box-sizing: border-box;
-                    cursor:pointer;
-                }        
-                .share-box img {
-                    width: 48px;
-                    height: 48px;
-                    border-radius: 5px;
-                }        
-                .share-box span {
-                    margin-left: 10px;
-                    font-size: 1.5em;
-                    color: #000;
-                }
-                .tooltip {
-                    visibility: hidden;
-                    width: 133px;
-                    background-color: #555;
-                    color: #fff;
-                    text-align: center;
-                    border-radius: 5px;
-                    padding: 5px;
-                    position: absolute;
-                    z-index: 1;
-                    top: 120%;
-                    left: 10.8vw;
-                    transform: translateX(-50%);
-                    opacity: 0;
-                    transition: opacity 0.3s;
-                    margin-top: 5px;
-                }        
-                .share-box:hover .tooltip {
-                    visibility: visible;
-                    opacity: 1;
-                }        
-                .tooltip::after {
-                    content: "";
-                    position: absolute;
-                    top: -18%;
-                    left: 4vw;
-                    transform: translateX(-50%);
-                    border-width: 5px;
-                    border-style: solid;
-                    border-color: transparent transparent #555 transparent;
-                }
                 .ideas {
                     display: grid;
                     gap: 4vh 2vw;
@@ -212,32 +97,7 @@ class IdeaList extends HTMLElement {
                 }
             </style>
             
-            <div id="roomInfo">
-                <div>
-                    <a href="#"><h1>Creative Minds</h1></a>
-                </div>
-                <div>
-                    <h2>|<h2>
-                </div>
-                <div>
-                    <h2 id="roomName">${room?(room.name?room.name:"NONAME2"):"NONAME"}</h2>
-                </div>
-            </div>  
-            <div id="roomMenu">
-                <div class="menu-item burger-menu">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-                <div class="menu-item member-count">
-                    ${(participations)?(participations.length):0}
-                </div>
-                <div class="menu-item share-box" @click="${() => this.shareRoom()}">
-                    <img src="https://png.pngtree.com/png-vector/20191004/ourmid/pngtree-person-icon-png-image_1788612.jpg" alt="Person Icon">
-                    <span>Share</span>
-                    <div class="tooltip">Copy link to clipboard</div>
-                </div>
-            </div>
+            <room-info-menu></room-info-menu>
             <div style="margin-left: 35vw; margin-top: 1vh; display: flex; flex-wrap: wrap">
                 <div @click="${() => this.onStartRoom()}" .hidden="${adminId!=userId || (this.roomState === 'STARTED' || this.roomState === 'INVALID')}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;

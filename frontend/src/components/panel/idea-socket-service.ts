@@ -200,7 +200,7 @@ class IdeaSocketService extends HTMLElement {
     template() {
         return html`
       <div>
-        <p>Socket-Status ${this.socketStatus}</p>
+        <!--<p>Socket-Status ${this.socketStatus}</p>-->
       </div>
     `;
     }

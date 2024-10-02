@@ -74,11 +74,11 @@ class CreateRoomElement extends HTMLElement {
         <div id="mindmaproom" class="technique-container inactive">
             <h2>MindMap</h2>
         </div>
-        <div id="zwickyboxroom" class="technique-container inactive">
-            <h2>Zwicky-Box</h2>
+        <div id="morphologicalroom" class="technique-container inactive">
+            <h2>Morphological Box</h2>
         </div>
         <div id="brainstormingroom" class="technique-container active">
-            <h2>Brainstorm</h2>
+            <h2>Brainstorming</h2>
         </div>
     </div>
 
