@@ -50,27 +50,41 @@ class MorphologicalBox extends HTMLElement {
 
     handleCellDblClick(event) {
         const clickedCell = event.target;
-
+        const row = clickedCell.parentElement;
+        const columnIndex = Array.from(row.children).indexOf(clickedCell);
+        const rowIndex = Array.from(row.parentElement.children).indexOf(row);
+    
         clickedCell.setAttribute('contenteditable', 'true');
         clickedCell.focus();
-
+    
         clickedCell.addEventListener('blur', () => {
             clickedCell.removeAttribute('contenteditable');
-
-            if (clickedCell.classList.contains('placeholder')) {
+    
+            if (clickedCell.textContent.trim() === "") {
+                if (columnIndex === 0) {
+                    clickedCell.textContent = `Parameter ${rowIndex + 1}`;
+                } else {
+                    clickedCell.textContent = `Realization ${columnIndex}`;
+                }
+    
+                clickedCell.classList.add('placeholder');
+            } else {
                 clickedCell.classList.remove('placeholder');
             }
         });
-
     }
+    
+    
 
     addClickListeners() {
+        const parameters = this.shadowRoot.querySelectorAll('tbody tr:not(:last-child)')
+        parameters.forEach(param => {
+            param.addEventListener('dblclick', (event) => this.handleCellDblClick(event));
+        })
         const cells = this.shadowRoot.querySelectorAll('tbody tr:not(:last-child) td:not(:first-child):not(:last-child)');
         cells.forEach(cell => {
-            // Click event to select the cell
             cell.addEventListener('click', (event) => this.handleCellClick(event));
 
-            // Double-click event to make the cell editable
             cell.addEventListener('dblclick', (event) => this.handleCellDblClick(event));
         });
     }
@@ -258,7 +272,7 @@ class MorphologicalBox extends HTMLElement {
             <div style="margin-top: 10vh; display: flex; flex-wrap: wrap; justify-content: space-around">
                 <div id="generateCombinationButton"
                     style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
-                    <h2 style="user-select: none">Generate Combination</h2>
+                    <h2 style="user-select: none">Save Combination</h2>
                 </div>
             </div>
 
