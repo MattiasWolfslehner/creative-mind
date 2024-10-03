@@ -7,22 +7,20 @@ class MorphologicalBox extends HTMLElement {
         this.attachShadow({ mode: "open" });
     }
 
-    
-
     generateCombination() {
         const rows = this.shadowRoot.querySelectorAll('tbody tr');
         const combination = [];
 
         rows.forEach(row => {
             const selectedCell = row.querySelector('.selected-1, .selected-2, .selected-3');
-            if (selectedCell) {
-                combination.push(selectedCell.textContent.trim())
-            }
+            if (selectedCell && !/Realization \d+/.test(selectedCell.textContent)) {
+                combination.push(selectedCell.textContent.trim());
+            }            
         });
 
         if (combination.length > 0) {
             const combinations = this.shadowRoot.querySelector('.combinations');
-            combinations.innerHTML += `${combination.join(' | ')}<br>`
+            combinations.innerHTML += `${combination.join(' | ')}<br>`;
         } else {
             console.log("No selection made.");
         }
@@ -50,10 +48,30 @@ class MorphologicalBox extends HTMLElement {
         clickedCell.classList.add(selectedClass);
     }
 
+    handleCellDblClick(event) {
+        const clickedCell = event.target;
+
+        clickedCell.setAttribute('contenteditable', 'true');
+        clickedCell.focus();
+
+        clickedCell.addEventListener('blur', () => {
+            clickedCell.removeAttribute('contenteditable');
+
+            if (clickedCell.classList.contains('placeholder')) {
+                clickedCell.classList.remove('placeholder');
+            }
+        });
+
+    }
+
     addClickListeners() {
-        const cells = this.shadowRoot.querySelectorAll('tbody td:not(:first-child, :last-child)'); // Alle Zellen außer der ersten Spalte
+        const cells = this.shadowRoot.querySelectorAll('tbody tr:not(:last-child) td:not(:first-child):not(:last-child)');
         cells.forEach(cell => {
+            // Click event to select the cell
             cell.addEventListener('click', (event) => this.handleCellClick(event));
+
+            // Double-click event to make the cell editable
+            cell.addEventListener('dblclick', (event) => this.handleCellDblClick(event));
         });
     }
 
@@ -96,7 +114,7 @@ class MorphologicalBox extends HTMLElement {
                     text-overflow: ellipsis;
                     padding: 0 10px;
                     box-sizing: border-box;
-                    cursor: pointer; /* Zeigt einen Pointer bei Hover */
+                    cursor: pointer;
                 }
                 
                 thead th {
@@ -258,12 +276,12 @@ class MorphologicalBox extends HTMLElement {
 
     connectedCallback() {
         render(this.template(), this.shadowRoot);
-        this.addClickListeners(); // Füge Event-Listener für Klicks hinzu
+        this.addClickListeners();
 
         const generateCombinationButton = this.shadowRoot.getElementById('generateCombinationButton');
         generateCombinationButton.addEventListener('click', () => {
-            this.generateCombination()
-        })
+            this.generateCombination();
+        });
     }
 }
 
