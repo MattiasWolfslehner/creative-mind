@@ -15,7 +15,7 @@ class KeycloakService {
 
     public async init () {
         try {
-            const authenticated = await KeycloakService.keycloak.init({enableLogging: true});
+            const authenticated = await KeycloakService.keycloak.init({enableLogging: true, onLoad: 'check-sso'});
             console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
             if (authenticated) {
                 await this.login(); // get user data NOT do login!!!!
