@@ -5,6 +5,8 @@ import {distinctUntilChanged, map} from "rxjs";
 import roomService from "../../service/room-service";
 import ideaService from "../../service/idea-service";
 import participationService from "../../service/participation-service";
+import mbparameterService from "../../service/mbparameter-service";
+import mbParameterService from "../../service/mbparameter-service";
 
 class IdeaSocketService extends HTMLElement {
 
@@ -36,7 +38,11 @@ class IdeaSocketService extends HTMLElement {
             case "room_notification": {
                 this.socketStatus = `got room nfctn (${message.response_type}): "${message.message}"`;
                 const y = participationService.getParticipantsInRoom(null);
-                const x = roomService.getRoom(null);
+                roomService.getRoom(null).then(roomInfo => {
+                  if (roomInfo.type === "morphologicalroom") { // check out news according to parameters and/or other things to come
+                      const z = mbParameterService.getParameterForRoom(roomInfo.roomId);
+                  }
+                })
                 this.refresh();
                 break;
             }

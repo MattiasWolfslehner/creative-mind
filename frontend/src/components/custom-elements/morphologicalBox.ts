@@ -1,4 +1,7 @@
 import { html, render } from "lit-html";
+import {MBParameter, store} from "../../model";
+import {distinctUntilChanged, map} from "rxjs";
+import mbParameterService from "../../service/mbparameter-service";
 
 class MorphologicalBox extends HTMLElement {
 
@@ -89,7 +92,7 @@ class MorphologicalBox extends HTMLElement {
         });
     }
 
-    template() {
+    template(activeRoomId:string, parameters: MBParameter[]) {
         return html`
             <style>
                 body {
@@ -203,7 +206,7 @@ class MorphologicalBox extends HTMLElement {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Power System</td>
+                            <td>${parameters?parameters[0].title:"Power System"}</td>
                             <td>Electric</td>
                             <td>Petrol</td>
                             <td>Diesel</td>
@@ -289,13 +292,18 @@ class MorphologicalBox extends HTMLElement {
     }
 
     connectedCallback() {
-        render(this.template(), this.shadowRoot);
-        this.addClickListeners();
 
-        const generateCombinationButton = this.shadowRoot.getElementById('generateCombinationButton');
-        generateCombinationButton.addEventListener('click', () => {
-            this.generateCombination();
-        });
+        const p = mbParameterService.getParameterForRoom(store.getValue().activeRoomId);
+        //
+        store.pipe(map( model => ({activeRoomId : model.activeRoomId, parameters: model.parameters}) ), distinctUntilChanged())
+            .subscribe(morphoRoom => {
+                render(this.template(morphoRoom.activeRoomId, morphoRoom.parameters), this.shadowRoot);
+                this.addClickListeners();
+                const generateCombinationButton = this.shadowRoot.getElementById('generateCombinationButton');
+                generateCombinationButton.addEventListener('click', () => {
+                    this.generateCombination();
+                });
+            });
     }
 }
 

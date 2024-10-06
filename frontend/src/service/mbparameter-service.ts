@@ -1,182 +1,63 @@
 import { produce } from "immer"
-import { Room, store } from "../model"
+import { MBParameter, store } from "../model"
 import path from "./service-const"
 
 
 
-class RoomService {
+class MBParameterService {
     
 
-    async getRooms(){
+    async getParameterForRoom(roomId:string){
         //fetch
         const theHeader = new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'Bearer '+ localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/list`, {
+        const response = await fetch(`${path}/api/morpho/${roomId}/parameter}`, {
             headers: theHeader
         });
-        const rooms : Room[] = await response.json();
+        const parameters : MBParameter[] = await response.json();
         //console.log(rooms);
 
-        /* LIST GIVES NO type value => call indiv get
         const model = produce(store.getValue(), draft => {
-            draft.rooms = rooms;
+            draft.parameters = parameters;
         });
 
         store.next(model);
-        */
 
-        rooms.forEach((aRoom) => {
-            this.getRoom(aRoom.roomId); // force fetch type!
-        });
     }
 
-    async createRoom(roomType : string, roomName: string, description: string|null) : Promise<Room> {
+    async createParameterForRoom(roomId : string, title: string) : Promise<MBParameter> {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'Bearer '+ localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/create`,{
+        const response = await fetch(`${path}/api/morpho/parameter`,{
             method: 'POST',
             headers: theHeader,
             body: JSON.stringify({
-                'type': roomType,
-                'name': roomName,
-                'description': description
+                'roomId': roomId,
+                'title': title
             })
         });
-
-        const room : Room = await response.json();
-
-
-        //add room to store
-        const model = produce(store.getValue(), draft => {
-            draft.rooms.push(room);
-        })
-        store.next(model);
-        console.log(room);
-        return room;
-    }
-
-    async updateState(roomId : string, roomState: string)  {
-        const theHeader = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
-        });
-        const response = await fetch(`${path}/api/rooms/updateState/${roomId}`,{
-            method: 'PUT',
-            headers: theHeader,
-            body: JSON.stringify({roomState: roomState})
-        });
-
-        const room : boolean = await response.json();
-
-        console.log(`Room state changed: ${room}`);
-
-        return room;
-    }
-
-    async updateRoom(room: Room)  {
-        const theHeader = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
-        });
-        const response = await fetch(`${path}/api/rooms/update/${room.roomId}`,{
-            method: 'PUT',
-            headers: theHeader,
-            body: JSON.stringify({name: room.name, description: room.description})
-        });
-
-        const updated_room : Room = await response.json();
-
-        //remove old room and add new room to store
-        const model = produce(store.getValue(), draft => {
-            draft.rooms = draft.rooms.filter(r => r.roomId !== room.roomId);
-            draft.rooms.push(updated_room);
-        })
-        store.next(model);
-        console.log(updated_room);
-        return updated_room;
-    }
-
-    async startRoom(roomId : string)  {
-        const theHeader = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
-        });
-        const response = await fetch(`${path}/api/rooms/start/${roomId}`,{
-            method: 'PUT',
-            headers: theHeader
-        });
-
-        const room : boolean = await response.json();
-
-        //console.log(`Room started: ${room}`);
-        // fetch new status
-        const x = this.getRoom(roomId);
-
-        return room;
-    }
-
-    async stopRoom(roomId : string)  {
-        const theHeader = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
-        });
-        const response = await fetch(`${path}/api/rooms/stop/${roomId}`,{
-            method: 'PUT',
-            headers: theHeader
-        });
-
-        const room : boolean = await response.json();
-
-        //console.log(`Room stopped: ${room}`);
-        // fetch new status
-        const x = this.getRoom(roomId);
-
-        return room;
-    }
-
-
-    async getRoom(roomId : string | null) : Promise<Room> {
-        if (!roomId) {
-            const model = store.getValue();
-            roomId  = model.activeRoomId;
-        }
-        const theHeader = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
-        });
-        const response = await fetch(`${path}/api/rooms/get/${roomId}`, {
-            method: 'GET',
-            headers: theHeader
-        });
-
         try {
-            // TODO: either must catch empty response here or ?!
-            // no 404 when no row found !?
-            const room: Room = await response.json();
+            const parameter: MBParameter = await response.json();
 
             //add room to store
             const model = produce(store.getValue(), draft => {
-                // delete if there
-                draft.rooms = draft.rooms.filter(r => r.roomId !== roomId);
-                // push new version
-                draft.rooms.push(room);
+                draft.parameters.push(parameter);
             })
-
             store.next(model);
-
-            return room;
+            console.log(parameter);
+            return parameter;
         }
         catch (error) {
-            console.log(error);
+            console.log(`Error in createParameterForRoom ${error}`);
             return null;
         }
     }
 }
 
 
-const roomService = new RoomService();
-export default roomService;
+const mbParameterService = new MBParameterService();
+export default mbParameterService;
