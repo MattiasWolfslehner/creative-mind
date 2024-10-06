@@ -31,6 +31,7 @@ public class MorphoResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addParameter(ParameterRequest parameterRequest) {
         // create parameter and ...
+        //TODO: IMPORTANT! Check Room Type is MB
         MBParameter parameter = this.morphoRepository.addParameter(parameterRequest);
         // broadcast news to others.
         roomManager.newsForAllSessions(parameterRequest.getRoomId());
@@ -42,6 +43,7 @@ public class MorphoResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getParameterByRoomId(@PathParam("roomId") String roomId) {
         try {
+            //TODO: IMPORTANT! Check Room Type is MB
             UUID parsedRoomId = UUID.fromString(roomId);
             List<MBParameter> parametersByRoom = this.morphoRepository.findParameterByRoomId(parsedRoomId);
 
@@ -57,12 +59,17 @@ public class MorphoResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addRealization(RealizationRequest realizationRequest){
+        //TODO: IMPORTANT! Check Room Type is MB
         Realization realization = this.morphoRepository.addRealization(realizationRequest);
 
         return Response.ok(realization).build();
     }
 
     //TODO: put => update Parameter
+
+    //TODO: get all Parameters of one Room + Get all realizations of one room
+
+
 
     //TODO: What to do with Combinations
 
