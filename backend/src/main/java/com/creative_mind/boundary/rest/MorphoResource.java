@@ -3,15 +3,12 @@ package com.creative_mind.boundary.rest;
 
 import com.creative_mind.manager.RoomManager;
 import com.creative_mind.model.MBParameter;
-import com.creative_mind.model.MorphologicalRoom;
 import com.creative_mind.model.Realization;
 import com.creative_mind.model.requests.ParameterRequest;
 import com.creative_mind.model.requests.RealizationRequest;
 import com.creative_mind.repository.MorphoRepository;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.TypedQuery;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -66,6 +63,8 @@ public class MorphoResource {
     }
 
     //TODO: put => update Parameter
+
+    //TODO: What to do with Combinations
 
 
 
