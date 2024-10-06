@@ -1,12 +1,12 @@
 import {html, render} from 'lit-html';
-import {Idea, Model, store} from "../../model";
+import {Idea, Model, Room, store} from "../../model";
 import {produce} from "immer";
 import {distinctUntilChanged, map} from "rxjs";
 import roomService from "../../service/room-service";
 import ideaService from "../../service/idea-service";
 import participationService from "../../service/participation-service";
-import mbparameterService from "../../service/mbparameter-service";
-import mbParameterService from "../../service/mbparameter-service";
+import mbparameterService from "../../service/morpho-service";
+import morphoService from "../../service/morpho-service";
 
 class IdeaSocketService extends HTMLElement {
 
@@ -38,11 +38,7 @@ class IdeaSocketService extends HTMLElement {
             case "room_notification": {
                 this.socketStatus = `got room nfctn (${message.response_type}): "${message.message}"`;
                 const y = participationService.getParticipantsInRoom(null);
-                roomService.getRoom(null).then(roomInfo => {
-                  if (roomInfo.type === "morphologicalroom") { // check out news according to parameters and/or other things to come
-                      const z = mbParameterService.getParameterForRoom(roomInfo.roomId);
-                  }
-                })
+                const x = roomService.getRoom(null);
                 this.refresh();
                 break;
             }
@@ -60,7 +56,22 @@ class IdeaSocketService extends HTMLElement {
             case "new_ideas_in_room": { // notification from backend about new "idea"
                 //console.log("new_ideas_in_room");
                 this.socketStatus = 'new ideas';
-                const x = ideaService.getIdeasByRoomId(this.roomId);
+                const model = store.getValue()
+                if (model.activeRoomId) {
+                    try {
+                        const room = model.rooms.filter(room => room.roomId === this.roomId)[0];
+                        if (room.type === "morphologicalroom") {
+                            const z = morphoService.getParameterForRoom(this.roomId);
+                        }
+                        else {
+                            const x = ideaService.getIdeasByRoomId(this.roomId);
+                        }
+                    }
+                    catch(error) {
+                        console.log(error);
+                        console.log("error while new ideas in sockets")
+                    }
+                }
                 this.refresh();
                 break;
             }

@@ -4,26 +4,36 @@ import path from "./service-const"
 
 
 
-class MBParameterService {
+class MorphoService {
     
 
     async getParameterForRoom(roomId:string){
         //fetch
+        if (!roomId) return null;
+
         const theHeader = new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'Bearer '+ localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/morpho/${roomId}/parameter}`, {
+        const response = await fetch(`${path}/api/morpho/${roomId}/parameter`, {
             headers: theHeader
         });
-        const parameters : MBParameter[] = await response.json();
-        //console.log(rooms);
+        try {
+            const parameters: MBParameter[] = await response.json();
+            console.log("parameters here");
+            console.log(parameters);
 
-        const model = produce(store.getValue(), draft => {
-            draft.parameters = parameters;
-        });
+            const model = produce(store.getValue(), draft => {
+                draft.parameters = parameters;
+            });
 
-        store.next(model);
+            store.next(model);
+        }
+        catch (error) {
+            console.log(`error in getParameterForRoom for ${roomId}`);
+            console.log(error);
+            return null;
+        }
 
     }
 
@@ -59,5 +69,5 @@ class MBParameterService {
 }
 
 
-const mbParameterService = new MBParameterService();
-export default mbParameterService;
+const morphoService = new MorphoService();
+export default morphoService;

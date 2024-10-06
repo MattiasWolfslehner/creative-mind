@@ -1,7 +1,7 @@
 import { html, render } from "lit-html";
 import {MBParameter, store} from "../../model";
 import {distinctUntilChanged, map} from "rxjs";
-import mbParameterService from "../../service/mbparameter-service";
+import morphoService from "../../service/morpho-service";
 
 class MorphologicalBox extends HTMLElement {
 
@@ -93,6 +93,8 @@ class MorphologicalBox extends HTMLElement {
     }
 
     template(activeRoomId:string, parameters: MBParameter[]) {
+        if (!parameters) parameters = [];
+
         return html`
             <style>
                 body {
@@ -206,7 +208,7 @@ class MorphologicalBox extends HTMLElement {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>${parameters?parameters[0].title:"Power System"}</td>
+                            <td>${(parameters.length > 0)?parameters[0].title:"Power System"}</td>
                             <td>Electric</td>
                             <td>Petrol</td>
                             <td>Diesel</td>
@@ -215,7 +217,7 @@ class MorphologicalBox extends HTMLElement {
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Frame System</td>
+                            <td>${(parameters.length > 1)?parameters[1].title:"Frame System"}</td>
                             <td>Vertical</td>
                             <td>Horizontal</td>
                             <td>Vertical/Horizontal</td>
@@ -224,7 +226,7 @@ class MorphologicalBox extends HTMLElement {
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Log Holding</td>
+                            <td>${(parameters.length > 2)?parameters[2].title:"Log Holding"}</td>
                             <td>Clamps</td>
                             <td>Clamps & Groove</td>
                             <td>Groove</td>
@@ -293,7 +295,7 @@ class MorphologicalBox extends HTMLElement {
 
     connectedCallback() {
 
-        const p = mbParameterService.getParameterForRoom(store.getValue().activeRoomId);
+        const p = morphoService.getParameterForRoom(store.getValue().activeRoomId);
         //
         store.pipe(map( model => ({activeRoomId : model.activeRoomId, parameters: model.parameters}) ), distinctUntilChanged())
             .subscribe(morphoRoom => {
