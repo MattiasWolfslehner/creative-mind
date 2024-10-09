@@ -1,12 +1,19 @@
 package com.creative_mind.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.Set;
+
+@NamedQuery(name = Realization.RETURN_REALIZATION_SET, query = "SELECT r FROM Realization r WHERE r.contentId IN :ids")
 @Entity
 public class Realization {
 
+    public static final String RETURN_REALIZATION_SET = "Realization.returnRealizationSet";
+
     @Id
     @GeneratedValue
+    @Column(name = "content_id")
     private int contentId;
 
     private String content;
@@ -14,6 +21,13 @@ public class Realization {
     @ManyToOne
     @JoinColumn(name = "param_id")
     private MBParameter mbParameter;
+
+    @ManyToMany
+    @JoinTable(name = "combination_realization",
+    joinColumns =  @JoinColumn(name = "content_id"),
+    inverseJoinColumns = @JoinColumn(name = "combination_id"))
+    @JsonIgnore
+    private Set<Combination> combinationSet;
 
     public Realization(String content, MBParameter mbParameter) {
         this.content = content;

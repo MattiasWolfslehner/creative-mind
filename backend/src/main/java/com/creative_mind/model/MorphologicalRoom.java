@@ -6,8 +6,12 @@ import java.util.Set;
 
 @Entity
 @DiscriminatorValue("Morphological Room")
-public class MorphologicalRoom extends Room{
+public class MorphologicalRoom extends Room {
+
+    public MorphologicalRoom() {super();}
+
     private static final String ROOM_TYPE = String.valueOf(RoomType.MORPHOLOGICAL);
+
     @Override
     public long getMaxTimerForRoom() {
         return 0;
@@ -15,4 +19,8 @@ public class MorphologicalRoom extends Room{
 
     @OneToMany(mappedBy = "morphologicalRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MBParameter> parameters;
+
+    @OneToMany(mappedBy = "morphologicalRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Combination> combinations;
+
 }

@@ -2,8 +2,10 @@ package com.creative_mind.boundary.rest;
 
 
 import com.creative_mind.manager.RoomManager;
+import com.creative_mind.model.Combination;
 import com.creative_mind.model.MBParameter;
 import com.creative_mind.model.Realization;
+import com.creative_mind.model.requests.CreateCombinationRequest;
 import com.creative_mind.model.requests.ParameterRequest;
 import com.creative_mind.model.requests.RealizationRequest;
 import com.creative_mind.repository.MorphoRepository;
@@ -58,7 +60,7 @@ public class MorphoResource {
     @Path("/realization")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addRealization(RealizationRequest realizationRequest){
+    public Response addRealization(RealizationRequest realizationRequest) {
         //TODO: IMPORTANT! Check Room Type is MB
         Realization realization = this.morphoRepository.addRealization(realizationRequest);
 
@@ -70,9 +72,14 @@ public class MorphoResource {
     //TODO: get all Parameters of one Room + Get all realizations of one room
 
 
-
     //TODO: What to do with Combinations
 
-
-
+    @POST
+    @Path("/combination")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createCombination(CreateCombinationRequest request) {
+        Combination combination = this.morphoRepository.createCombination(request);
+        return Response.ok(combination).build();
+    }
 }
