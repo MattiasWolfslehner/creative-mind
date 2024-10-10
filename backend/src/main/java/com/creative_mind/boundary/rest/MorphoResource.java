@@ -27,6 +27,11 @@ public class MorphoResource {
     @Inject
     MorphoRepository morphoRepository;
 
+    /**
+     * Add a Parameter
+     * @param parameterRequest DTO to create a new Parameter
+     * @return the Parameter status code of the Realization and the Parameter itself
+     */
     @POST
     @Path("/parameter")
     @Produces(MediaType.APPLICATION_JSON)
@@ -40,6 +45,11 @@ public class MorphoResource {
         return Response.ok(parameter).build();
     }
 
+    /**
+     *
+     * @param roomId the UUID of the Room
+     * @return all Parameters and their respective Realizations of the specific room
+     */
     @GET
     @Path("/{roomId}/parameter")
     @Produces(MediaType.APPLICATION_JSON)
@@ -56,6 +66,11 @@ public class MorphoResource {
 
     }
 
+    /**
+     * Add a Realization
+     * @param realizationRequest the DTO to add a Realization
+     * @return the Response status code of the Realization and the Realization itself
+     */
     @POST
     @Path("/realization")
     @Produces(MediaType.APPLICATION_JSON)
@@ -73,7 +88,11 @@ public class MorphoResource {
 
 
     //TODO: What to do with Combinations
-
+    /**
+     *
+     * @param request DTO for the Combination that a specific member of a specific Room creates
+     * @return the Response status code of the Combination and the Combination-DTO itself
+     */
     @POST
     @Path("/combination")
     @Produces(MediaType.APPLICATION_JSON)
