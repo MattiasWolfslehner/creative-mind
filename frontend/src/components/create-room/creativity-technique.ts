@@ -68,18 +68,18 @@ class CreateRoomElement extends HTMLElement {
     </style>
 
     <div id="creativityTechniques">
-        <div id="brainwritingroom" class="technique-container inactive">
+        <!--<div id="brainwritingroom" class="technique-container inactive">
             <h2>6-3-5</h2>
         </div>
         <div id="mindmaproom" class="technique-container inactive">
             <h2>MindMap</h2>
-        </div>
+        </div>-->
         <div id="morphologicalroom" class="technique-container inactive">
             <h2>Morphological Box</h2>
         </div>
-        <div id="brainstormingroom" class="technique-container active">
+        <!--<div id="brainstormingroom" class="technique-container active">
             <h2>Brainstorming</h2>
-        </div>
+        </div>-->
     </div>
 
     <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-around">
