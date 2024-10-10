@@ -1,11 +1,11 @@
 meta {
-  name: ADD REALIZATION
+  name: UPDATE REALIZATION
   type: http
-  seq: 20
+  seq: 22
 }
 
-post {
-  url: http://localhost:8080/api/morpho/realization
+put {
+  url: http://localhost:8080/api/morpho/realization/1
   body: json
   auth: none
 }
@@ -16,8 +16,7 @@ headers {
 
 body:json {
   {
-    "paramId": 1,
-    "content": "Rau"
+    "paramId": 2,
+    "content": "Grün"
   }
-  
 }

@@ -82,6 +82,18 @@ public class MorphoResource {
         return Response.ok(realization).build();
     }
 
+    /**
+     *
+     * @param realizationId the id of the Realization that is to be updated
+     * @param realizationRequest the Realizations content and paramId of the Realization that content needs to be changed
+     */
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/realization/{realizationId}")
+    public void overwriteRealization(@PathParam("realizationId") int realizationId, RealizationRequest realizationRequest){
+        this.morphoRepository.overwriteRealization(realizationId,realizationRequest);
+    }
+
     //TODO: put => update Parameter
 
     //TODO: get all Parameters of one Room + Get all realizations of one room

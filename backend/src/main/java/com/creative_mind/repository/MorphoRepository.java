@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -104,5 +105,15 @@ public class MorphoRepository {
         return new HashSet<>(entityManager.createNamedQuery(Realization.RETURN_REALIZATION_SET, Realization.class)
                 .setParameter("ids", ids)
                 .getResultList());
+    }
+
+    @Transactional
+    public void overwriteRealization(int realizationId, RealizationRequest realizationRequest) {
+        try{
+            Realization realization = this.entityManager.find(Realization.class,realizationId);
+            realization.setContent(realizationRequest.getContent());
+        }catch (Exception ex){
+            throw new NotFoundException();
+        }
     }
 }
