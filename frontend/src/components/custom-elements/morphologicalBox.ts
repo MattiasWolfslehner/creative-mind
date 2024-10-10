@@ -115,29 +115,29 @@ class MorphologicalBox extends HTMLElement {
                 
                 table {
                     border-collapse: collapse;
-                    border: 5px solid #9D75EF;
+                    border: 0.5vw solid #9D75EF;
                     background-color: #8d63d0;
-                    border-radius: 5px;
+                    border-radius: 0.3vw;
                 }
                 
                 thead th, tbody td {
-                    width: 175px;
-                    height: 60px;
-                    font-size: 16pt;
+                    width: 10vw;
+                    height: 7vh;
+                    font-size: 1.5vw;
                     color: white;
-                    border: 5px solid #9D75EF;
+                    border: 0.5vw solid #9D75EF;
                     text-align: center;
                     vertical-align: middle;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    padding: 0 10px;
+                    padding: 0 0.5vw;
                     box-sizing: border-box;
                     cursor: pointer;
                 }
                 
                 thead th {
-                    font-size: 22pt;
+                    font-size: 2vw;
                     font-weight: 600;
                 }
                 
@@ -152,127 +152,128 @@ class MorphologicalBox extends HTMLElement {
                 .selected-3 {
                     background-color: #7EEDE5;
                 }
-
+            
                 .placeholder {
                     opacity: 0.6;
                 }
-
+            
                 .folder-box {
-                    width: 1700px;
-                    height: 600px;
+                    width: 85vw;
+                    height: 60vh;
                     background-color: #8d63d0;
-                    border-radius: 0 10px 10px 10px;
-                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                    border-radius: 0 1vw 1vw 1vw;
+                    box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
                     position: relative;
-                    margin: 50px auto;
+                    margin: 5vh auto;
                 }
-        
+            
                 .folder-tab {
                     position: absolute;
-                    top: -40px;
+                    top: -4vh;
                     left: 0;
-                    width: 300px;
-                    height: 60px;
+                    width: 17vw;
+                    height: auto;
                     background-color: #8d63d0;
-                    border-radius: 10px 10px 0 0;
+                    border-radius: 1vw 1vw 0 0;
                     text-align: center;
                     color: white;
-                    font-size: 24pt;
+                    font-size: 2.4vw;
                     font-weight: bold;
-                    line-height: 60px;
+                    line-height: 6vh;
                 }
-        
+            
                 .folder-body {
-                    padding: 20px;
-                    margin-top: 60px;
+                    padding: 2vw;
+                    margin-top: 6vh;
                 }
-        
+            
                 .combinations {
                     color: #fff;
-                    font-size: 16pt;
+                    font-size: 1.6vw;
                 }
             </style>
-
+            
             <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Parameter</th>
-                            <th>Realization 1</th>
-                            <th>Realization 2</th>
-                            <th>Realization 3</th>
-                            <th>Realization 4</th>
-                            <th>Realization 5</th>
-                            <th>+</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>${(parameters.length > 0)?parameters[0].title:"Power System"}</td>
-                            <td>Electric</td>
-                            <td>Petrol</td>
-                            <td>Diesel</td>
-                            <td class="placeholder">Realization 4</td>
-                            <td class="placeholder">Realization 5</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>${(parameters.length > 1)?parameters[1].title:"Frame System"}</td>
-                            <td>Vertical</td>
-                            <td>Horizontal</td>
-                            <td>Vertical/Horizontal</td>
-                            <td class="placeholder">Realization 4</td>
-                            <td class="placeholder">Realization 5</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>${(parameters.length > 2)?parameters[2].title:"Log Holding"}</td>
-                            <td>Clamps</td>
-                            <td>Clamps & Groove</td>
-                            <td>Groove</td>
-                            <td class="placeholder">Realization 4</td>
-                            <td class="placeholder">Realization 5</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Splitting Device</td>
-                            <td>Saw</td>
-                            <td>Wedge</td>
-                            <td class="placeholder">Realization 3</td>
-                            <td class="placeholder">Realization 4</td>
-                            <td class="placeholder">Realization 5</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Splitting Force</td>
-                            <td>Manual Lever</td>
-                            <td>Pneumatic Ram</td>
-                            <td>Hydraulic Ram</td>
-                            <td>Impact Force</td>
-                            <td>Sawing</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Support/Transport</td>
-                            <td>Wheels</td>
-                            <td>Tyres</td>
-                            <td>Tyres/Spikes</td>
-                            <td>Sledge</td>
-                            <td>Spikes</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td style="font-size: 22pt; font-weight: 600;">+</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Realization 1</th>
+                                <th>Realization 2</th>
+                                <th>Realization 3</th>
+                                <th>Realization 4</th>
+                                <th>Realization 5</th>
+                                <th>+</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${(parameters.length > 0)?parameters[0].title:"Power System"}</td>
+                                <td>Electric</td>
+                                <td>Petrol</td>
+                                <td>Diesel</td>
+                                <td class="placeholder">Realization 4</td>
+                                <td class="placeholder">Realization 5</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>${(parameters.length > 1)?parameters[1].title:"Frame System"}</td>
+                                <td>Vertical</td>
+                                <td>Horizontal</td>
+                                <td>Vertical/Horizontal</td>
+                                <td class="placeholder">Realization 4</td>
+                                <td class="placeholder">Realization 5</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>${(parameters.length > 2)?parameters[2].title:"Log Holding"}</td>
+                                <td>Clamps</td>
+                                <td>Clamps & Groove</td>
+                                <td>Groove</td>
+                                <td class="placeholder">Realization 4</td>
+                                <td class="placeholder">Realization 5</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Splitting Device</td>
+                                <td>Saw</td>
+                                <td>Wedge</td>
+                                <td class="placeholder">Realization 3</td>
+                                <td class="placeholder">Realization 4</td>
+                                <td class="placeholder">Realization 5</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Splitting Force</td>
+                                <td>Manual Lever</td>
+                                <td>Pneumatic Ram</td>
+                                <td>Hydraulic Ram</td>
+                                <td>Impact Force</td>
+                                <td>Sawing</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Support/Transport</td>
+                                <td>Wheels</td>
+                                <td>Tyres</td>
+                                <td>Tyres/Spikes</td>
+                                <td>Sledge</td>
+                                <td>Spikes</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 22pt; font-weight: 600;">+</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>    
+            </div>    
 
             <div style="margin-top: 10vh; display: flex; flex-wrap: wrap; justify-content: space-around">
                 <div id="generateCombinationButton"
@@ -296,7 +297,7 @@ class MorphologicalBox extends HTMLElement {
     connectedCallback() {
 
         const p = morphoService.getParameterForRoom(store.getValue().activeRoomId);
-        //
+        
         store.pipe(map( model => ({activeRoomId : model.activeRoomId, parameters: model.parameters}) ), distinctUntilChanged())
             .subscribe(morphoRoom => {
                 render(this.template(morphoRoom.activeRoomId, morphoRoom.parameters), this.shadowRoot);
