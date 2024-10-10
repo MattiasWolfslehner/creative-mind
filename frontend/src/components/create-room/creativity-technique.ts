@@ -83,7 +83,7 @@ class CreateRoomElement extends HTMLElement {
     </div>
 
     <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-around">
-        <input id="room-name" type="text" class="styled-input" name="" placeholder="enter name of new room">
+        <input id="room-name" type="text" class="styled-input" name="" placeholder="give your room a name">
     </div>
     
     <div style="margin-top: 15vh; display: flex; flex-wrap: wrap; justify-content: space-around">
