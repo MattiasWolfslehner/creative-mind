@@ -11,6 +11,10 @@ public class RealizationRequest {
         this.paramId = paramId;
     }
 
+    public RealizationRequest(String content) {
+        this.content = content;
+    }
+
     public String getContent() {
         return content;
     }

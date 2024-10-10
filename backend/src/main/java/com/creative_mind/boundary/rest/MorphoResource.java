@@ -16,6 +16,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Path("/api/morpho")
@@ -29,6 +30,7 @@ public class MorphoResource {
 
     /**
      * Add a Parameter
+     *
      * @param parameterRequest DTO to create a new Parameter
      * @return the Parameter status code of the Realization and the Parameter itself
      */
@@ -46,7 +48,6 @@ public class MorphoResource {
     }
 
     /**
-     *
      * @param roomId the UUID of the Room
      * @return all Parameters and their respective Realizations of the specific room
      */
@@ -68,6 +69,7 @@ public class MorphoResource {
 
     /**
      * Add a Realization
+     *
      * @param realizationRequest the DTO to add a Realization
      * @return the Response status code of the Realization and the Realization itself
      */
@@ -83,15 +85,14 @@ public class MorphoResource {
     }
 
     /**
-     *
      * @param realizationId the id of the Realization that is to be updated
-     * @param realizationRequest the Realizations content and paramId of the Realization that content needs to be changed
+     * @param realizationRequest the Realizations content that the old one needs to be changed to
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/realization/{realizationId}")
-    public void overwriteRealization(@PathParam("realizationId") int realizationId, RealizationRequest realizationRequest){
-        this.morphoRepository.overwriteRealization(realizationId,realizationRequest);
+    public void overwriteRealization(@PathParam("realizationId") int realizationId, RealizationRequest realizationRequest) {
+        this.morphoRepository.overwriteRealization(realizationId, realizationRequest);
     }
 
     //TODO: put => update Parameter
@@ -100,8 +101,8 @@ public class MorphoResource {
 
 
     //TODO: What to do with Combinations
+
     /**
-     *
      * @param request DTO for the Combination that a specific member of a specific Room creates
      * @return the Response status code of the Combination and the Combination-DTO itself
      */
