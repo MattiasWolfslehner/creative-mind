@@ -6,7 +6,8 @@ import java.util.UUID;
 public class CreateCombinationRequest {
     private UUID morphologicalRoomId;
     private UUID memberId;
-    private Set<Integer> realizationIds;
+
+    private String combinationText;
 
     // Getters and Setters
     public UUID getMorphologicalRoomId() {
@@ -25,11 +26,11 @@ public class CreateCombinationRequest {
         this.memberId = memberId;
     }
 
-    public Set<Integer> getRealizationIds() {
-        return realizationIds;
+    public String getCombinationText() {
+        return combinationText;
     }
 
-    public void setRealizationIds(Set<Integer> realizationIds) {
-        this.realizationIds = realizationIds;
+    public void setCombinationText(String combinationText) {
+        this.combinationText = combinationText;
     }
 }

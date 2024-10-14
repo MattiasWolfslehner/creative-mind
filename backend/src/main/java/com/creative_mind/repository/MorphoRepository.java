@@ -88,12 +88,10 @@ public class MorphoRepository {
         MorphologicalRoom morphologicalRoom = (MorphologicalRoom) room;
         User creatingMember = this.userRepository.getUserByUUID(request.getMemberId());
 
-        Set<Realization> realizations = new HashSet<>(this.findAllRealizationsByIds(request.getRealizationIds()));
-
         Combination combination = new Combination();
         combination.setMorphologicalRoom(morphologicalRoom);
         combination.setMember(creatingMember);
-        combination.setRealizationSet(realizations);
+        combination.setCombinationText(request.getCombinationText());
 
         this.entityManager.persist(combination);
 

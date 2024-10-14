@@ -3,8 +3,6 @@ package com.creative_mind.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.util.Set;
-
 @Entity
 public class Combination {
 
@@ -18,22 +16,16 @@ public class Combination {
     @JoinColumn(name = "room_id")
     private MorphologicalRoom morphologicalRoom;
 
+    private String combinationText;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private User member;
 
-    @ManyToMany
-    @JoinTable(
-            name = "combination_realization",
-            joinColumns = @JoinColumn(name = "combination_id", referencedColumnName = "combination_id"),
-            inverseJoinColumns = @JoinColumn(name = "content_id", referencedColumnName = "content_id"))
-    @JsonIgnore
-    private Set<Realization> realizationSet;
-
-    public Combination(MorphologicalRoom morphologicalRoom, User member, Set<Realization> realizationSet) {
+    public Combination(MorphologicalRoom morphologicalRoom, String combinationText, User member) {
         this.morphologicalRoom = morphologicalRoom;
+        this.combinationText = combinationText;
         this.member = member;
-        this.realizationSet = realizationSet;
     }
 
     public Combination() {
@@ -55,12 +47,12 @@ public class Combination {
         this.member = member;
     }
 
-    public Set<Realization> getRealizationSet() {
-        return realizationSet;
+    public String getCombinationText() {
+        return combinationText;
     }
 
-    public void setRealizationSet(Set<Realization> realizationSet) {
-        this.realizationSet = realizationSet;
+    public void setCombinationText(String combinationText) {
+        this.combinationText = combinationText;
     }
 }
 
