@@ -52,6 +52,7 @@ entity User {
 
 entity Combination {
 * combinationId: Integer
+* combinationText: String
 }
 
 Room <|-- MorphologicalRoom
@@ -68,7 +69,5 @@ Idea "1" -- "*" User
 User "1" -- "*" Participation
 
 MorphologicalRoom "1" -- "*" Combination : generates
-Combination "1" -- "*" Combination_Realization : includes
-Realization "1" -- "*" Combination_Realization : part of
 User "1" -- "*" Combination: creates
 @enduml
