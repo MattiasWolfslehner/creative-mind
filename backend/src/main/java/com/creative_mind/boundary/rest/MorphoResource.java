@@ -68,6 +68,18 @@ public class MorphoResource {
     }
 
     /**
+     *
+     * @param paramId the id of the Parameter that is to be updated
+     * @param parameterRequest the Parameter title that the old one needs to be changed to
+     */
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/parameter/{paramId}")
+    public void overwriteParameter(@PathParam("paramId") int paramId, ParameterRequest parameterRequest) {
+        this.morphoRepository.overwriteParameter(paramId, parameterRequest);
+    }
+
+    /**
      * Add a Realization
      *
      * @param realizationRequest the DTO to add a Realization

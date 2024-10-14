@@ -116,4 +116,14 @@ public class MorphoRepository {
             throw new NotFoundException();
         }
     }
+
+    @Transactional
+    public void overwriteParameter(int paramId, ParameterRequest parameterRequest) {
+        try{
+            MBParameter parameter = this.entityManager.find(MBParameter.class,paramId);
+            parameter.setTitle(parameterRequest.getTitle());
+        }catch (Exception ex){
+            throw new NotFoundException();
+        }
+    }
 }
