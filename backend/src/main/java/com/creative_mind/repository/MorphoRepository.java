@@ -124,4 +124,11 @@ public class MorphoRepository {
             throw new NotFoundException();
         }
     }
+
+    public List<Combination> findCombinationsOfRoom(UUID parsedRoomId) {
+        TypedQuery<Combination> query = this.entityManager.createNamedQuery(Combination.FIND_COMBINATIONS_OF_ROOM, Combination.class);
+        query.setParameter("roomId", parsedRoomId);
+
+        return query.getResultList();
+    }
 }

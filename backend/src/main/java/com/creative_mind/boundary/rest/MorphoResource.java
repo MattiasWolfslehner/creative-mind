@@ -107,13 +107,6 @@ public class MorphoResource {
         this.morphoRepository.overwriteRealization(realizationId, realizationRequest);
     }
 
-    //TODO: put => update Parameter
-
-    //TODO: get all Parameters of one Room + Get all realizations of one room
-
-
-    //TODO: What to do with Combinations
-
     /**
      * @param request DTO for the Combination that a specific member of a specific Room creates
      * @return the Response status code of the Combination and the Combination-DTO itself
@@ -126,4 +119,19 @@ public class MorphoResource {
         Combination combination = this.morphoRepository.createCombination(request);
         return Response.ok(combination).build();
     }
+
+    @GET
+    @Path("/{roomId}/combination")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCombinationsOfRoom(@PathParam("roomId") String roomId){
+        try{
+            UUID parsedRoomId = UUID.fromString(roomId);
+            List<Combination> combinationsOfRoom = this.morphoRepository.findCombinationsOfRoom(parsedRoomId);
+            return Response.ok(combinationsOfRoom).build();
+        } catch (NoResultException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
 }

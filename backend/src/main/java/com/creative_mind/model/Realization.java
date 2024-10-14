@@ -22,13 +22,6 @@ public class Realization {
     @JoinColumn(name = "param_id")
     private MBParameter mbParameter;
 
-    @ManyToMany
-    @JoinTable(name = "combination_realization",
-    joinColumns =  @JoinColumn(name = "content_id"),
-    inverseJoinColumns = @JoinColumn(name = "combination_id"))
-    @JsonIgnore
-    private Set<Combination> combinationSet;
-
     public Realization(String content, MBParameter mbParameter) {
         this.content = content;
         this.mbParameter = mbParameter;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
+@NamedQuery(name = Combination.FIND_COMBINATIONS_OF_ROOM, query = "select c from Combination c where c.morphologicalRoom.roomId = :roomId")
 public class Combination {
 
     @JsonIgnore
@@ -12,8 +13,11 @@ public class Combination {
     @Column(name = "combination_id")
     private int combinationId;
 
+    public static final String FIND_COMBINATIONS_OF_ROOM = "Combination.findCombinationsOfRoom";
+
     @ManyToOne
     @JoinColumn(name = "room_id")
+    @JsonIgnore
     private MorphologicalRoom morphologicalRoom;
 
     private String combinationText;
