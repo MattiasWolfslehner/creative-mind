@@ -17,7 +17,9 @@ class MorphologicalBoxElement extends HTMLElement {
         return html` 
             <div>
                     <room-info-menu></room-info-menu>
+                    <div style="margin-top: 20vh">
                     <morphological-box style="font-family: 'sans-serif'"></morphological-box>
+                    </div>
             </div>
         `;
     }

@@ -19,7 +19,7 @@ const template = (isInRoom : boolean, isRoomList : boolean)=> html`
         }
     </style>
 
-    <h1 id="homeButtonId" @click="${() => {router.navigate("/");}}">Creative Minds</h1>
+    <!--<h1 id="homeButtonId" @click="${() => {router.navigate("/");}}">Creative Minds</h1>-->
     <div>
         <create-room ?hidden = ${(isInRoom || isRoomList)} ></create-room>
         <room-list ?hidden = ${(isInRoom || !isRoomList)} ></room-list>

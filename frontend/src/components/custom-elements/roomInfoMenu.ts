@@ -13,7 +13,7 @@ class RoomInfoMenu extends HTMLElement {
 
 
     template(participations: Participation[], room: Room) {
-        
+
         return html`
             <style>
                 body {
@@ -29,122 +29,134 @@ class RoomInfoMenu extends HTMLElement {
                     color: #fff;
                     text-decoration: none;
                 }
+                
                 #roomInfo {
                     position: absolute;
-                    top: 1vw;
+                    top: 2vw;
                     left: 2vw;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     width: 30vw;
-                    height: 65px;
-                    border-radius: 5px;
+                    height: 6vw;
+                    border-radius: 0.5vw;
                     background-color: #8D63D0;
-                    padding: 0 10px;
+                    padding: 0 1vw;
                     font-family: 'sans-serif';
                     color: white;
+                    font-size: 1.1vw;
                 }
                 #roomInfo div {
-                    padding: 0 1rem;
+                    padding: 0 1vw;
                 }
+                
                 #roomMenu {
                     position: absolute;
-                    top: 1vw;
+                    top: 2vw;
                     left: 35vw;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    width: 15vw;
-                    height: 65px;
-                    border-radius: 5px;
+                    width: 18vw;
+                    height: 6vw;
+                    border-radius: 0.5vw;
                     background-color: #8D63D0;
-                    padding: 0 10px;
+                    padding: 0 1vw;
                     box-sizing: border-box;
                     font-family: 'sans-serif';
-                }        
+                    font-size: 1vw;
+                }
+                
                 .menu-item {
                     display: flex;
                     align-items: center;
-                }        
+                }
+                
                 .burger-menu {
                     display: flex;
                     flex-direction: column;
                     justify-content: space-around;
-                    width: 40px;
-                    height: 24px;
+                    width: 4vw;
+                    height: 2vw;
                     cursor: pointer;
                 }
                 .burger-menu div {
                     width: 100%;
-                    height: 6px;
+                    height: 0.5vw;
                     background-color: #fff;
-                    border-radius: 2px;
-                    margin: 5%;
+                    border-radius: 0.2vw;
+                    margin: 2%;
                 }
+                
                 .member-count {
-                    width: 49px;
-                    height: 49px;
+                    width: 4vw;
+                    height: 4vw;
                     border-radius: 50%;
                     background-color: #fff;
-                    border: 3px solid #7A49C9;
+                    border: 0.3vw solid #7A49C9;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    font-size: 1.5em;
+                    font-size: 1.2vw;
                 }
+                
                 .share-box {
                     display: flex;
                     align-items: center;
-                    width: 141px;
-                    height: 48px;
+                    width: 15vw;
+                    height: 5vw;
                     background-color: #fff;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                    padding: 0 10px;
+                    border-radius: 0.5vw;
+                    box-shadow: 0 0.2vw 0.4vw rgba(0, 0, 0, 0.1);
+                    padding: 0 1vw;
                     box-sizing: border-box;
-                    cursor:pointer;
-                }        
+                    cursor: pointer;
+                }
+                
                 .share-box img {
-                    width: 48px;
-                    height: 48px;
-                    border-radius: 5px;
-                }        
+                    width: 4vw;
+                    height: 4vw;
+                    border-radius: 0.5vw;
+                }
+                
                 .share-box span {
-                    margin-left: 10px;
-                    font-size: 1.5em;
+                    margin-left: 1vw;
+                    font-size: 1.5vw;
                     color: #000;
                 }
+                
                 .tooltip {
                     visibility: hidden;
-                    width: 133px;
+                    width: 13vw;
                     background-color: #555;
                     color: #fff;
                     text-align: center;
-                    border-radius: 5px;
-                    padding: 5px;
+                    border-radius: 0.5vw;
+                    padding: 0.5vw;
                     position: absolute;
                     z-index: 1;
-                    top: 120%;
-                    left: 10.8vw;
+                    top: 110%;
+                    left: 50%;
                     transform: translateX(-50%);
                     opacity: 0;
                     transition: opacity 0.3s;
-                    margin-top: 5px;
-                }        
+                }
+                
                 .share-box:hover .tooltip {
                     visibility: visible;
                     opacity: 1;
-                }        
+                }
+                
                 .tooltip::after {
                     content: "";
                     position: absolute;
-                    top: -18%;
-                    left: 4vw;
+                    top: -0.7vw;
+                    left: 50%;
                     transform: translateX(-50%);
-                    border-width: 5px;
+                    border-width: 0.5vw;
                     border-style: solid;
                     border-color: transparent transparent #555 transparent;
-                }
+                }            
             </style>
             
             <div id="roomInfo">
@@ -155,7 +167,7 @@ class RoomInfoMenu extends HTMLElement {
                     <h2>|<h2>
                 </div>
                 <div>
-                    <h2 id="roomName">${room?(room.name?room.name:"NONAME2"):"NONAME"}</h2>
+                    <h2 id="roomName">${room ? (room.name ? room.name : "NONAME2") : "NONAME"}</h2>
                 </div>
             </div>  
             <div id="roomMenu">
@@ -165,7 +177,7 @@ class RoomInfoMenu extends HTMLElement {
                     <div></div>
                 </div>
                 <div class="menu-item member-count">
-                    ${(participations)?(participations.length):0}
+                    ${(participations) ? (participations.length) : 0}
                 </div>
                 <div class="menu-item share-box" @click="${() => this.shareRoom()}">
                     <img src="https://png.pngtree.com/png-vector/20191004/ourmid/pngtree-person-icon-png-image_1788612.jpg" alt="Person Icon">
@@ -183,16 +195,16 @@ class RoomInfoMenu extends HTMLElement {
             participations: model.participations,
             activeRoomId: model.activeRoomId,
             thisUserId: model.thisUserId
-        })),distinctUntilChanged())
+        })), distinctUntilChanged())
             .subscribe(reduced_model => {
-            const thisRooms = reduced_model.rooms.filter(
-                (room) => room.roomId === reduced_model.activeRoomId
-            );
-            let thisRoom: Room = null;
-            thisRoom = thisRooms[0];
+                const thisRooms = reduced_model.rooms.filter(
+                    (room) => room.roomId === reduced_model.activeRoomId
+                );
+                let thisRoom: Room = null;
+                thisRoom = thisRooms[0];
 
-            render(this.template(reduced_model.participations, thisRoom), this.shadowRoot);
-        });
+                render(this.template(reduced_model.participations, thisRoom), this.shadowRoot);
+            });
     }
 
     shareRoom() {
@@ -201,7 +213,7 @@ class RoomInfoMenu extends HTMLElement {
             alert('Link copied to clipboard!');
         }).catch(err => {
             console.error('Failed to copy: ', err);
-        });        
+        });
     }
 }
 
