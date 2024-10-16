@@ -9,6 +9,7 @@ import com.creative_mind.services.IdeaCsvService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
@@ -73,15 +74,18 @@ public class RoomRepository {
     }
 
     public MorphologicalRoom getMorphoRoomByUUID(UUID morphologicalRoomId) {
+
         TypedQuery<MorphologicalRoom> roomQuery = this.entityManager
                 .createNamedQuery(MorphologicalRoom.GET_ROOM_BY_ROOM_ID, MorphologicalRoom.class);
         roomQuery.setParameter("roomId", morphologicalRoomId);
 
-        MorphologicalRoom room =  roomQuery.getSingleResult();
-
-        if(room == null){
-            throw new CreativeMindException(String.format("No room with [%s] available!", morphologicalRoomId.toString()));
+        MorphologicalRoom room;
+        try {
+            room = roomQuery.getSingleResult();
+        } catch (NoResultException e) {
+            throw new CreativeMindException(String.format("No room with [%s] available!", morphologicalRoomId.toString()), e);
         }
+
         return room;
     }
 
