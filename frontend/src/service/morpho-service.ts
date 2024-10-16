@@ -64,6 +64,34 @@ class MorphoService {
         }
     }
 
+    async saveParameter(title: string, roomId: string) {
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+        });
+
+        const tempJson = JSON.stringify({
+            'title': title,
+            'roomId': roomId
+        })
+            
+        const response = await fetch(`${path}/api/morpho/parameter`, {
+            method: 'POST',
+            headers: theHeader,
+            body: tempJson
+        });
+    
+        try {
+            if (response.ok) {
+                console.log('Parameter successfully sent to backend.');
+            } else {
+                console.error('Failed to send parameter to backend.');
+            }
+        } catch (error) {
+            console.error('Error while sending parameter to backend:', error);
+        }
+    }    
+
     async saveCombination(roomId: string, memberId: string, combination: string) {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
@@ -75,8 +103,6 @@ class MorphoService {
             'memberId': memberId,
             'combinationText': combination
         })
-
-        console.log(tempJson);
             
         const response = await fetch(`${path}/api/morpho/combination`, {
             method: 'POST',

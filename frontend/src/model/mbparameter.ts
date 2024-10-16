@@ -1,4 +1,3 @@
-
 export interface MBParameter {
     "roomId" : string,
     "paramId" : number,

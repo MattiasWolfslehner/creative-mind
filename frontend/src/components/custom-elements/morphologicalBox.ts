@@ -1,6 +1,6 @@
 import { html, render } from "lit-html";
-import {MBParameter, store} from "../../model";
-import {distinctUntilChanged, map} from "rxjs";
+import { MBParameter, store } from "../../model";
+import { distinctUntilChanged, map } from "rxjs";
 import morphoService from "../../service/morpho-service";
 
 class MorphologicalBox extends HTMLElement {
@@ -14,26 +14,26 @@ class MorphologicalBox extends HTMLElement {
     generateCombination() {
         const rows = this.shadowRoot.querySelectorAll('tbody tr');
         const combination = [];
-    
+
         rows.forEach(row => {
             const selectedCell = row.querySelector('.selected-1, .selected-2, .selected-3');
             if (selectedCell && !/Realization \d+/.test(selectedCell.textContent)) {
                 combination.push(selectedCell.textContent.trim());
-            }            
+            }
         });
-    
+
         if (combination.length > 0) {
             const combinations = this.shadowRoot.querySelector('.combinations');
             combinations.innerHTML += `${combination.join(' | ')}<br>`;
-    
+
             console.log(store.getValue().activeRoomId, store.getValue().thisUserId);
-            
+
             morphoService.saveCombination(store.getValue().activeRoomId, store.getValue().thisUserId, combination.toString());
-    
+
         } else {
             console.log("No selection made.");
         }
-    }    
+    }
 
     handleCellClick(event) {
         const clickedCell = event.target;
@@ -60,28 +60,59 @@ class MorphologicalBox extends HTMLElement {
     handleCellDblClick(event) {
         const clickedCell = event.target;
         const row = clickedCell.parentElement;
-        const columnIndex = Array.from(row.children).indexOf(clickedCell);  // Ermitteln der Spaltennummer
-        const rowIndex = Array.from(row.parentElement.children).indexOf(row);  // Ermitteln der Zeilennummer
+        const columnIndex = Array.from(row.children).indexOf(clickedCell);
+        const rowIndex = Array.from(row.parentElement.children).indexOf(row);
     
-        clickedCell.setAttribute('contenteditable', 'true');
-        clickedCell.focus();
+        const previousText = clickedCell.textContent.trim();
     
-        clickedCell.addEventListener('blur', () => {
+        // Aktiviert den Bearbeitungsmodus, aber verhindert mehrfache Listener
+        if (!clickedCell.isBeingEdited) {
+            clickedCell.setAttribute('contenteditable', 'true');
+            clickedCell.isBeingEdited = true;
+            clickedCell.focus();
+        }
+    
+        // Verwende "blur", um den Bearbeitungsmodus zu beenden
+        const handleBlur = async () => {
             clickedCell.removeAttribute('contenteditable');
+            clickedCell.isBeingEdited = false; // Entferne den Bearbeitungsstatus
     
-            if (clickedCell.textContent.trim() === "") {
-                if (columnIndex === 0) {
-                    clickedCell.textContent = `Parameter ${rowIndex + 1}`;
+            // Verwende setTimeout, um sicherzustellen, dass der Text vollständig aktualisiert wurde
+            setTimeout(async () => {
+                let newTitle = clickedCell.textContent.trim();
+    
+                if (newTitle === "") {
+                    // Leerer Wert -> Platzhalter wiederherstellen
+                    if (columnIndex === 0) {
+                        newTitle = `Parameter ${rowIndex + 1}`;
+                    } else {
+                        newTitle = `Realization ${columnIndex}`;
+                    }
+                    clickedCell.classList.add('placeholder');
                 } else {
-                    clickedCell.textContent = `Realization ${columnIndex}`;
+                    clickedCell.classList.remove('placeholder');
                 }
     
-                clickedCell.classList.add('placeholder');
-            } else {
-                clickedCell.classList.remove('placeholder');
-            }
-        });
-    }   
+                // Nur speichern, wenn sich der Parameterwert geändert hat
+                if (columnIndex === 0 && newTitle !== previousText) {
+                    const roomId = store.getValue().activeRoomId;
+    
+                    try {
+                        await morphoService.saveParameter(newTitle, roomId);
+                        console.log(`Parameter "${newTitle}" erfolgreich gespeichert.`);
+                    } catch (error) {
+                        console.error(`Fehler beim Speichern des Parameters: ${error}`);
+                    }
+                }
+            }, 0); // Setzt den Timeout auf 0, um sicherzustellen, dass der DOM aktualisiert wird
+        };
+    
+        // Sicherstellen, dass der "blur"-Listener nur einmal hinzugefügt wird
+        if (!clickedCell.hasBlurListener) {
+            clickedCell.addEventListener('blur', handleBlur, { once: true });
+            clickedCell.hasBlurListener = true; // Setze ein Flag, um Mehrfachhinzufügungen zu verhindern
+        }
+    }    
 
     addClickListeners() {
         const parameters = this.shadowRoot.querySelectorAll('tbody tr:not(:last-child)')
@@ -96,7 +127,7 @@ class MorphologicalBox extends HTMLElement {
         });
     }
 
-    template(activeRoomId:string, parameters: MBParameter[]) {
+    template(activeRoomId: string, parameters: MBParameter[]) {
         if (!parameters) parameters = [];
 
         return html`
@@ -212,7 +243,7 @@ class MorphologicalBox extends HTMLElement {
                         </thead>
                         <tbody>
                             <tr>
-                                <td>${(parameters.length > 0)?parameters[0].title:"Power System"}</td>
+                                <td>${(parameters.length > 0) ? parameters[0].title : "Power System"}</td>
                                 <td>Electric</td>
                                 <td>Petrol</td>
                                 <td>Diesel</td>
@@ -221,7 +252,7 @@ class MorphologicalBox extends HTMLElement {
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>${(parameters.length > 1)?parameters[1].title:"Frame System"}</td>
+                                <td>${(parameters.length > 1) ? parameters[1].title : "Frame System"}</td>
                                 <td>Vertical</td>
                                 <td>Horizontal</td>
                                 <td>Vertical/Horizontal</td>
@@ -230,7 +261,7 @@ class MorphologicalBox extends HTMLElement {
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>${(parameters.length > 2)?parameters[2].title:"Log Holding"}</td>
+                                <td>${(parameters.length > 2) ? parameters[2].title : "Log Holding"}</td>
                                 <td>Clamps</td>
                                 <td>Clamps & Groove</td>
                                 <td>Groove</td>
@@ -300,7 +331,7 @@ class MorphologicalBox extends HTMLElement {
 
     connectedCallback() {
         const p = morphoService.getParameterForRoom(store.getValue().activeRoomId);
-        
+
         store.pipe(
             map(model => ({ activeRoomId: model.activeRoomId, parameters: model.parameters })),
             distinctUntilChanged()
@@ -308,16 +339,16 @@ class MorphologicalBox extends HTMLElement {
             render(this.template(morphoRoom.activeRoomId, morphoRoom.parameters), this.shadowRoot);
             this.addClickListeners();
         });
-    
+
         if (!this.isListenerAdded) {
             const generateCombinationButton = this.shadowRoot.getElementById('generateCombinationButton');
             generateCombinationButton.addEventListener('click', () => {
                 this.generateCombination();
             });
-    
+
             this.isListenerAdded = true;
         }
-    }    
+    }
 }
 
 customElements.define("morphological-box", MorphologicalBox);
