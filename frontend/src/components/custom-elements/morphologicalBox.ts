@@ -4,6 +4,7 @@ import {distinctUntilChanged, map} from "rxjs";
 import morphoService from "../../service/morpho-service";
 
 class MorphologicalBox extends HTMLElement {
+    isListenerAdded: any;
 
     constructor() {
         super();
@@ -13,21 +14,26 @@ class MorphologicalBox extends HTMLElement {
     generateCombination() {
         const rows = this.shadowRoot.querySelectorAll('tbody tr');
         const combination = [];
-
+    
         rows.forEach(row => {
             const selectedCell = row.querySelector('.selected-1, .selected-2, .selected-3');
             if (selectedCell && !/Realization \d+/.test(selectedCell.textContent)) {
                 combination.push(selectedCell.textContent.trim());
             }            
         });
-
+    
         if (combination.length > 0) {
             const combinations = this.shadowRoot.querySelector('.combinations');
             combinations.innerHTML += `${combination.join(' | ')}<br>`;
+    
+            console.log(store.getValue().activeRoomId);
+            
+            morphoService.saveCombination(store.getValue().activeRoomId, combination);
+    
         } else {
             console.log("No selection made.");
         }
-    }
+    }    
 
     handleCellClick(event) {
         const clickedCell = event.target;
@@ -54,8 +60,8 @@ class MorphologicalBox extends HTMLElement {
     handleCellDblClick(event) {
         const clickedCell = event.target;
         const row = clickedCell.parentElement;
-        const columnIndex = Array.from(row.children).indexOf(clickedCell);
-        const rowIndex = Array.from(row.parentElement.children).indexOf(row);
+        const columnIndex = Array.from(row.children).indexOf(clickedCell);  // Ermitteln der Spaltennummer
+        const rowIndex = Array.from(row.parentElement.children).indexOf(row);  // Ermitteln der Zeilennummer
     
         clickedCell.setAttribute('contenteditable', 'true');
         clickedCell.focus();
@@ -75,9 +81,7 @@ class MorphologicalBox extends HTMLElement {
                 clickedCell.classList.remove('placeholder');
             }
         });
-    }
-    
-    
+    }   
 
     addClickListeners() {
         const parameters = this.shadowRoot.querySelectorAll('tbody tr:not(:last-child)')
@@ -277,7 +281,7 @@ class MorphologicalBox extends HTMLElement {
 
             <div style="margin-top: 10vh; display: flex; flex-wrap: wrap; justify-content: space-around">
                 <div id="generateCombinationButton"
-                    style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
+                    style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; font-size: 1.1vw; margin-bottom: 20px; border-radius: 10px; cursor: pointer">
                     <h2 style="user-select: none">Save Combination</h2>
                 </div>
             </div>
@@ -295,19 +299,25 @@ class MorphologicalBox extends HTMLElement {
     }
 
     connectedCallback() {
-
         const p = morphoService.getParameterForRoom(store.getValue().activeRoomId);
         
-        store.pipe(map( model => ({activeRoomId : model.activeRoomId, parameters: model.parameters}) ), distinctUntilChanged())
-            .subscribe(morphoRoom => {
-                render(this.template(morphoRoom.activeRoomId, morphoRoom.parameters), this.shadowRoot);
-                this.addClickListeners();
-                const generateCombinationButton = this.shadowRoot.getElementById('generateCombinationButton');
-                generateCombinationButton.addEventListener('click', () => {
-                    this.generateCombination();
-                });
+        store.pipe(
+            map(model => ({ activeRoomId: model.activeRoomId, parameters: model.parameters })),
+            distinctUntilChanged()
+        ).subscribe(morphoRoom => {
+            render(this.template(morphoRoom.activeRoomId, morphoRoom.parameters), this.shadowRoot);
+            this.addClickListeners();
+        });
+    
+        if (!this.isListenerAdded) {
+            const generateCombinationButton = this.shadowRoot.getElementById('generateCombinationButton');
+            generateCombinationButton.addEventListener('click', () => {
+                this.generateCombination();
             });
-    }
+    
+            this.isListenerAdded = true;
+        }
+    }    
 }
 
 customElements.define("morphological-box", MorphologicalBox);
