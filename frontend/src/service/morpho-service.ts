@@ -3,7 +3,6 @@ import { MBParameter, store } from "../model"
 import path from "./service-const"
 
 class MorphoService {
-
     async getParameterForRoom(roomId: string) {
         //fetch
         if (!roomId) return null;
@@ -61,6 +60,34 @@ class MorphoService {
         catch (error) {
             console.log(`Error in createParameterForRoom ${error}`);
             return null;
+        }
+    }
+
+    async saveRealization(paramId: number, content: string) {
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+        });
+
+        const tempJson = JSON.stringify({
+            'paramId': paramId,
+            'content': content
+        })
+            
+        const response = await fetch(`${path}/api/morpho/realization`, {
+            method: 'POST',
+            headers: theHeader,
+            body: tempJson
+        });
+    
+        try {
+            if (response.ok) {
+                console.log('Realization successfully sent to backend.');
+            } else {
+                console.error('Failed to send realization to backend.');
+            }
+        } catch (error) {
+            console.error('Error while sending realization to backend:', error);
         }
     }
 

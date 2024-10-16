@@ -93,15 +93,20 @@ class MorphologicalBox extends HTMLElement {
                     clickedCell.classList.remove('placeholder');
                 }
     
-                // Nur speichern, wenn sich der Parameterwert geändert hat
+                const roomId = store.getValue().activeRoomId;
                 if (columnIndex === 0 && newTitle !== previousText) {
-                    const roomId = store.getValue().activeRoomId;
-    
                     try {
                         await morphoService.saveParameter(newTitle, roomId);
                         console.log(`Parameter "${newTitle}" erfolgreich gespeichert.`);
                     } catch (error) {
                         console.error(`Fehler beim Speichern des Parameters: ${error}`);
+                    }
+                } else if (columnIndex !== 0 && newTitle !== previousText) {
+                    try {
+                        await morphoService.saveRealization(columnIndex, newTitle);
+                        console.log(`Realization "${newTitle}" erfolgreich gespeichert.`);
+                    } catch (error) {
+                        console.error(`Fehler beim Speichern der Realization: ${error}`);
                     }
                 }
             }, 0); // Setzt den Timeout auf 0, um sicherzustellen, dass der DOM aktualisiert wird
@@ -331,6 +336,7 @@ class MorphologicalBox extends HTMLElement {
 
     connectedCallback() {
         const p = morphoService.getParameterForRoom(store.getValue().activeRoomId);
+        console.log('Parameters are: ',p);        
 
         store.pipe(
             map(model => ({ activeRoomId: model.activeRoomId, parameters: model.parameters })),
