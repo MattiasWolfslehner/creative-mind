@@ -2,18 +2,15 @@ import { produce } from "immer"
 import { MBParameter, store } from "../model"
 import path from "./service-const"
 
-
-
 class MorphoService {
-    
 
-    async getParameterForRoom(roomId:string){
+    async getParameterForRoom(roomId: string) {
         //fetch
         if (!roomId) return null;
 
         const theHeader = new Headers({
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
         const response = await fetch(`${path}/api/morpho/${roomId}/parameter`, {
             headers: theHeader
@@ -37,12 +34,12 @@ class MorphoService {
 
     }
 
-    async createParameterForRoom(roomId : string, title: string) : Promise<MBParameter> {
+    async createParameterForRoom(roomId: string, title: string): Promise<MBParameter> {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/morpho/parameter`,{
+        const response = await fetch(`${path}/api/morpho/parameter`, {
             method: 'POST',
             headers: theHeader,
             body: JSON.stringify({
@@ -66,8 +63,33 @@ class MorphoService {
             return null;
         }
     }
-}
 
+    async saveCombination(roomId: string, combination: string[]) {
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+        });
+    
+        const response = await fetch(`${path}/api/morpho/combination`, {
+            method: 'POST',
+            headers: theHeader,
+            body: JSON.stringify({
+                roomId: roomId,
+                combination: combination
+            })
+        });
+    
+        try {
+            if (response.ok) {
+                console.log('Combination successfully sent to backend.');
+            } else {
+                console.error('Failed to send combination to backend.');
+            }
+        } catch (error) {
+            console.error('Error while sending combination to backend:', error);
+        }
+    }    
+}
 
 const morphoService = new MorphoService();
 export default morphoService;
