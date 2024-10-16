@@ -75,7 +75,7 @@ public class RoomRepository {
     public MorphologicalRoom getMorphoRoomByUUID(UUID morphologicalRoomId) {
         TypedQuery<MorphologicalRoom> roomQuery = this.entityManager
                 .createNamedQuery(MorphologicalRoom.GET_ROOM_BY_ROOM_ID, MorphologicalRoom.class);
-        roomQuery.setParameter("roomId", morphologicalRoomId.toString());
+        roomQuery.setParameter("roomId", morphologicalRoomId);
 
         MorphologicalRoom room =  roomQuery.getSingleResult();
 
