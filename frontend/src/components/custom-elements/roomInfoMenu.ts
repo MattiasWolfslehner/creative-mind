@@ -57,7 +57,7 @@ class RoomInfoMenu extends HTMLElement {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    width: 18vw;
+                    width: 30vw;
                     height: 6vw;
                     border-radius: 0.5vw;
                     background-color: #8D63D0;
