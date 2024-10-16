@@ -64,19 +64,24 @@ class MorphoService {
         }
     }
 
-    async saveCombination(roomId: string, combination: string[]) {
+    async saveCombination(roomId: string, memberId: string, combination: string) {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-    
+
+        const tempJson = JSON.stringify({
+            'morphologicalRoomId': roomId,
+            'memberId': memberId,
+            'combinationText': combination
+        })
+
+        console.log(tempJson);
+            
         const response = await fetch(`${path}/api/morpho/combination`, {
             method: 'POST',
             headers: theHeader,
-            body: JSON.stringify({
-                roomId: roomId,
-                combination: combination
-            })
+            body: tempJson
         });
     
         try {

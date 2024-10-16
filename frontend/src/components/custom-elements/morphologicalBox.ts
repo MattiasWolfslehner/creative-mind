@@ -26,9 +26,9 @@ class MorphologicalBox extends HTMLElement {
             const combinations = this.shadowRoot.querySelector('.combinations');
             combinations.innerHTML += `${combination.join(' | ')}<br>`;
     
-            console.log(store.getValue().activeRoomId);
+            console.log(store.getValue().activeRoomId, store.getValue().thisUserId);
             
-            morphoService.saveCombination(store.getValue().activeRoomId, combination);
+            morphoService.saveCombination(store.getValue().activeRoomId, store.getValue().thisUserId, combination.toString());
     
         } else {
             console.log("No selection made.");
