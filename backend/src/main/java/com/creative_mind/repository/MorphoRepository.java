@@ -77,19 +77,12 @@ public class MorphoRepository {
     @Transactional
     public Combination createCombination(CreateCombinationRequest request) {
         // Fetch the room by UUID
-        Room room = this.roomRepository.getRoomByUUID(request.getMorphologicalRoomId());
+        MorphologicalRoom room = this.roomRepository.getMorphoRoomByUUID(request.getMorphologicalRoomId());
 
-        // Check if the room is a MorphologicalRoom
-        if (!(room instanceof MorphologicalRoom)) {
-            throw new IllegalArgumentException("The room is not a MorphologicalRoom");
-        }
-
-        // Cast room to MorphologicalRoom
-        MorphologicalRoom morphologicalRoom = (MorphologicalRoom) room;
         User creatingMember = this.userRepository.getUserByUUID(request.getMemberId());
 
         Combination combination = new Combination();
-        combination.setMorphologicalRoom(morphologicalRoom);
+        combination.setMorphologicalRoom(room);
         combination.setMember(creatingMember);
         combination.setCombinationText(request.getCombinationText());
 

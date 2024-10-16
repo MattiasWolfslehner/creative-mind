@@ -1,6 +1,7 @@
 package com.creative_mind.repository;
 
 import com.creative_mind.exception.CreativeMindException;
+import com.creative_mind.model.MorphologicalRoom;
 import com.creative_mind.model.Room;
 import com.creative_mind.model.RoomStatus;
 import com.creative_mind.model.requests.RoomRequest;
@@ -67,6 +68,19 @@ public class RoomRepository {
 
         if(room == null){
             throw new CreativeMindException(String.format("No room with [%s] available!", uuid.toString()));
+        }
+        return room;
+    }
+
+    public MorphologicalRoom getMorphoRoomByUUID(UUID morphologicalRoomId) {
+        TypedQuery<MorphologicalRoom> roomQuery = this.entityManager
+                .createNamedQuery(MorphologicalRoom.GET_ROOM_BY_ROOM_ID, MorphologicalRoom.class);
+        roomQuery.setParameter("roomId", morphologicalRoomId);
+
+        MorphologicalRoom room =  roomQuery.getSingleResult();
+
+        if(room == null){
+            throw new CreativeMindException(String.format("No room with [%s] available!", morphologicalRoomId.toString()));
         }
         return room;
     }

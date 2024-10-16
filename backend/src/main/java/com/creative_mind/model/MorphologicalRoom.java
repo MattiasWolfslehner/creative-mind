@@ -6,8 +6,9 @@ import java.util.Set;
 
 @Entity
 @DiscriminatorValue("Morphological Room")
+@NamedQuery(name = MorphologicalRoom.GET_ROOM_BY_ROOM_ID, query = "select r from MorphologicalRoom r where r.roomId = :roomId")
 public class MorphologicalRoom extends Room {
-
+    public static final String GET_ROOM_BY_ROOM_ID = "MorphologicalRoom.getRoomByRoomId";
     public MorphologicalRoom() {super();}
 
     private static final String ROOM_TYPE = String.valueOf(RoomType.MORPHOLOGICAL);
