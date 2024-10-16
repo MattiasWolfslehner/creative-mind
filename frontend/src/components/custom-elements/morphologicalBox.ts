@@ -4,12 +4,33 @@ import { distinctUntilChanged, map } from "rxjs";
 import morphoService from "../../service/morpho-service";
 
 class MorphologicalBox extends HTMLElement {
-    isListenerAdded: any;
+    isListenerAdded: boolean;
+    parametersSaved: boolean;
 
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
+        this.parametersSaved = false;
     }
+
+    async saveAllParameters() {
+        const rows = this.shadowRoot.querySelectorAll('tbody tr');
+        const roomId = store.getValue().activeRoomId;
+    
+        for (let i = 0; i < rows.length; i++) {
+            const parameterCell = rows[i].querySelector('td:first-child');
+            const parameterTitle = parameterCell.textContent.trim();
+    
+            if (parameterTitle && !/Parameter \d+/.test(parameterTitle)) {
+                try {
+                    await morphoService.saveParameter(parameterTitle, roomId);
+                    console.log(`Parameter "${parameterTitle}" erfolgreich gespeichert.`);
+                } catch (error) {
+                    console.error(`Fehler beim Speichern des Parameters "${parameterTitle}": ${error}`);
+                }
+            }
+        }
+    }    
 
     generateCombination() {
         const rows = this.shadowRoot.querySelectorAll('tbody tr');
@@ -344,6 +365,11 @@ class MorphologicalBox extends HTMLElement {
         ).subscribe(morphoRoom => {
             render(this.template(morphoRoom.activeRoomId, morphoRoom.parameters), this.shadowRoot);
             this.addClickListeners();
+
+            if (!this.parametersSaved) {
+                this.saveAllParameters();
+                this.parametersSaved = true;
+            }
         });
 
         if (!this.isListenerAdded) {
