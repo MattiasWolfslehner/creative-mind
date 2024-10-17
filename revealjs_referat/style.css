@@ -1,0 +1,35 @@
+.pic_div {
+    padding: 5vw;
+    background-color: #ffffff;
+    border-radius: 50%;
+}
+.div_flex {
+    display: flex
+}
+#div_main {
+    text-align: center;
+    margin-left: 5%;
+    margin-top: 10%
+}
+#logo {
+    width: 50%;
+    height: auto;
+    border-radius: 10%;
+}
+#erd {
+    width: 70%;
+    height: auto;
+    margin-top: 0%;
+    padding-right: 10%
+}
+li {
+    font-size: 75%;
+}
+.bold {
+    font-weight: bold
+}
+#h2_erd {
+    text-align: center;
+    margin-top: 35%
+}
+

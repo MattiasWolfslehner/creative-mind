@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<style>
+		li {
+			font-size: 75%;
+		}
+		.pic_div {
+			padding: 5vw;
+			background-color: #ffffff;
+			border-radius: 50%;
+		}
+	</style>
+	<body>
+		<div class="reveal">			
+			<div class="slides">
+				<section>
+					<h1>Creative Minds</h1>
+					<div style="display: flex">
+						<img src="./img/logo black.png" width="50%" height="auto" style="border-radius: 10%">
+						<div style="text-align: center; margin-left: 5%; margin-top: 10%" >
+							<p style="font-weight: bold">Projekt der HTL Leonding</p>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h2>Die erste Software Lösung für den Morphologischen Kasten!</h2>
+				</section>
+
+				<section>
+					<h2>Team</h2>
+					<div style="display: flex">
+						<div>
+							<p>Schnalzenberger Isabel</p>
+							<p>Projekt Leiter & Entwickler</p>
+						</div>
+						<div>
+							<p>Ursprung Christoph</p>
+							<p>Frontend Entwickler</p>
+						</div>
+						<div>
+							<p>Wolfslehner Mattias</p>
+							<p>Backend Entwickler</p>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h2>Morphologischer Kasten</h2>
+					<ul>
+						<li>Auch Zwicky-Box genannt</li>
+						<li>Eine Kreativitätsmethode zur Problemlösung</li>
+						<li>Erfunden von Fritz Zwicky in den 1960er Jahren</li>
+						<li>Ziel: Mehrdimensionale Probleme in Parameter und Ausprägungen zerlegen</li>
+						<li>
+							<ul><li>-> Neue Lösungsansätze finden</li></ul>
+						</li>
+						<li>Systematische Analyse der Parameter schafft eine objektive Entscheidungsbasis</li>
+						<li> Begriff:
+							<ul>
+								<li>Morphologisch: Verschiedene Formen des Problems untersuchen</li>
+								<li>Kasten: Zentrale Morphologische Matrix</li>
+							</ul>
+						</li>
+						<li>Anforderung: Zentrale Speicherung der Parameter und Ausprägungen für das Team</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Ausgangssituation</h2>
+					<ul>
+						<li>Hoher Aufwand bei nachträglicher Digitalisierung analoger Projekte</li>
+						<li>Erschwerte Zusammenarbeit durch Home-Office und internationale Strukturen</li>
+						<li>Gemeinsame Ideenfindung wird durch genannte Faktoren behindert</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Ziel</h2>
+					<ul>
+						<li>Auflösung der genannten Probleme</li>
+						<li>Die erste Website zu programmieren die eine Zwicky-Box anbietet</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Architektur</h2>
+					<div class="pic_div"><img src="./img/architektur.png"></div>
+				</section>
+				
+				<section style="padding: 0%;">
+					<div style="display: flex; padding-left: 10%">
+						<img src="./img/erd.png" width="70%" style="margin-top: 0%; padding-right: 10%">
+						<h2 style="text-align: center; margin-top: 35%">ERD</h2>
+					</div>
+				</section>
+				
+				<section>
+					<section><h2>Live Demo</h2></section>
+					<section><img src="./img/main_page.png"></section>
+					<section><img src="./img/rooms.png"></section>
+					<section><img src="./img/create_rooms.png" alt="create rooms"></section>
+					<section><img src="./img/morphokasten.png"></section>
+					<section><img src="./img/morphokasten_wahl.png"></section>
+					<section><img src="./img/morphokasten_combi.png"></section>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>

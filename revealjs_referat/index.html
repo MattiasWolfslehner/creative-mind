@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<div class="reveal">			
+			<div class="slides">
+				<section>
+					<h1>Creative Minds</h1>
+					<div class="div_flex">
+						<img id="logo" src="./img/logo black.png">
+						<div id="div_main">
+							<p class="bold">Projekt der HTL Leonding</p>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h2 class="bold">Die erste Software Lösung für den Morphologischen Kasten!</h2>
+				</section>
+
+				<section>
+					<h2>Team</h2>
+					<div class="div_flex">
+						<div>
+							<p class="bold">Schnalzenberger Isabel</p>
+							<p>Projekt Leiter & Entwickler</p>
+						</div>
+						<div>
+							<p class="bold">Ursprung Christoph</p>
+							<p>Frontend Entwickler</p>
+						</div>
+						<div>
+							<p class="bold">Wolfslehner Mattias</p>
+							<p>Backend Entwickler</p>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h2>Morphologischer Kasten</h2>
+					<ul>
+						<li>Auch Zwicky-Box genannt</li>
+						<li>Eine Kreativitätsmethode zur Problemlösung</li>
+						<li>Erfunden von Fritz Zwicky in den 1960er Jahren</li>
+						<li>Ziel: Mehrdimensionale Probleme in Parameter und Ausprägungen zerlegen</li>
+						<li>
+							<ul><li>-> Neue Lösungsansätze finden</li></ul>
+						</li>
+						<li>Systematische Analyse der Parameter schafft eine objektive Entscheidungsbasis</li>
+						<li> Begriff:
+							<ul>
+								<li>Morphologisch: Verschiedene Formen des Problems untersuchen</li>
+								<li>Kasten: Zentrale Morphologische Matrix</li>
+							</ul>
+						</li>
+						<li>Anforderung: Zentrale Speicherung der Parameter und Ausprägungen für das Team</li>
+					</ul>
+				</section>
+				
+				<section>
+					<h2>Ausgangssituation</h2>
+					<ul>
+						<li>Hoher Aufwand bei nachträglicher Digitalisierung analoger Projekte</li>
+						<li>Erschwerte Zusammenarbeit durch Home-Office und internationale Strukturen</li>
+						<li>Gemeinsame Ideenfindung wird durch genannte Faktoren behindert</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Ziel</h2>
+					<ul>
+						<li>Auflösung der genannten Probleme</li>
+						<li>Die erste Website zu programmieren die eine Zwicky-Box anbietet</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Architektur</h2>
+					<div class="pic_div"><img src="./img/architektur.png"></div>
+				</section>
+				
+				<section>
+					<div class="div_flex">
+						<img id="erd" src="./img/erd.png">
+						<h2 id="h2_erd">ERD</h2>
+					</div>
+				</section>
+				
+				<section>
+					<section><h2>Live Demo</h2></section>
+					<section><img src="./img/main_page.png"></section>
+					<section><img src="./img/rooms.png"></section>
+					<section><img src="./img/create_rooms.png" alt="create rooms"></section>
+					<section><img src="./img/morphokasten.png"></section>
+					<section><img src="./img/morphokasten_wahl.png"></section>
+					<section><img src="./img/morphokasten_combi.png"></section>
+				</section>
+
+				<section>
+					<h2>VIELEN DANK FÜR IHRE AUFMERKSAMKEIT</h2>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
