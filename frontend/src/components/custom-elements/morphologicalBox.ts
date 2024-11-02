@@ -60,9 +60,7 @@ class MorphologicalBox extends HTMLElement {
     addNewParameterRow(event) {
         console.log("addNewParameterRow");
         const clickedCell = event.target;
-        const row = clickedCell.closest('tr');
-        const cells = row.querySelectorAll('td');
-        const rowIndex = Array.from(row.parentElement.children).indexOf(row);
+        const xxx = morphoService.saveParameter("newP", store.getValue().activeRoomId);
     }
 
 
@@ -182,10 +180,16 @@ class MorphologicalBox extends HTMLElement {
         });
     }
 
-    generateRealizations(p: MBParameter) {
-        return p.realizations.map((r: MBRealization) =>
-            html`<td "content_id" = ${r.content_id}>${r.content}</td>`
+    generateRealizations(p: MBParameter, realisations: number) {
+        let rrr =  p.realizations.map((r: MBRealization) =>
+            html`<td "content_id"="${r.content_id}">${r.content}</td>`
         );
+        let i = p.realizations.length;
+        for (;i<realisations;i++) {
+            rrr.push(html`
+                <td "content_id"="-1"></td>`);
+        }
+        return rrr;
     }
 
     template(activeRoomId: string, parameters: MBParameter[]) {
@@ -321,7 +325,7 @@ class MorphologicalBox extends HTMLElement {
         const parameterrows = parameters.map((p: MBParameter) =>
            html`<tr>
                <td>${p.title}</td>
-               ${this.generateRealizations(p)}
+               ${this.generateRealizations(p, realizations)}
                 </tr>`
         );
 
