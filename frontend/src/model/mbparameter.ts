@@ -1,5 +1,7 @@
+import {MBRealization} from "./mbrealization";
+
 export interface MBParameter {
-    "roomId" : string,
     "paramId" : number,
     "title": string,
+    "realizations": MBRealization[]
 }

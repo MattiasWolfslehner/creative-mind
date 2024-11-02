@@ -8,6 +8,7 @@ import "../brainwriting/brainwriting"
 import "../brainstorming/brainstorming"
 import "../morphologicalbox/morphologicalbox"
 import {distinctUntilChanged, map} from "rxjs";
+import morphoService from "../../service/morpho-service";
 
 
 class StatefullRoom extends HTMLElement {
@@ -46,7 +47,6 @@ class StatefullRoom extends HTMLElement {
                 idxOfSign = data.roomId.length;
             }
             this.roomId = data.roomId.substring(0,idxOfSign);
-            var roomType = '';
 
             const room: Promise<void | Room> = roomService.getRoom(this.roomId).then(value => {
                 const model = produce(store.getValue(), draft => {
@@ -55,31 +55,35 @@ class StatefullRoom extends HTMLElement {
                     }
                     else {
                         draft.activeRoomId = '';
+                        draft.parameters = [];
+                        draft.ideas = [];
                     }
                 });
                 store.next(model);
             });
 
             if (this.roomId) {
-                // load ideas for rooms
+                // load ideas for rooms initially
                 const ideas = ideaService.getIdeasByRoomId(this.roomId);
-
-                // get Room from store
-                store.pipe(map(model => ({rooms: model.rooms, thisUserId: model.thisUserId})), distinctUntilChanged())
-                    .subscribe(reduced_model => {
-                        //console.log('model in statefullroom:', this.roomId);
-                        const room = reduced_model.rooms.find(r => r.roomId === this.roomId);
-                        if (room) {
-                            roomType = room.type;
-                        } else {
-                            roomType = '';
-                        }
-
-                        render(this.template(roomType, this.roomId, reduced_model.thisUserId), this.shadowRoot);
-                    });
+                const p = morphoService.getParameterForRoom(this.roomId);
             }
         });
 
+
+        var roomType = '';
+        // get Room from store
+        store.pipe(map(model => ({rooms: model.rooms, thisUserId: model.thisUserId})), distinctUntilChanged())
+            .subscribe(reduced_model => {
+                //console.log('model in statefullroom:', this.roomId);
+                const room = reduced_model.rooms.find(r => r.roomId === this.roomId);
+                if (room) {
+                    roomType = room.type;
+                } else {
+                    roomType = '';
+                }
+
+                render(this.template(roomType, this.roomId, reduced_model.thisUserId), this.shadowRoot);
+            });
     }    
 }
 

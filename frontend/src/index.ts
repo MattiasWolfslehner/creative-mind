@@ -10,6 +10,8 @@ router.on('/', () => {
     const model = produce(store.getValue(), draft => {
         draft.isRoomList = false;
         draft.activeRoomId = "";
+        draft.ideas = [];
+        draft.parameters = [];
     });
     store.next(model);
 });
@@ -18,6 +20,8 @@ router.on('', () => {
     const model = produce(store.getValue(), draft => {
         draft.isRoomList = false;
         draft.activeRoomId = "";
+        draft.ideas = [];
+        draft.parameters = [];
     });
     store.next(model);
 });

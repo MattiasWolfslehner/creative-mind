@@ -1,7 +1,8 @@
-import { html, render } from "lit-html";
-import { MBParameter, store } from "../../model";
-import { distinctUntilChanged, map } from "rxjs";
+import {html, render} from "lit-html";
+import {MBParameter, store} from "../../model";
+import {distinctUntilChanged, map} from "rxjs";
 import morphoService from "../../service/morpho-service";
+import {MBRealization} from "../../model/mbrealization";
 
 class MorphologicalBox extends HTMLElement {
     isListenerAdded: boolean;
@@ -10,18 +11,18 @@ class MorphologicalBox extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
-        this.parametersSaved = false;
+        this.parametersSaved = false; // TODO: Must be true later on (when loading nothing changed)
     }
 
     async saveAllParameters() {
         const rows = this.shadowRoot.querySelectorAll('tbody tr');
         const roomId = store.getValue().activeRoomId;
-    
+        console.log(`room now ${roomId}`);
         for (let i = 0; i < rows.length; i++) {
             const parameterCell = rows[i].querySelector('td:first-child');
             const parameterTitle = parameterCell.textContent.trim();
     
-            if (parameterTitle && !/Parameter \d+/.test(parameterTitle)) {
+            if (parameterTitle && !/Parameter|\+/.test(parameterTitle)) {
                 try {
                     await morphoService.saveParameter(parameterTitle, roomId);
                     console.log(`Parameter "${parameterTitle}" erfolgreich gespeichert.`);
@@ -56,7 +57,17 @@ class MorphologicalBox extends HTMLElement {
         }
     }
 
+    addNewParameterRow(event) {
+        console.log("addNewParameterRow");
+        const clickedCell = event.target;
+        const row = clickedCell.closest('tr');
+        const cells = row.querySelectorAll('td');
+        const rowIndex = Array.from(row.parentElement.children).indexOf(row);
+    }
+
+
     handleCellClick(event) {
+        console.log("cell click");
         const clickedCell = event.target;
         const row = clickedCell.closest('tr');
         const cells = row.querySelectorAll('td');
@@ -143,20 +154,45 @@ class MorphologicalBox extends HTMLElement {
     addClickListeners() {
         const parameters = this.shadowRoot.querySelectorAll('tbody tr:not(:last-child)')
         parameters.forEach(param => {
-            param.addEventListener('dblclick', (event) => this.handleCellDblClick(event));
+            if(param.getAttribute("listener") !== "true") {
+                param.addEventListener('dblclick', (event) => this.handleCellDblClick(event));
+            }
         })
         const cells = this.shadowRoot.querySelectorAll('tbody tr:not(:last-child) td:not(:first-child):not(:last-child)');
         cells.forEach(cell => {
-            cell.addEventListener('click', (event) => this.handleCellClick(event));
+            if(cell.getAttribute("listener") !== "true") {
+                cell.addEventListener('click', (event) => this.handleCellClick(event));
 
-            cell.addEventListener('dblclick', (event) => this.handleCellDblClick(event));
+                cell.addEventListener('dblclick', (event) => this.handleCellDblClick(event));
+            }
         });
+        const cells2 = this.shadowRoot.querySelectorAll('tbody tr:last-child td:first-child');
+        cells2.forEach(cell => {
+            if(cell.getAttribute("listener") !== "true") {
+                console.log("add P Listener for", cell);
+                cell.addEventListener('click', (event) => this.addNewParameterRow(event));
+            }
+        });
+        const cells3 = this.shadowRoot.querySelectorAll('thead tr td:last-child');
+        cells3.forEach(cell => {
+            if(cell.getAttribute("listener") !== "true") {
+                console.log("add R Listener for", cell);
+                //cell.addEventListener('click', (event) => this.addNewRealisation(event));
+            }
+        });
+    }
+
+    generateRealizations(p: MBParameter) {
+        return p.realizations.map((r: MBRealization) =>
+            html`<td "content_id" = ${r.content_id}>${r.content}</td>`
+        );
     }
 
     template(activeRoomId: string, parameters: MBParameter[]) {
         if (!parameters) parameters = [];
+        console.log(parameters);
 
-        return html`
+        const component_header = html`
             <style>
                 body {
                     background-color: #9D75EF;
@@ -256,6 +292,18 @@ class MorphologicalBox extends HTMLElement {
             
             <div class="table-container">
                     <table>
+                        `;
+
+
+        // const ideaTemplates = ideas.map((idea: Idea) =>
+        //     this.checkShowIdeaInRoom(idea, room, userId)
+        //         ? html`<div style="background-color: ${this.getRandomColor()};"><p>${idea.content}  \n <span style="font-size: smaller">(${this.getUserName(idea.memberId, participations)})</span></p></div>`
+        //         : nothing
+        // );
+
+        const realizations = 5;
+        // create header row
+        const table_header = html`
                         <thead>
                             <tr>
                                 <th>Parameter</th>
@@ -267,61 +315,19 @@ class MorphologicalBox extends HTMLElement {
                                 <th>+</th>
                             </tr>
                         </thead>
+                        `;
+
+
+        const parameterrows = parameters.map((p: MBParameter) =>
+           html`<tr>
+               <td>${p.title}</td>
+               ${this.generateRealizations(p)}
+                </tr>`
+        );
+
+        const table_body = html`
                         <tbody>
-                            <tr>
-                                <td>${(parameters.length > 0) ? parameters[0].title : "Power System"}</td>
-                                <td>Electric</td>
-                                <td>Petrol</td>
-                                <td>Diesel</td>
-                                <td class="placeholder">Realization 4</td>
-                                <td class="placeholder">Realization 5</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>${(parameters.length > 1) ? parameters[1].title : "Frame System"}</td>
-                                <td>Vertical</td>
-                                <td>Horizontal</td>
-                                <td>Vertical/Horizontal</td>
-                                <td class="placeholder">Realization 4</td>
-                                <td class="placeholder">Realization 5</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>${(parameters.length > 2) ? parameters[2].title : "Log Holding"}</td>
-                                <td>Clamps</td>
-                                <td>Clamps & Groove</td>
-                                <td>Groove</td>
-                                <td class="placeholder">Realization 4</td>
-                                <td class="placeholder">Realization 5</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Splitting Device</td>
-                                <td>Saw</td>
-                                <td>Wedge</td>
-                                <td class="placeholder">Realization 3</td>
-                                <td class="placeholder">Realization 4</td>
-                                <td class="placeholder">Realization 5</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Splitting Force</td>
-                                <td>Manual Lever</td>
-                                <td>Pneumatic Ram</td>
-                                <td>Hydraulic Ram</td>
-                                <td>Impact Force</td>
-                                <td>Sawing</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Support/Transport</td>
-                                <td>Wheels</td>
-                                <td>Tyres</td>
-                                <td>Tyres/Spikes</td>
-                                <td>Sledge</td>
-                                <td>Spikes</td>
-                                <td></td>
-                            </tr>
+                            ${parameterrows}
                             <tr>
                                 <td style="font-size: 22pt; font-weight: 600;">+</td>
                                 <td></td>
@@ -332,6 +338,8 @@ class MorphologicalBox extends HTMLElement {
                                 <td></td>
                             </tr>
                         </tbody>
+                        `;
+        const component_footer = html`
                     </table>
                 </div>    
             </div>    
@@ -353,12 +361,16 @@ class MorphologicalBox extends HTMLElement {
                 </div>
             </div>
         `;
+
+        return html`${component_header}
+                ${table_header}
+                ${table_body}
+                ${component_footer}
+                `;
+
     }
 
     connectedCallback() {
-        const p = morphoService.getParameterForRoom(store.getValue().activeRoomId);
-        console.log('Parameters are: ',p);        
-
         store.pipe(
             map(model => ({ activeRoomId: model.activeRoomId, parameters: model.parameters })),
             distinctUntilChanged()
