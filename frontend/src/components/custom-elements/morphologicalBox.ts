@@ -124,7 +124,6 @@ class MorphologicalBox extends HTMLElement {
             // Verwende setTimeout, um sicherzustellen, dass der Text vollständig aktualisiert wurde
             setTimeout(async () => {
                 let newTitle = clickedCell.textContent.trim();
-                clickedCell.textContent = "";
                 let param_id = clickedCell.getAttribute("paramId");
                 let content_id = clickedCell.getAttribute("content_id");
 
@@ -140,6 +139,7 @@ class MorphologicalBox extends HTMLElement {
                     try {
                         if (content_id == -1) {
                             content_id = null;
+                            clickedCell.textContent = ""; // must reset, cell ist placed somewhere else after refresh
                         }
                         await morphoService.saveRealization(param_id, newTitle, content_id);
                         console.log(`Realization "${newTitle}" erfolgreich gespeichert.`);
@@ -363,7 +363,16 @@ class MorphologicalBox extends HTMLElement {
                         `;
 
 
-        const parameterrows = parameters.map((p: MBParameter) =>
+        let sp = [...parameters];
+        function compareParameter(a:MBParameter, b:MBParameter) {
+            if (a.paramId > b.paramId) { // we can change that later to alphabetical
+                return(1);
+            } else {
+                return(-1); // equality should not exist
+            }
+        }
+        sp.sort(compareParameter);
+        const parameterrows = sp.map((p: MBParameter) =>
            html`<tr>
                <td paramId="${p.paramId}">${p.title}</td>
                ${this.generateRealizations(p, realizations)}
