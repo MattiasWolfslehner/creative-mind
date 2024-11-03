@@ -3,6 +3,7 @@ import {MBParameter, store} from "../../model";
 import {distinctUntilChanged, map} from "rxjs";
 import morphoService from "../../service/morpho-service";
 import {MBRealization} from "../../model/mbrealization";
+import {MBCombination} from "../../model/mbcombination";
 
 class MorphologicalBox extends HTMLElement {
     isListenerAdded: boolean;
@@ -45,12 +46,12 @@ class MorphologicalBox extends HTMLElement {
         });
 
         if (combination.length > 0) {
-            const combinations = this.shadowRoot.querySelector('.combinations');
-            combinations.innerHTML += `${combination.join(' | ')}<br>`;
+            //const combinations = this.shadowRoot.querySelector('.combinations');
+            //combinations.innerHTML += `${combination.join(' | ')}<br>`;
 
             console.log(store.getValue().activeRoomId, store.getValue().thisUserId);
 
-            morphoService.saveCombination(store.getValue().activeRoomId, store.getValue().thisUserId, combination.toString());
+            morphoService.saveCombination(store.getValue().activeRoomId, store.getValue().thisUserId, combination.join(' | '));
 
         } else {
             console.log("No selection made.");
@@ -67,15 +68,6 @@ class MorphologicalBox extends HTMLElement {
         }
     }
 
-    addNewRealization(event) {
-        console.log("addNewRealization");
-        const clickedCell = event.target;
-        if (clickedCell.textContent.trim() === "+") {
-            //const xxx = morphoService.saveParameter("new", store.getValue().activeRoomId);
-        } else {
-            console.log("wrong cell!");
-        }
-    }
 
 
     handleCellClick(event) {
@@ -184,14 +176,6 @@ class MorphologicalBox extends HTMLElement {
                 cell.addEventListener('click', (event) => this.addNewParameterRow(event));
             }
         });
-        const cells3 = this.shadowRoot.querySelectorAll('thead tr:first-child td:last-child');
-        cells3.forEach(cell => {
-            if(cell.getAttribute("has_my_listener_add_R") !== "true") {
-                cell.setAttribute("has_my_listener_add_R","true");
-                console.log("add R Listener for", cell);
-                cell.addEventListener('click', (event) => this.addNewRealization(event));
-            }
-        });
     }
 
     generateRealizations(p: MBParameter, realisations: number) {
@@ -222,9 +206,11 @@ class MorphologicalBox extends HTMLElement {
         }
     }
 
-    template(activeRoomId: string, parameters: MBParameter[]) {
+    template(activeRoomId: string, parameters: MBParameter[], combinations: MBCombination[]) {
         if (!parameters) parameters = [];
-        console.log(parameters);
+        if (!combinations) combinations = [];
+        //console.log(parameters);
+        console.log(combinations);
 
         const component_header = html`
             <style>
@@ -395,6 +381,11 @@ class MorphologicalBox extends HTMLElement {
                             </tr>
                         </tbody>
                         `;
+
+        const combinationshtml = combinations.map((c : MBCombination) =>
+            html`${c.combinationText}<br>`
+        );
+
         const component_footer = html`
                     </table>
                 </div>    
@@ -413,7 +404,7 @@ class MorphologicalBox extends HTMLElement {
                 </div>
 
                 <div class="folder-body">
-                    <div class="combinations"></div>
+                    <div class="combinations">${combinationshtml}</div>
                 </div>
             </div>
         `;
@@ -428,10 +419,10 @@ class MorphologicalBox extends HTMLElement {
 
     connectedCallback() {
         store.pipe(
-            map(model => ({ activeRoomId: model.activeRoomId, parameters: model.parameters })),
+            map(model => ({ activeRoomId: model.activeRoomId, parameters: model.parameters, combinations: model.combinations })),
             distinctUntilChanged()
         ).subscribe(morphoRoom => {
-            render(this.template(morphoRoom.activeRoomId, morphoRoom.parameters), this.shadowRoot);
+            render(this.template(morphoRoom.activeRoomId, morphoRoom.parameters, morphoRoom.combinations), this.shadowRoot);
             this.addClickListeners();
 
             if (!this.parametersSaved) {

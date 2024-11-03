@@ -1,6 +1,7 @@
 import { produce } from "immer"
 import { MBParameter, store } from "../model"
 import path from "./service-const"
+import {MBCombination} from "../model/mbcombination";
 
 class MorphoService {
     async getParameterForRoom(roomId: string) {
@@ -33,36 +34,35 @@ class MorphoService {
 
     }
 
-    async createParameterForRoom(roomId: string, title: string): Promise<MBParameter> {
+    async getCombinationsForRoom (roomId: string) {
+        //fetch
+        if (!roomId) return null;
+
         const theHeader = new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/morpho/parameter`, {
-            method: 'POST',
-            headers: theHeader,
-            body: JSON.stringify({
-                'roomId': roomId,
-                'title': title
-            })
+        const response = await fetch(`${path}/api/morpho/${roomId}/combination`, {
+            headers: theHeader
         });
         try {
-            const parameter: MBParameter = await response.json();
+            const combinations: MBCombination[] = await response.json();
+            console.log("combinations here");
+            console.log(combinations);
 
-            //add room to store
             const model = produce(store.getValue(), draft => {
-                draft.parameters.push(parameter);
-            })
+                draft.combinations = combinations;
+            });
+
             store.next(model);
-            console.log(parameter);
-            return parameter;
         }
         catch (error) {
-            console.log(`Error in createParameterForRoom ${error}`);
+            console.log(`error in getParameterForRoom for ${roomId}`);
+            console.log(error);
             return null;
         }
-    }
 
+    }
     async saveRealization(paramId: number, content: string, contentId: number|null = null) {
         const theHeader = new Headers({
             'Content-Type': 'application/json',

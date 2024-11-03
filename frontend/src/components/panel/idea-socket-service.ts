@@ -62,6 +62,7 @@ class IdeaSocketService extends HTMLElement {
                         const room = model.rooms.filter(room => room.roomId === this.roomId)[0];
                         if (room.type === "morphologicalroom") {
                             const z = morphoService.getParameterForRoom(this.roomId);
+                            const y = morphoService.getCombinationsForRoom(this.roomId);
                         }
                         else {
                             const x = ideaService.getIdeasByRoomId(this.roomId);

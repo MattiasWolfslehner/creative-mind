@@ -12,6 +12,7 @@ router.on('/', () => {
         draft.activeRoomId = "";
         draft.ideas = [];
         draft.parameters = [];
+        draft.combinations = [];
     });
     store.next(model);
 });
@@ -22,6 +23,7 @@ router.on('', () => {
         draft.activeRoomId = "";
         draft.ideas = [];
         draft.parameters = [];
+        draft.combinations = [];
     });
     store.next(model);
 });

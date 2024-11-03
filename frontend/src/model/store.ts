@@ -10,7 +10,8 @@ const initialState : Model = {
     thisUserId: "",
     isRoomList: false,
     remaining: null,
-    parameters: []
+    parameters: [],
+    combinations: []
 }
 
 export const store = new BehaviorSubject<Model> (initialState)

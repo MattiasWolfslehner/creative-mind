@@ -66,6 +66,7 @@ class StatefullRoom extends HTMLElement {
                 // load ideas for rooms initially
                 const ideas = ideaService.getIdeasByRoomId(this.roomId);
                 const p = morphoService.getParameterForRoom(this.roomId);
+                const c = morphoService.getCombinationsForRoom(this.roomId);
             }
         });
 
