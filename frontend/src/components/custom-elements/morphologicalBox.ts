@@ -60,7 +60,21 @@ class MorphologicalBox extends HTMLElement {
     addNewParameterRow(event) {
         console.log("addNewParameterRow");
         const clickedCell = event.target;
-        const xxx = morphoService.saveParameter("newP", store.getValue().activeRoomId);
+        if (clickedCell.textContent.trim() === "+") {
+            const xxx = morphoService.saveParameter("new", store.getValue().activeRoomId);
+        } else {
+            console.log("wrong cell!");
+        }
+    }
+
+    addNewRealization(event) {
+        console.log("addNewRealization");
+        const clickedCell = event.target;
+        if (clickedCell.textContent.trim() === "+") {
+            //const xxx = morphoService.saveParameter("new", store.getValue().activeRoomId);
+        } else {
+            console.log("wrong cell!");
+        }
     }
 
 
@@ -110,30 +124,21 @@ class MorphologicalBox extends HTMLElement {
             // Verwende setTimeout, um sicherzustellen, dass der Text vollständig aktualisiert wurde
             setTimeout(async () => {
                 let newTitle = clickedCell.textContent.trim();
-    
-                if (newTitle === "") {
-                    // Leerer Wert -> Platzhalter wiederherstellen
-                    if (columnIndex === 0) {
-                        newTitle = `Parameter ${rowIndex + 1}`;
-                    } else {
-                        newTitle = `Realization ${columnIndex}`;
-                    }
-                    clickedCell.classList.add('placeholder');
-                } else {
-                    clickedCell.classList.remove('placeholder');
-                }
-    
+                let param_id = clickedCell.getAttribute("paramId");
+                let content_id = clickedCell.getAttribute("content_id");
+
                 const roomId = store.getValue().activeRoomId;
                 if (columnIndex === 0 && newTitle !== previousText) {
                     try {
-                        await morphoService.saveParameter(newTitle, roomId);
+                        await morphoService.saveParameter(newTitle, roomId, param_id);
                         console.log(`Parameter "${newTitle}" erfolgreich gespeichert.`);
                     } catch (error) {
                         console.error(`Fehler beim Speichern des Parameters: ${error}`);
                     }
                 } else if (columnIndex !== 0 && newTitle !== previousText) {
                     try {
-                        await morphoService.saveRealization(columnIndex, newTitle);
+                        // TODO: columnindex is wrong!
+                        await morphoService.saveRealization(param_id, newTitle);
                         console.log(`Realization "${newTitle}" erfolgreich gespeichert.`);
                     } catch (error) {
                         console.error(`Fehler beim Speichern der Realization: ${error}`);
@@ -152,42 +157,48 @@ class MorphologicalBox extends HTMLElement {
     addClickListeners() {
         const parameters = this.shadowRoot.querySelectorAll('tbody tr:not(:last-child)')
         parameters.forEach(param => {
-            if(param.getAttribute("listener") !== "true") {
+            if(param.getAttribute("has_my_listener_edit") !== "true") {
+                param.setAttribute("has_my_listener_edit","true");
                 param.addEventListener('dblclick', (event) => this.handleCellDblClick(event));
             }
         })
         const cells = this.shadowRoot.querySelectorAll('tbody tr:not(:last-child) td:not(:first-child):not(:last-child)');
         cells.forEach(cell => {
-            if(cell.getAttribute("listener") !== "true") {
+            if(cell.getAttribute("has_my_listener_click") !== "true") {
+                cell.setAttribute("has_my_listener_click","true");
                 cell.addEventListener('click', (event) => this.handleCellClick(event));
-
+            }
+            if(cell.getAttribute("has_my_listener_edit") !== "true") {
+                cell.setAttribute("has_my_listener_edit","true");
                 cell.addEventListener('dblclick', (event) => this.handleCellDblClick(event));
             }
         });
         const cells2 = this.shadowRoot.querySelectorAll('tbody tr:last-child td:first-child');
         cells2.forEach(cell => {
-            if(cell.getAttribute("listener") !== "true") {
+            if(cell.getAttribute("has_my_listener_add_P") !== "true") {
+                cell.setAttribute("has_my_listener_add_P","true");
                 console.log("add P Listener for", cell);
                 cell.addEventListener('click', (event) => this.addNewParameterRow(event));
             }
         });
-        const cells3 = this.shadowRoot.querySelectorAll('thead tr td:last-child');
+        const cells3 = this.shadowRoot.querySelectorAll('thead tr:first-child td:last-child');
         cells3.forEach(cell => {
-            if(cell.getAttribute("listener") !== "true") {
+            if(cell.getAttribute("has_my_listener_add_R") !== "true") {
+                cell.setAttribute("has_my_listener_add_R","true");
                 console.log("add R Listener for", cell);
-                //cell.addEventListener('click', (event) => this.addNewRealisation(event));
+                cell.addEventListener('click', (event) => this.addNewRealization(event));
             }
         });
     }
 
     generateRealizations(p: MBParameter, realisations: number) {
         let rrr =  p.realizations.map((r: MBRealization) =>
-            html`<td "content_id"="${r.content_id}">${r.content}</td>`
+            html`<td paramId="${p.paramId}" content_id="${r.content_id}">${r.content}</td>`
         );
         let i = p.realizations.length;
         for (;i<realisations;i++) {
             rrr.push(html`
-                <td "content_id"="-1"></td>`);
+                <td paramId="${p.paramId}" content_id="-1"></td>`);
         }
         return rrr;
     }
@@ -324,7 +335,7 @@ class MorphologicalBox extends HTMLElement {
 
         const parameterrows = parameters.map((p: MBParameter) =>
            html`<tr>
-               <td>${p.title}</td>
+               <td paramId="${p.paramId}">${p.title}</td>
                ${this.generateRealizations(p, realizations)}
                 </tr>`
         );

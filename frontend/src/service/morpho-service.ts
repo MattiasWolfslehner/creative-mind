@@ -91,7 +91,7 @@ class MorphoService {
         }
     }
 
-    async saveParameter(title: string, roomId: string) {
+    async saveParameter(title: string, roomId: string, paramId: number|null = null) {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
@@ -101,13 +101,23 @@ class MorphoService {
             'title': title,
             'roomId': roomId
         })
-            
-        const response = await fetch(`${path}/api/morpho/parameter`, {
-            method: 'POST',
-            headers: theHeader,
-            body: tempJson
-        });
-    
+
+        let response;
+
+        // use overwrite if paramid is there
+        if (paramId) {
+            response = await fetch(`${path}/api/morpho/parameter/${paramId}`, {
+                method: 'PUT',
+                headers: theHeader,
+                body: tempJson
+            });
+        } else {
+            response = await fetch(`${path}/api/morpho/parameter`, {
+                method: 'POST',
+                headers: theHeader,
+                body: tempJson
+            });
+        }
         try {
             if (response.ok) {
                 console.log('Parameter successfully sent to backend.');
