@@ -18,7 +18,7 @@ class MorphologicalBox extends HTMLElement {
     async saveAllParameters() {
         const rows = this.shadowRoot.querySelectorAll('tbody tr');
         const roomId = store.getValue().activeRoomId;
-        console.log(`room now ${roomId}`);
+        // console.log(`room now ${roomId}`);
         for (let i = 0; i < rows.length; i++) {
             const parameterCell = rows[i].querySelector('td:first-child');
             const parameterTitle = parameterCell.textContent.trim();
@@ -26,7 +26,7 @@ class MorphologicalBox extends HTMLElement {
             if (parameterTitle && !/Parameter|\+/.test(parameterTitle)) {
                 try {
                     await morphoService.saveParameter(parameterTitle, roomId);
-                    console.log(`Parameter "${parameterTitle}" erfolgreich gespeichert.`);
+                    // console.log(`Parameter "${parameterTitle}" erfolgreich gespeichert.`);
                 } catch (error) {
                     console.error(`Fehler beim Speichern des Parameters "${parameterTitle}": ${error}`);
                 }
@@ -53,7 +53,7 @@ class MorphologicalBox extends HTMLElement {
     }
 
     addNewParameterRow(event) {
-        console.log("addNewParameterRow");
+        // console.log("addNewParameterRow");
         const clickedCell = event.target;
         if (clickedCell.textContent.trim() === "+") {
             const xxx = morphoService.saveParameter("new", store.getValue().activeRoomId);
@@ -116,7 +116,7 @@ class MorphologicalBox extends HTMLElement {
                 if (columnIndex === 0 && newTitle !== previousText) {
                     try {
                         await morphoService.saveParameter(newTitle, roomId, param_id);
-                        console.log(`Parameter "${newTitle}" erfolgreich gespeichert.`);
+                        // console.log(`Parameter "${newTitle}" erfolgreich gespeichert.`);
                     } catch (error) {
                         console.error(`Fehler beim Speichern des Parameters: ${error}`);
                     }
@@ -127,7 +127,7 @@ class MorphologicalBox extends HTMLElement {
                             clickedCell.textContent = ""; // must reset, cell ist placed somewhere else after refresh
                         }
                         await morphoService.saveRealization(param_id, newTitle, content_id);
-                        console.log(`Realization "${newTitle}" erfolgreich gespeichert.`);
+                        // console.log(`Realization "${newTitle}" erfolgreich gespeichert.`);
                     } catch (error) {
                         console.error(`Fehler beim Speichern der Realization: ${error}`);
                     }
@@ -165,7 +165,6 @@ class MorphologicalBox extends HTMLElement {
         cells2.forEach(cell => {
             if(cell.getAttribute("has_my_listener_add_P") !== "true") {
                 cell.setAttribute("has_my_listener_add_P","true");
-                console.log("add P Listener for", cell);
                 cell.addEventListener('click', (event) => this.addNewParameterRow(event));
             }
         });
@@ -202,7 +201,7 @@ class MorphologicalBox extends HTMLElement {
     template(activeRoomId: string, parameters: MBParameter[], combinations: MBCombination[]) {
         if (!parameters) parameters = [];
         if (!combinations) combinations = [];
-        //console.log(parameters);
+        // console.log(parameters);
         // console.log(combinations);
 
         const component_header = html`
@@ -322,7 +321,7 @@ class MorphologicalBox extends HTMLElement {
                 }
             }
         });
-        console.log(`there are a max of ${realizations} realizations`);
+        // console.log(`there are a max of ${realizations} realizations`);
 
         // create header row
         let rrr:TemplateResult<1>[] = [];

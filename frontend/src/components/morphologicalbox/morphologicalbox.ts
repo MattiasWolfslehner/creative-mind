@@ -28,14 +28,10 @@ class MorphologicalBoxElement extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
         // loads data
-        //const ideas = ideaService.getIdeasByRoomId(this.roomid);
-        //const rooms = roomService.getRooms();
         const users = userService.getUsers();
     }
 
     connectedCallback() {
-        //const ideas = ideaService.getIdeasByRoomId(this.roomId);
-        //const rooms = roomService.getRooms();
         const users = userService.getUsers();
         store.pipe(map(model => model.activeRoomId), distinctUntilChanged())
             .subscribe(activeRoomId => {
