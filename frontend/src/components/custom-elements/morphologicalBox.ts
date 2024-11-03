@@ -204,109 +204,6 @@ class MorphologicalBox extends HTMLElement {
         // console.log(parameters);
         // console.log(combinations);
 
-        const component_header = html`
-            <style>
-                body {
-                    background-color: #9D75EF;
-                    margin: 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                }
-                
-                .table-container {
-                    margin-top: 10vh;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-                
-                table {
-                    border-collapse: collapse;
-                    border: 0.5vw solid #9D75EF;
-                    background-color: #8d63d0;
-                    border-radius: 0.3vw;
-                }
-                
-                thead th, tbody td {
-                    width: 10vw;
-                    height: 7vh;
-                    font-size: 1.5vw;
-                    color: white;
-                    border: 0.5vw solid #9D75EF;
-                    text-align: center;
-                    vertical-align: middle;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    padding: 0 0.5vw;
-                    box-sizing: border-box;
-                    cursor: pointer;
-                }
-                
-                thead th {
-                    font-size: 2vw;
-                    font-weight: 600;
-                }
-                
-                .selected-1 {
-                    background-color: #F06568;
-                }
-                
-                .selected-2 {
-                    background-color: #FFE76A;
-                }
-                
-                .selected-3 {
-                    background-color: #7EEDE5;
-                }
-            
-                .placeholder {
-                    opacity: 0.6;
-                }
-            
-                .folder-box {
-                    width: 85vw;
-                    height: 60vh;
-                    background-color: #8d63d0;
-                    border-radius: 0 1vw 1vw 1vw;
-                    box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
-                    position: relative;
-                    margin: 5vh auto;
-                }
-            
-                .folder-tab {
-                    position: absolute;
-                    top: -4vh;
-                    left: 0;
-                    width: 17vw;
-                    height: auto;
-                    background-color: #8d63d0;
-                    border-radius: 1vw 1vw 0 0;
-                    text-align: center;
-                    color: white;
-                    font-size: 2.4vw;
-                    font-weight: bold;
-                    line-height: 6vh;
-                }
-            
-                .folder-body {
-                    padding: 2vw;
-                    margin-top: 6vh;
-                }
-            
-                .combinations {
-                    color: #fff;
-                    font-size: 1.6vw;
-                }
-            </style>
-            
-            <div class="table-container">
-                    <table>
-                        `;
-
-
         // const ideaTemplates = ideas.map((idea: Idea) =>
         //     this.checkShowIdeaInRoom(idea, room, userId)
         //         ? html`<div style="background-color: ${this.getRandomColor()};"><p>${idea.content}  \n <span style="font-size: smaller">(${this.getUserName(idea.memberId, participations)})</span></p></div>`
@@ -328,14 +225,14 @@ class MorphologicalBox extends HTMLElement {
         let i = 0;
         for (;i<realizations;i++) {
             rrr.push(html`
-                <th>Realization ${i+1}</th>`);
+                <th><small><small><small>Realization</small> <br> ${i+1}</small></small></th>`);
         }
         const table_header = html`
                         <thead>
                             <tr>
-                                <th>Parameter</th>
+                                <th><small><small>Parameter</small></small></th>
                                 ${rrr}
-                                <th>+</th>
+                                <th> ... </th>
                             </tr>
                         </thead>
                         `;
@@ -357,10 +254,10 @@ class MorphologicalBox extends HTMLElement {
                 </tr>`
         );
 
-        rrr = [];
+        let ccc : TemplateResult<1> [] = [];
         i = 0;
         for (;i<realizations;i++) {
-            rrr.push(html`
+            ccc.push(html`
                 <td></td>`);
         }
         const table_body = html`
@@ -368,7 +265,7 @@ class MorphologicalBox extends HTMLElement {
                             ${parameterrows}
                             <tr>
                                 <td style="font-size: 22pt; font-weight: 600;">+</td>
-                                ${rrr}
+                                ${ccc}
                                 <td></td>
                             </tr>
                         </tbody>
@@ -378,35 +275,128 @@ class MorphologicalBox extends HTMLElement {
             html`${c.combinationText}<br>`
         );
 
-        const component_footer = html`
-                    </table>
-                </div>    
-            </div>    
+
+        return html`
+            <style>
+                body {
+                    background-color: #9D75EF;
+                    margin: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                }
+
+                .table-container {
+                    margin-top: 10vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                table {
+                    border-collapse: collapse;
+                    border: 0.5vw solid #9D75EF;
+                    background-color: #8d63d0;
+                    border-radius: 0.3vw;
+                }
+
+                thead th, tbody td {
+                    width: 10vw;
+                    height: 7vh;
+                    font-size: 1.5vw;
+                    color: white;
+                    border: 0.5vw solid #9D75EF;
+                    text-align: center;
+                    vertical-align: middle;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    padding: 0 0.5vw;
+                    box-sizing: border-box;
+                    cursor: pointer;
+                }
+
+                thead th {
+                    font-size: 2vw;
+                    font-weight: 600;
+                }
+
+                .selected-1 {
+                    background-color: #F06568;
+                }
+
+                .selected-2 {
+                    background-color: #FFE76A;
+                }
+
+                .selected-3 {
+                    background-color: #7EEDE5;
+                }
+
+                .placeholder {
+                    opacity: 0.6;
+                }
+
+                .folder-box {
+                    width: 85vw;
+                    background-color: #8d63d0;
+                    border-radius: 0 1vw 1vw 1vw;
+                    box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
+                    position: relative;
+                    margin: 5vh auto;
+                }
+
+                .folder-tab {
+                    position: absolute;
+                    top: -4vh;
+                    left: 0;
+                    width: 17vw;
+                    height: auto;
+                    background-color: #8d63d0;
+                    border-radius: 1vw 1vw 0 0;
+                    text-align: center;
+                    color: white;
+                    font-size: 2.4vw;
+                    font-weight: bold;
+                    line-height: 6vh;
+                }
+
+                .folder-body {
+                    padding: 2vw;
+                    margin-top: 6vh;
+                }
+
+                .combinations {
+                    color: #fff;
+                    font-size: 1.6vw;
+                }
+            </style>
+
+            <div class="table-container">
+                <table>
+                ${table_header}
+                ${table_body}
+                </table>
+            </div>
 
             <div style="margin-top: 10vh; display: flex; flex-wrap: wrap; justify-content: space-around">
                 <div id="generateCombinationButton"
-                    style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; font-size: 1.1vw; margin-bottom: 20px; border-radius: 10px; cursor: pointer">
+                     style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; font-size: 1.1vw; margin-bottom: 20px; border-radius: 10px; cursor: pointer">
                     <h2 style="user-select: none">Save Combination</h2>
                 </div>
             </div>
 
             <div class="folder-box">
                 <div class="folder-tab">
-                    Combinations
+                    <small>Combinations</small>
                 </div>
-
+    
                 <div class="folder-body">
                     <div class="combinations">${combinationshtml}</div>
                 </div>
-            </div>
+            </div>                
         `;
-
-        return html`${component_header}
-                ${table_header}
-                ${table_body}
-                ${component_footer}
-                `;
-
     }
 
     connectedCallback() {
