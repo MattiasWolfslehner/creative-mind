@@ -1,5 +1,6 @@
 package com.creative_mind.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -23,6 +24,7 @@ public class MBParameter {
 
     @ManyToOne
     @JoinColumn(name = "room_id")
+    @JsonIgnore
     private MorphologicalRoom morphologicalRoom;
 
     @OneToMany(mappedBy = "mbParameter", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,5 +1,6 @@
 package com.creative_mind.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @NamedQuery(name = Realization.RETURN_REALIZATION_SET, query = "SELECT r FROM Realization r WHERE r.contentId IN :ids")
@@ -16,7 +17,8 @@ public class Realization {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "param_id")
+    @JoinColumn(name = "param_id", nullable = false, updatable = false)
+    @JsonIgnore
     private MBParameter mbParameter;
 
     public Realization(String content, MBParameter mbParameter) {
