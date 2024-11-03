@@ -3,7 +3,6 @@ package com.creative_mind.model;
 import jakarta.persistence.*;
 
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @NamedQuery(name = MBParameter.FIND_PARAMETER_BY_ROOM, query = "select p from MBParameter p where p.morphologicalRoom.roomId = :roomId")
@@ -58,5 +57,9 @@ public class MBParameter {
 
     public Set<Realization> getRealizations() {
         return realizations;
+    }
+
+    public MorphologicalRoom getMorphologicalRoom() {
+        return morphologicalRoom;
     }
 }

@@ -99,10 +99,11 @@ public class MorphoRepository {
     }
 
     @Transactional
-    public void overwriteRealization(int realizationId, RealizationRequest realizationRequest) {
+    public Realization overwriteRealization(int realizationId, RealizationRequest realizationRequest) {
         try{
             Realization realization = this.entityManager.find(Realization.class,realizationId);
             realization.setContent(realizationRequest.getContent());
+            return realization;
         }catch (Exception ex){
             throw new NotFoundException();
         }

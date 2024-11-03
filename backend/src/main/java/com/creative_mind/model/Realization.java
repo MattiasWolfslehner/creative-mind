@@ -1,9 +1,6 @@
 package com.creative_mind.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-import java.util.Set;
 
 @NamedQuery(name = Realization.RETURN_REALIZATION_SET, query = "SELECT r FROM Realization r WHERE r.contentId IN :ids")
 @Entity
@@ -40,6 +37,10 @@ public class Realization {
 
     public int getContentId() {
         return contentId;
+    }
+
+    public MBParameter getMbParameter() {
+        return mbParameter;
     }
 }
 

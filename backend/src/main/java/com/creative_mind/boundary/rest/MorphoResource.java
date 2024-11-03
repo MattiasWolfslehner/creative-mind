@@ -87,6 +87,7 @@ public class MorphoResource {
     public void overwriteParameter(@PathParam("paramId") int paramId, ParameterRequest parameterRequest) {
         Log.info(String.format("overwriteParameter paramId [%d] .. .room [%s] .", paramId, parameterRequest.getRoomId() ));
         this.morphoRepository.overwriteParameter(paramId, parameterRequest);
+        roomManager.newsForAllSessions(parameterRequest.getRoomId());
     }
 
     /**
@@ -104,7 +105,7 @@ public class MorphoResource {
                 , realizationRequest.getParamId(), realizationRequest.getContent() ));
         //TODO: IMPORTANT! Check Room Type is MB
         Realization realization = this.morphoRepository.addRealization(realizationRequest);
-
+        roomManager.newsForAllSessions(realization.getMbParameter().getMorphologicalRoom().getRoomId());
         return Response.ok(realization).build();
     }
 
@@ -116,7 +117,8 @@ public class MorphoResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/realization/{realizationId}")
     public void overwriteRealization(@PathParam("realizationId") int realizationId, RealizationRequest realizationRequest) {
-        this.morphoRepository.overwriteRealization(realizationId, realizationRequest);
+        Realization realization = this.morphoRepository.overwriteRealization(realizationId, realizationRequest);
+        roomManager.newsForAllSessions(realization.getMbParameter().getMorphologicalRoom().getRoomId());
     }
 
     /**
@@ -129,6 +131,7 @@ public class MorphoResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createCombination(CreateCombinationRequest request) {
         Combination combination = this.morphoRepository.createCombination(request);
+        roomManager.newsForAllSessions(combination.getMorphologicalRoom().getRoomId());
         return Response.ok(combination).build();
     }
 
