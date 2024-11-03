@@ -63,7 +63,7 @@ class MorphoService {
         }
     }
 
-    async saveRealization(paramId: number, content: string) {
+    async saveRealization(paramId: number, content: string, contentId: number|null = null) {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
@@ -72,13 +72,23 @@ class MorphoService {
         const tempJson = JSON.stringify({
             'paramId': paramId,
             'content': content
-        })
-            
-        const response = await fetch(`${path}/api/morpho/realization`, {
-            method: 'POST',
-            headers: theHeader,
-            body: tempJson
         });
+            
+        let response;
+
+        if (contentId) {
+            response = await fetch(`${path}/api/morpho/realization/${contentId}`, {
+                method: 'PUT',
+                headers: theHeader,
+                body: tempJson
+            });
+        } else {
+            response = await fetch(`${path}/api/morpho/realization`, {
+                method: 'POST',
+                headers: theHeader,
+                body: tempJson
+            });
+        }
     
         try {
             if (response.ok) {

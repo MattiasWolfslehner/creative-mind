@@ -1,4 +1,4 @@
-import {html, render} from "lit-html";
+import {html, nothing, render, TemplateResult} from "lit-html";
 import {MBParameter, store} from "../../model";
 import {distinctUntilChanged, map} from "rxjs";
 import morphoService from "../../service/morpho-service";
@@ -124,6 +124,7 @@ class MorphologicalBox extends HTMLElement {
             // Verwende setTimeout, um sicherzustellen, dass der Text vollständig aktualisiert wurde
             setTimeout(async () => {
                 let newTitle = clickedCell.textContent.trim();
+                clickedCell.textContent = "";
                 let param_id = clickedCell.getAttribute("paramId");
                 let content_id = clickedCell.getAttribute("content_id");
 
@@ -137,8 +138,10 @@ class MorphologicalBox extends HTMLElement {
                     }
                 } else if (columnIndex !== 0 && newTitle !== previousText) {
                     try {
-                        // TODO: columnindex is wrong!
-                        await morphoService.saveRealization(param_id, newTitle);
+                        if (content_id == -1) {
+                            content_id = null;
+                        }
+                        await morphoService.saveRealization(param_id, newTitle, content_id);
                         console.log(`Realization "${newTitle}" erfolgreich gespeichert.`);
                     } catch (error) {
                         console.error(`Fehler beim Speichern der Realization: ${error}`);
@@ -192,15 +195,31 @@ class MorphologicalBox extends HTMLElement {
     }
 
     generateRealizations(p: MBParameter, realisations: number) {
-        let rrr =  p.realizations.map((r: MBRealization) =>
-            html`<td paramId="${p.paramId}" content_id="${r.content_id}">${r.content}</td>`
-        );
-        let i = p.realizations.length;
-        for (;i<realisations;i++) {
-            rrr.push(html`
-                <td paramId="${p.paramId}" content_id="-1"></td>`);
+        function compareRealizations(a:MBRealization, b:MBRealization) {
+            if (a.contentId > b.contentId) {
+                return(1);
+            } else {
+                return(-1); // equality should not exist
+            }
         }
-        return rrr;
+        if (p.realizations) {
+            let rs = [...p.realizations];
+            rs.sort(compareRealizations);
+            let rrr = rs.map((r: MBRealization) =>
+                html`
+                    <td paramId="${p.paramId}" content_id="${r.contentId}">${r.content}</td>`
+            );
+            let i = p.realizations.length;
+            for (; i < realisations + 1; i++) { // we need one more column for "ADD new realization"
+                rrr.push(html`
+                    <td paramId="${p.paramId}" content_id="-1"></td>`);
+            }
+            return rrr;
+        }
+        else {
+            return html`
+                    <td paramId="${p.paramId}" content_id="-1"></td>`;
+        }
     }
 
     template(activeRoomId: string, parameters: MBParameter[]) {
@@ -316,17 +335,28 @@ class MorphologicalBox extends HTMLElement {
         //         : nothing
         // );
 
-        const realizations = 5;
+        let realizations = 0;
+        parameters.forEach((p) => {
+            if (p.realizations) {
+                if (p.realizations.length > realizations) {
+                    realizations = p.realizations.length;
+                }
+            }
+        });
+        console.log(`there are a max of ${realizations} realizations`);
+
         // create header row
+        let rrr:TemplateResult<1>[] = [];
+        let i = 0;
+        for (;i<realizations;i++) {
+            rrr.push(html`
+                <th>Realization ${i+1}</th>`);
+        }
         const table_header = html`
                         <thead>
                             <tr>
                                 <th>Parameter</th>
-                                <th>Realization 1</th>
-                                <th>Realization 2</th>
-                                <th>Realization 3</th>
-                                <th>Realization 4</th>
-                                <th>Realization 5</th>
+                                ${rrr}
                                 <th>+</th>
                             </tr>
                         </thead>
@@ -340,16 +370,18 @@ class MorphologicalBox extends HTMLElement {
                 </tr>`
         );
 
+        rrr = [];
+        i = 0;
+        for (;i<realizations;i++) {
+            rrr.push(html`
+                <td></td>`);
+        }
         const table_body = html`
                         <tbody>
                             ${parameterrows}
                             <tr>
                                 <td style="font-size: 22pt; font-weight: 600;">+</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                ${rrr}
                                 <td></td>
                             </tr>
                         </tbody>

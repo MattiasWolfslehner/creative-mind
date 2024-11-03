@@ -1,5 +1,5 @@
 export interface MBRealization {
-    "content_id": number,
-    "param_id" : number,
+    "contentId": number,
+    "paramId" : number,
     "content": string,
 }
