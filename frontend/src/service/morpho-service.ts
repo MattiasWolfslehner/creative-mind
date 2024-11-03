@@ -17,8 +17,8 @@ class MorphoService {
         });
         try {
             const parameters: MBParameter[] = await response.json();
-            console.log("parameters here");
-            console.log(parameters);
+            // console.log("parameters here");
+            // console.log(parameters);
 
             const model = produce(store.getValue(), draft => {
                 draft.parameters = parameters;
@@ -47,8 +47,8 @@ class MorphoService {
         });
         try {
             const combinations: MBCombination[] = await response.json();
-            console.log("combinations here");
-            console.log(combinations);
+            // console.log("combinations here");
+            // console.log(combinations);
 
             const model = produce(store.getValue(), draft => {
                 draft.combinations = combinations;

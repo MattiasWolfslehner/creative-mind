@@ -46,13 +46,7 @@ class MorphologicalBox extends HTMLElement {
         });
 
         if (combination.length > 0) {
-            //const combinations = this.shadowRoot.querySelector('.combinations');
-            //combinations.innerHTML += `${combination.join(' | ')}<br>`;
-
-            console.log(store.getValue().activeRoomId, store.getValue().thisUserId);
-
-            morphoService.saveCombination(store.getValue().activeRoomId, store.getValue().thisUserId, combination.join(' | '));
-
+            const z = morphoService.saveCombination(store.getValue().activeRoomId, store.getValue().thisUserId, combination.join(' | '));
         } else {
             console.log("No selection made.");
         }
@@ -71,7 +65,6 @@ class MorphologicalBox extends HTMLElement {
 
 
     handleCellClick(event) {
-        console.log("cell click");
         const clickedCell = event.target;
         const row = clickedCell.closest('tr');
         const cells = row.querySelectorAll('td');
@@ -210,7 +203,7 @@ class MorphologicalBox extends HTMLElement {
         if (!parameters) parameters = [];
         if (!combinations) combinations = [];
         //console.log(parameters);
-        console.log(combinations);
+        // console.log(combinations);
 
         const component_header = html`
             <style>
