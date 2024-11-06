@@ -96,6 +96,24 @@ class CreateRoomElement extends HTMLElement {
             <h2 style="user-select: none">Show My Rooms</h2>
         </div>
     </div>
+    <div style="background-color: rgba(0, 0, 0, 0.5);padding:20px; border-radius: 10px; margin: 6vh">
+        <h2 style="margin-bottom: -0.5vh; color: white; font-family: 'sans-serif'"> Der Morphologische Kasten (Zwicky Box)</h2>
+        <p style="color: white; font-family: 'sans-serif'; font-size: 1.2rem">
+        Der Morphologische Kasten ist eine Kreativitäts- und Problemlösungstechnik, 
+        die von Fritz Zwicky entwickelt wurde. Sie dient dazu, komplexe Probleme systematisch zu analysieren und kreative Lösungen zu finden. Die Methode basiert darauf, 
+        ein Problem in seine wesentlichen Parameter oder Dimensionen zu zerlegen und für jede Dimension mögliche Ausprägungen oder Optionen festzulegen. Diese Parameter und 
+        ihre Ausprägungen werden in einer tabellenartigen Struktur, dem sogenannten Morphologischen Kasten, dargestellt.
+        <br><br>
+        Durch das systematische Kombinieren der verschiedenen Ausprägungen lassen sich viele verschiedene Lösungsmöglichkeiten erzeugen, 
+        die man sonst vielleicht übersehen würde. Der Morphologische Kasten eignet sich besonders gut für Situationen, in denen es keine eindeutige Lösung gibt und kreative Ansätze gefragt sind, 
+        wie z.B. in der Produktentwicklung, im Design oder bei der strategischen Planung.
+        <br><br>
+        Der Vorteil des Morphologischen Kastens liegt darin, 
+        dass er durch die visuelle und strukturierte Darstellung hilft, den Lösungsraum umfassend zu erkunden. 
+        Teams können gemeinsam Parameter festlegen und unterschiedliche Kombinationen bewerten, 
+        was zu innovativen und vielfältigen Lösungsansätzen führt.
+        </p>
+    </div>
 `);
     }
 
