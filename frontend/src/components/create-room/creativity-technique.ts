@@ -34,6 +34,22 @@ class CreateRoomElement extends HTMLElement {
             width: 100%;
             margin-top: 3vh;
         }
+
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 80vw;
+            max-width: 60vw;
+        }
+        
+        .char-counter {
+            font-family: 'sans-serif';
+            position: absolute;
+            right: 1vw;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1vw;
+        }
         
         .styled-input {
             width: 80vw;
@@ -86,9 +102,13 @@ class CreateRoomElement extends HTMLElement {
         </div>-->
     </div>
 
-    <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-around">
-        <input id="room-name" type="text" class="styled-input" name="" placeholder="give your room a name">
+    <div class="container">
+        <div class="input-container">
+            <input id="room-name" type="text" class="styled-input" maxlength="25" placeholder="give your room a name">
+            <span id="charCounter" class="char-counter">0/25</span>
+        </div>
     </div>
+
     
     <div style="margin-top: 15vh; display: flex; flex-wrap: wrap; justify-content: space-around">
         <div id="createRoomButton" .disabled="${((activeUserId)?"true":"false")}"
@@ -122,13 +142,18 @@ class CreateRoomElement extends HTMLElement {
     }
 
     connectedCallback() {
-        //console.log("connected");
-
-        // add change ...
         store.pipe(map( model => model.thisUserId ), distinctUntilChanged())
             .subscribe(thisUserId => {
                 render(this.template(thisUserId), this.shadowRoot)
             });
+
+        const roomNameInput = this.shadowRoot.querySelector("#room-name") as HTMLInputElement;
+        const charCounter = this.shadowRoot.querySelector("#charCounter");
+        
+        roomNameInput.addEventListener("input", () => {
+            const charCount = roomNameInput.value.length
+            charCounter.textContent = `${charCount}/25`;
+        })
 
         this.addClickEventListeners();
     }
