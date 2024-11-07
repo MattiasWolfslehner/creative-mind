@@ -17,54 +17,58 @@ class CreateRoomElement extends HTMLElement {
     template (activeUserId: string) {
         return (html`
     <style>
-    .active {
-    background-color: #8D63D0;
-    color: white;
-    }
-
-    .inactive {
-    background-color: rgba(141, 99, 208, 0.4);
-    color: rgba(255, 255, 255, 0.4);
-    }
-    
-    .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        margin-top: 10vh;
-    }
-    .styled-input {
-        width: 100%;
-        max-width: 1070px;
-        height: 60px;
-        background-color: #8D63D0;
-        color: #fff;
-        border: 5px solid #9D75EF;
-        box-sizing: border-box;
-        font-size: 16px;
-        padding: 0 10px;
-        outline: none;
-        margin-bottom: 20px;
-        border-radius: 5px;
-    }
-    
-    #creativityTechniques {
-    margin-top: 3vh;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    }
-
-    .technique-container {
-    width: 20vw;
-    height: auto;
-    text-align: center;
-    font-family: 'sans-serif';
-    margin-bottom: 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    }
+        .active {
+            background-color: #8D63D0;
+            color: white;
+        }
+        
+        .inactive {
+            background-color: rgba(141, 99, 208, 0.4);
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 3vh;
+        }
+        
+        .styled-input {
+            width: 80vw;
+            max-width: 60vw;
+            height: 6vh;
+            background-color: #8D63D0;
+            color: #fff;
+            border: 0.3vw solid #9D75EF;
+            box-sizing: border-box;
+            font-size: 1.2vw;
+            padding: 0 2vw;
+            outline: none;
+            border-radius: 1vw;
+        }
+        
+        #creativityTechniques {
+            margin-top: 3vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5vw;
+            padding: 0 5vw;
+        }
+        
+        .technique-container {
+            width: 20vw;
+            height: auto;
+            text-align: center;
+            font-family: 'sans-serif';
+            margin-bottom: 2vh;
+            padding: 1vh 1vw;
+            border-radius: 1vw;
+            cursor: pointer;
+            font-size: 1.2vw;
+        }        
     </style>
 
     <div id="creativityTechniques">
