@@ -8,6 +8,7 @@ import {MBCombination} from "../../model/mbcombination";
 class MorphologicalBox extends HTMLElement {
     isListenerAdded: boolean;
     parametersSaved: boolean;
+    parametersFromBackend: MBParameter[];
 
     constructor() {
         super();
@@ -15,6 +16,7 @@ class MorphologicalBox extends HTMLElement {
         this.parametersSaved = false; // TODO: Must be true later on (when loading nothing changed)
     }
 
+<<<<<<< Updated upstream
     async saveAllParameters() {
         const rows = this.shadowRoot.querySelectorAll('tbody tr');
         const roomId = store.getValue().activeRoomId;
@@ -34,6 +36,8 @@ class MorphologicalBox extends HTMLElement {
         }
     }    
 
+=======
+>>>>>>> Stashed changes
     generateCombination() {
         const rows = this.shadowRoot.querySelectorAll('tbody tr');
         const combination = [];
@@ -109,9 +113,26 @@ class MorphologicalBox extends HTMLElement {
             // Verwende setTimeout, um sicherzustellen, dass der Text vollständig aktualisiert wurde
             setTimeout(async () => {
                 let newTitle = clickedCell.textContent.trim();
+<<<<<<< Updated upstream
                 let param_id = clickedCell.getAttribute("paramId");
                 let content_id = clickedCell.getAttribute("content_id");
 
+=======
+    
+                if (newTitle === "") {
+                    // Leerer Wert -> Platzhalter wiederherstellen
+                    if (columnIndex === 0) {
+                        newTitle = `Parameter ${rowIndex + 1}`;
+                    } else {
+                        newTitle = `Realization ${columnIndex}`;
+                    }
+                    clickedCell.classList.add('placeholder');
+                } else {
+                    clickedCell.classList.remove('placeholder');
+                    //TODO: await morphoService.saveRealization(rowIndex+1, newTitle, null);
+                }
+    
+>>>>>>> Stashed changes
                 const roomId = store.getValue().activeRoomId;
                 if (columnIndex === 0 && newTitle !== previousText) {
                     try {
@@ -120,14 +141,19 @@ class MorphologicalBox extends HTMLElement {
                     } catch (error) {
                         console.error(`Fehler beim Speichern des Parameters: ${error}`);
                     }
-                } else if (columnIndex !== 0 && newTitle !== previousText) {
+                } else if (columnIndex !== 0 && newTitle !== previousText && clickedCell.classList.getValue() !== 'placeholder') {
                     try {
+<<<<<<< Updated upstream
                         if (content_id == -1) {
                             content_id = null;
                             clickedCell.textContent = ""; // must reset, cell ist placed somewhere else after refresh
                         }
                         await morphoService.saveRealization(param_id, newTitle, content_id);
                         // console.log(`Realization "${newTitle}" erfolgreich gespeichert.`);
+=======
+                        // await morphoService.saveRealization(rowIndex+1, newTitle, 1);
+                        console.log(`Realization "${newTitle}" erfolgreich gespeichert.`);
+>>>>>>> Stashed changes
                     } catch (error) {
                         console.error(`Fehler beim Speichern der Realization: ${error}`);
                     }
@@ -374,11 +400,94 @@ class MorphologicalBox extends HTMLElement {
             </style>
 
             <div class="table-container">
+<<<<<<< Updated upstream
                 <table>
                 ${table_header}
                 ${table_body}
                 </table>
             </div>
+=======
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Realization 1</th>
+                                <th>Realization 2</th>
+                                <th>Realization 3</th>
+                                <th>Realization 4</th>
+                                <th>Realization 5</th>
+                                <th>+</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${(this.parametersFromBackend.length > 0) ? this.parametersFromBackend[0].title : "Power System"}</td>
+                                <td>${(this.parametersFromBackend.length > 0) ? this.parametersFromBackend[0].realizations[0].content : "Electric"}</td>
+                                <td>${(this.parametersFromBackend.length > 0) ? this.parametersFromBackend[0].realizations[1].content : "Petrol"}</td>
+                                <td>${(this.parametersFromBackend.length > 0) ? this.parametersFromBackend[0].realizations[2].content : "Diesel"}</td>
+                                <td class="placeholder">Realization 4</td>
+                                <td class="placeholder">Realization 5</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>${(this.parametersFromBackend.length > 1) ? this.parametersFromBackend[1].title : "Frame System"}</td>
+                                <td>Vertical</td>
+                                <td>Horizontal</td>
+                                <td>Vertical/Horizontal</td>
+                                <td class="placeholder">Realization 4</td>
+                                <td class="placeholder">Realization 5</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>${(parameters.length > 2) ? parameters[2].title : "Log Holding"}</td>
+                                <td>Clamps</td>
+                                <td>Clamps & Groove</td>
+                                <td>Groove</td>
+                                <td class="placeholder">Realization 4</td>
+                                <td class="placeholder">Realization 5</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Splitting Device</td>
+                                <td>Saw</td>
+                                <td>Wedge</td>
+                                <td class="placeholder">Realization 3</td>
+                                <td class="placeholder">Realization 4</td>
+                                <td class="placeholder">Realization 5</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Splitting Force</td>
+                                <td>Manual Lever</td>
+                                <td>Pneumatic Ram</td>
+                                <td>Hydraulic Ram</td>
+                                <td>Impact Force</td>
+                                <td>Sawing</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Support/Transport</td>
+                                <td>Wheels</td>
+                                <td>Tyres</td>
+                                <td>Tyres/Spikes</td>
+                                <td>Sledge</td>
+                                <td>Spikes</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 22pt; font-weight: 600;">+</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>    
+            </div>    
+>>>>>>> Stashed changes
 
             <div style="margin-top: 10vh; display: flex; flex-wrap: wrap; justify-content: space-around">
                 <div id="generateCombinationButton"
@@ -399,18 +508,23 @@ class MorphologicalBox extends HTMLElement {
         `;
     }
 
+<<<<<<< Updated upstream
     connectedCallback() {
         store.pipe(
             map(model => ({ activeRoomId: model.activeRoomId, parameters: model.parameters, combinations: model.combinations })),
             distinctUntilChanged()
         ).subscribe(morphoRoom => {
             render(this.template(morphoRoom.activeRoomId, morphoRoom.parameters, morphoRoom.combinations), this.shadowRoot);
+=======
+    connectedCallback() {        
+        store.pipe(
+            map(model => ({ activeRoomId: model.activeRoomId, parameters: model.parameters })),            
+            distinctUntilChanged()
+        ).subscribe(morphoRoom => {
+            this.parametersFromBackend = store.getValue().parameters
+            render(this.template(morphoRoom.activeRoomId, morphoRoom.parameters), this.shadowRoot);
+>>>>>>> Stashed changes
             this.addClickListeners();
-
-            if (!this.parametersSaved) {
-                this.saveAllParameters();
-                this.parametersSaved = true;
-            }
         });
 
         if (!this.isListenerAdded) {

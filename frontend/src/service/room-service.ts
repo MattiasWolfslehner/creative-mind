@@ -1,22 +1,22 @@
 import { produce } from "immer"
 import { Room, store } from "../model"
 import path from "./service-const"
-
-
+import "./morpho-service"
+import morphoService from "./morpho-service";
 
 class RoomService {
-    
 
-    async getRooms(){
+
+    async getRooms() {
         //fetch
         const theHeader = new Headers({
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
         const response = await fetch(`${path}/api/rooms/list`, {
             headers: theHeader
         });
-        const rooms : Room[] = await response.json();
+        const rooms: Room[] = await response.json();
         //console.log(rooms);
 
         /* LIST GIVES NO type value => call indiv get
@@ -32,12 +32,12 @@ class RoomService {
         });
     }
 
-    async createRoom(roomType : string, roomName: string, description: string|null) : Promise<Room> {
+    async createRoom(roomType: string, roomName: string, description: string | null): Promise<Room> {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/create`,{
+        const response = await fetch(`${path}/api/rooms/create`, {
             method: 'POST',
             headers: theHeader,
             body: JSON.stringify({
@@ -47,8 +47,7 @@ class RoomService {
             })
         });
 
-        const room : Room = await response.json();
-
+        const room: Room = await response.json();
 
         //add room to store
         const model = produce(store.getValue(), draft => {
@@ -56,39 +55,75 @@ class RoomService {
         })
         store.next(model);
         console.log(room);
+
+        if (roomType == 'morphologicalroom') {
+            this.saveDummyParameters(room.roomId);
+        }
         return room;
     }
 
-    async updateState(roomId : string, roomState: string)  {
+    async saveDummyParameters(roomId: string) {
+        // Insert dummy Parameters
+        const dummyParameters = ['Farbe', 'Textur'];
+
+        // Create parameters and wait for them to be added to the store
+        for (let i = 0; i < dummyParameters.length; i++) {
+            await morphoService.createParameterForRoom(roomId, dummyParameters[i]);
+        }
+
+        // Fetch updated parameters from the store after creation
+        const parameters = store.getValue().parameters;
+
+        // Insert dummy Realizations for each corresponding parameter
+        const dummyRealizationContent = ['Rot', 'Rau', 'Rau2', 'Rau3'];
+
+        // Check if the number of realizations exceeds the number of parameters
+        if (dummyRealizationContent.length > parameters.length) {
+            console.warn('More realizations than parameters. Realizations will be truncated.');
+        }
+
+        // Use Promise.all to ensure all async operations are completed before moving forward
+        await Promise.all(parameters.map(async (parameter, index) => {
+            for (let i = 0; i < 3; i++) {
+                const realization = await morphoService.createRealization(parameter.paramId, `Content${ index } | ${ i }`);
+                console.log('new Realization: ', realization);
+            }
+        }));
+
+        // This will now be executed after all realizations have been created
+        console.log(store.getValue().parameters);
+    }
+
+    async updateState(roomId: string, roomState: string) {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/updateState/${roomId}`,{
+        const response = await fetch(`${path}/api/rooms/updateState/${roomId}`, {
             method: 'PUT',
             headers: theHeader,
-            body: JSON.stringify({roomState: roomState})
+            body: JSON.stringify({ roomState: roomState })
         });
 
-        const room : boolean = await response.json();
+        const room: boolean = await response.json();
 
         console.log(`Room state changed: ${room}`);
 
         return room;
     }
 
-    async updateRoom(room: Room)  {
+    async updateRoom(room: Room) {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/update/${room.roomId}`,{
+        const response = await fetch(`${path}/api/rooms/update/${room.roomId}`, {
             method: 'PUT',
             headers: theHeader,
-            body: JSON.stringify({name: room.name, description: room.description})
+            body: JSON.stringify({ name: room.name, description: room.description })
         });
 
-        const updated_room : Room = await response.json();
+        const updated_room: Room = await response.json();
 
         //remove old room and add new room to store
         const model = produce(store.getValue(), draft => {
@@ -100,17 +135,17 @@ class RoomService {
         return updated_room;
     }
 
-    async startRoom(roomId : string)  {
+    async startRoom(roomId: string) {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/start/${roomId}`,{
+        const response = await fetch(`${path}/api/rooms/start/${roomId}`, {
             method: 'PUT',
             headers: theHeader
         });
 
-        const room : boolean = await response.json();
+        const room: boolean = await response.json();
 
         //console.log(`Room started: ${room}`);
         // fetch new status
@@ -119,17 +154,17 @@ class RoomService {
         return room;
     }
 
-    async stopRoom(roomId : string)  {
+    async stopRoom(roomId: string) {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/stop/${roomId}`,{
+        const response = await fetch(`${path}/api/rooms/stop/${roomId}`, {
             method: 'PUT',
             headers: theHeader
         });
 
-        const room : boolean = await response.json();
+        const room: boolean = await response.json();
 
         //console.log(`Room stopped: ${room}`);
         // fetch new status
@@ -139,14 +174,14 @@ class RoomService {
     }
 
 
-    async getRoom(roomId : string | null) : Promise<Room> {
+    async getRoom(roomId: string | null): Promise<Room> {
         if (!roomId) {
             const model = store.getValue();
-            roomId  = model.activeRoomId;
+            roomId = model.activeRoomId;
         }
         const theHeader = new Headers({
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
         const response = await fetch(`${path}/api/rooms/get/${roomId}`, {
             method: 'GET',
