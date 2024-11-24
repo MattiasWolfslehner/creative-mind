@@ -68,7 +68,7 @@ class RoomService {
 
         // Create parameters and wait for them to be added to the store
         for (let i = 0; i < dummyParameters.length; i++) {
-            await morphoService.createParameterForRoom(roomId, dummyParameters[i]);
+            await morphoService.saveParameter(roomId, dummyParameters[i]);
         }
 
         // Fetch updated parameters from the store after creation
@@ -85,7 +85,7 @@ class RoomService {
         // Use Promise.all to ensure all async operations are completed before moving forward
         await Promise.all(parameters.map(async (parameter, index) => {
             for (let i = 0; i < 3; i++) {
-                const realization = await morphoService.createRealization(parameter.paramId, `Content${ index } | ${ i }`);
+                const realization = await morphoService.saveRealization(parameter.paramId, `Content${ index } | ${ i }`);
                 console.log('new Realization: ', realization);
             }
         }));

@@ -2,7 +2,7 @@ import { html, render } from "lit-html";
 import "../create-room/create-room"
 import "../create-room/room-list"
 import "../room/statefullroom"
-import "./idea-socket-service"
+import "./room-manager-socket-service"
 import { store } from "../../model"
 import { distinctUntilChanged, map } from "rxjs";
 import {router} from "../../../router";

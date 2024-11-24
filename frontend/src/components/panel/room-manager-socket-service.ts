@@ -8,7 +8,7 @@ import participationService from "../../service/participation-service";
 import mbparameterService from "../../service/morpho-service";
 import morphoService from "../../service/morpho-service";
 
-class IdeaSocketService extends HTMLElement {
+class RoomManagerSocketService extends HTMLElement {
 
     protected roomId: string | null = null;
     protected userId: string | null = null;
@@ -147,7 +147,7 @@ class IdeaSocketService extends HTMLElement {
 
         if (this.roomId && this.userId) {
             // keep the "this" pointer for onOpen... handlers later
-            const roomChatContext : IdeaSocketService = this; // not to be mistaken with websocket inside
+            const roomChatContext : RoomManagerSocketService = this; // not to be mistaken with websocket inside
 
             // create websocket url
             let url = `ws://localhost:8080/rooms/join/${this.roomId}/${this.userId}`;
@@ -225,4 +225,4 @@ class IdeaSocketService extends HTMLElement {
 }
 
 
-customElements.define("idea-socket-service", IdeaSocketService)
+customElements.define("idea-socket-service", RoomManagerSocketService)
