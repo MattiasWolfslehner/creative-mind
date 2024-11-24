@@ -17,10 +17,14 @@
     border-radius: 10%;
 }
 #erd {
-    width: 70%;
+    width: 100%;
     height: auto;
     margin-top: 0%;
     padding-right: 10%
+}
+#arch_img {
+    width: 100%;
+    height: auto;
 }
 li {
     font-size: 75%;
@@ -32,4 +36,3 @@ li {
     text-align: center;
     margin-top: 35%
 }
-
