@@ -336,7 +336,7 @@ class MorphologicalBox extends HTMLElement {
             <tr>
                 <th>Parameter</th>
                 ${rrr}
-                <th>+</th>
+                <th> (auto) </th>
             </tr>
             </thead>
         `;
