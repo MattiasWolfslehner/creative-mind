@@ -1,15 +1,15 @@
 .pic_div {
     padding: 5vw;
-    background-color: #ffffff;
     border-radius: 50%;
 }
 .div_flex {
-    display: flex
+    display: flex;
+    margin: 0%;
 }
 #div_main {
     text-align: center;
     margin-left: 5%;
-    margin-top: 10%
+    margin-top: 10%;
 }
 #logo {
     width: 50%;
@@ -20,7 +20,7 @@
     width: 100%;
     height: auto;
     margin-top: 0%;
-    padding-right: 10%
+    padding-right: 10%;
 }
 #arch_img {
     width: 100%;
@@ -30,9 +30,16 @@ li {
     font-size: 75%;
 }
 .bold {
-    font-weight: bold
+    font-weight: bold;
 }
 #h2_erd {
     text-align: center;
-    margin-top: 35%
+    margin-top: 35%;
+    margin-left: 5%;
+}
+#morpho_img {
+    padding-top: 10%;
+    padding-left: 5%;
+    width: 60%;
+    height: 60%;
 }
