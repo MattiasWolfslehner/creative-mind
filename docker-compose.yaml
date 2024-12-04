@@ -1,20 +1,6 @@
+include:
+  - postgres.yaml
 services:
-  postgres:
-    container_name: postgres
-    image: postgres:16-alpine
-    ports:
-      - 5432:5432
-    volumes:
-      - postgres:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=demo
-      - POSTGRES_USER=demo
-      - POSTGRES_DB=demo
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d demo --user demo"]
-      start_period: 30s
-      start_interval: 2s
-      retries: 10
   backend:
     depends_on:
       postgres:
@@ -59,5 +45,21 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=password
       - KC_HOSTNAME=keycloak
       # localhost
+  nginx:
+    container_name: www
+    image: ghcr.io/mattiaswolfslehner/frontend:latest
+    ports:
+      - 9000:80
+    healthcheck:
+      test: curl --fail --head -fsS http://localhost
+      interval: 40s
+      timeout: 30s
+      retries: 2
+      start_period: 10s
+    depends_on:
+      backend:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
 volumes:
   postgres:
