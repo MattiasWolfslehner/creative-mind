@@ -15,11 +15,11 @@ RUN /opt/keycloak/bin/kc.sh build --health-enabled=true --metrics-enabled=true
 
 FROM --platform=linux/amd64 quay.io/keycloak/keycloak:latest
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
-# COPY ./import/ /opt/keycloak/data/import/
+COPY ./import/ /opt/keycloak/data/import/
 # change these values to point to a running postgres instance
 ENV KC_DB=postgres
 ENV KC_DB_URL=keycloak
 ENV KC_DB_USERNAME=keycloak
 ENV KC_DB_PASSWORD=keycloak
-ENV KC_HOSTNAME=localhost
+ENV KC_HOSTNAME=keycloak
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]

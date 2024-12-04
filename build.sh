@@ -3,7 +3,8 @@ set -e
 pushd frontend
 npm install
 npm run build
-docker build --tag frontend .
+docker build --tag ghcr.io/mattiaswolfslehner/frontend .
+docker push ghcr.io/mattiaswolfslehner/frontend
 popd
 
 pushd backend
