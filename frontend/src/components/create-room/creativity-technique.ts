@@ -32,7 +32,7 @@ class CreateRoomElement extends HTMLElement {
             flex-direction: column;
             align-items: center;
             width: 100%;
-            margin-top: 3vh;
+            margin-top: 2vw;
         }
 
         .input-container {
@@ -41,6 +41,7 @@ class CreateRoomElement extends HTMLElement {
             align-items: center;
             width: 80vw;
             max-width: 60vw;
+            height: auto;
         }
         
         .char-counter {
@@ -48,25 +49,26 @@ class CreateRoomElement extends HTMLElement {
             position: absolute;
             right: 1vw;
             color: rgba(255, 255, 255, 0.7);
-            font-size: 1vw;
+            font-size: 1.2em;
         }
         
         .styled-input {
             width: 80vw;
             max-width: 60vw;
-            height: 6vh;
+            height: 4vw;
             background-color: #8D63D0;
             color: #fff;
             border: 0.3vw solid #9D75EF;
             box-sizing: border-box;
-            font-size: 1.2vw;
+            font-size: 1.2em;
             padding: 0 2vw;
             outline: none;
             border-radius: 1vw;
+            text-overflow: ellipsis;
         }
         
         #creativityTechniques {
-            margin-top: 3vh;
+            margin-top: 3vw;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -75,15 +77,15 @@ class CreateRoomElement extends HTMLElement {
         }
         
         .technique-container {
-            width: 20vw;
+            width: auto;
             height: auto;
             text-align: center;
             font-family: 'sans-serif';
-            margin-bottom: 2vh;
+            margin-bottom: 3vw;
             padding: 1vh 1vw;
             border-radius: 1vw;
             cursor: pointer;
-            font-size: 1.2vw;
+            font-size: 1.2em;
         }        
     </style>
 
@@ -110,17 +112,17 @@ class CreateRoomElement extends HTMLElement {
     </div>
 
     
-    <div style="margin-top: 15vh; display: flex; flex-wrap: wrap; justify-content: space-around">
+    <div style="margin-top: 3vw; display: flex; flex-wrap: wrap; justify-content: space-around">
         <div id="createRoomButton" .disabled="${((activeUserId)?"true":"false")}"
-             style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
+             style="background-color: white; width: 15vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
             <h2 style="user-select: none">Create Room</h2>
         </div>
         <div id="showRoomListButton" .disabled="${((activeUserId)?"true":"false")}"
-             style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
+             style="background-color: white; width: 15vw; height: auto; text-align: center; font-family: 'sans-serif'; margin-bottom: 20px; border-radius: 10px">
             <h2 style="user-select: none">Show My Rooms</h2>
         </div>
     </div>
-    <div style="background-color: rgba(0, 0, 0, 0.5);padding:20px; border-radius: 10px; margin: 6vh">
+    <div style="background-color: rgba(0, 0, 0, 0.5);padding:20px; border-radius: 10px; margin: 2vw">
         <h2 style="margin-bottom: -0.5vh; color: white; font-family: 'sans-serif'"> Der Morphologische Kasten (Zwicky Box)</h2>
         <p style="color: white; font-family: 'sans-serif'; font-size: 1.2rem">
         Der Morphologische Kasten ist eine Kreativitäts- und Problemlösungstechnik, 

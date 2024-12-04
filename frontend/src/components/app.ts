@@ -23,7 +23,7 @@ class AppComponent extends HTMLElement {
             right: 2vw;
             background-color: white;
             border-radius: 50%;
-            width: 5%;
+            width: 6vw;
             height: auto;
             cursor: pointer;
         }
