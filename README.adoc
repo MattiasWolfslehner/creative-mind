@@ -12,15 +12,13 @@ Unsere Mission ist es, die Flexibilität und Vielseitigkeit des morphologischen 
 
 == 🛠️ Funktionen  
 * **Benutzerfreundliche Oberfläche**: Einfache Erstellung und Bearbeitung von morphologischen Kästen.  
-* **Kollaboration**: Teile und bearbeite deine Kästen gemeinsam mit anderen.  
-* **Vorlagen**: Zugang zu vorgefertigten Kästen für verschiedene Anwendungsbereiche.  
+* **Kollaboration**: Teile und bearbeite deine Kästen gemeinsam mit anderen.
 * **Export & Import**: Sichere und teile Ergebnisse im PDF- oder CSV-Format.  
-* **Cloud-Speicherung**: Zugriff auf deine Projekte von überall.  
+* **Account-Speicherung**: Zugriff auf deine Projekte von überall.  
 
 == 🚀 Technologie-Stack  
-* **Frontend**: React.js für eine dynamische und reaktionsschnelle Benutzeroberfläche.  
-* **Backend**: Node.js und Express für eine robuste Serverarchitektur.  
-* **Datenbank**: MongoDB zur Speicherung von Benutzer- und Projektdaten.  
-* **Hosting**: Deployment auf AWS/Heroku für maximale Zuverlässigkeit.  
+* **Frontend**: Webpack für eine dynamische und reaktionsschnelle Benutzeroberfläche.  
+* **Backend**: Leocloud für eine robuste Serverarchitektur.  
+* **Datenbank**: Postgres zur Speicherung von Benutzer- und Projektdaten.  
 
 == 📸 Vorschau
