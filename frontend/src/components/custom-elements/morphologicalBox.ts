@@ -202,10 +202,16 @@ class MorphologicalBox extends HTMLElement {
     template(activeRoomId: string, parameters: MBParameter[], combinations: MBCombination[]) {
         if (!parameters) parameters = [];
         if (!combinations) combinations = [];
-        //console.log(parameters);
-        // console.log(combinations);
-
-        const component_header = html`
+    
+        // Bestimme die maximale Anzahl an Realisierungen
+        let realizations = 0;
+        parameters.forEach((p) => {
+            if (p.realizations) {
+                realizations = Math.max(realizations, p.realizations.length);
+            }
+        });
+    
+        const component = html`
             <style>
                 body {
                     background-color: #9D75EF;
@@ -213,11 +219,17 @@ class MorphologicalBox extends HTMLElement {
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    height: 100vh;
+                    font-family: Arial, sans-serif;
                 }
                 
+                #container {
+                    width: 100vw;
+                    display: flex;
+                    justify-content: center;
+                }
+    
                 .table-container {
-                    margin-top: 10vh;
+                    margin-top: 3vw;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -225,30 +237,33 @@ class MorphologicalBox extends HTMLElement {
                 
                 table {
                     border-collapse: collapse;
-                    border: 0.5vw solid #9D75EF;
+                    width: 90vw;
+                    border: 0.4vw solid #9D75EF;
                     background-color: #8d63d0;
-                    border-radius: 0.3vw;
+                    border-radius: 0.5vw;
+                    table-layout: fixed;
                 }
                 
                 thead th, tbody td {
-                    width: 10vw;
-                    height: 7vh;
-                    font-size: 1.5vw;
+                    width: auto;
+                    height: 7vw;
+                    font-size: 1.5em;
                     color: white;
-                    border: 0.5vw solid #9D75EF;
+                    border: 0.3vw solid #9D75EF;
                     text-align: center;
                     vertical-align: middle;
-                    white-space: nowrap;
+                    padding: 0.5vw;
+                    box-sizing: border-box;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    padding: 0 0.5vw;
-                    box-sizing: border-box;
+                    white-space: nowrap;
                     cursor: pointer;
                 }
                 
                 thead th {
-                    font-size: 2vw;
-                    font-weight: 600;
+                    font-size: 2em;
+                    font-weight: bold;
+                    background-color: #7c52c3;
                 }
                 
                 .selected-1 {
@@ -262,14 +277,14 @@ class MorphologicalBox extends HTMLElement {
                 .selected-3 {
                     background-color: #7EEDE5;
                 }
-            
+    
                 .placeholder {
                     opacity: 0.6;
                 }
             
                 .folder-box {
                     width: 85vw;
-                    height: 60vh;
+                    height: 65vw;
                     background-color: #8d63d0;
                     border-radius: 0 1vw 1vw 1vw;
                     box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
@@ -287,8 +302,8 @@ class MorphologicalBox extends HTMLElement {
                     border-radius: 1vw 1vw 0 0;
                     text-align: center;
                     color: white;
-                    font-size: 2.4vw;
                     font-weight: bold;
+                    font-size: 2em;
                     line-height: 6vh;
                 }
             
@@ -296,119 +311,63 @@ class MorphologicalBox extends HTMLElement {
                     padding: 2vw;
                     margin-top: 6vh;
                 }
-            
-                .combinations {
-                    color: #fff;
-                    font-size: 1.6vw;
-                }
             </style>
             
-            <div class="table-container">
+            <div id="container">
+                <div class="table-container">
                     <table>
-                        `;
-
-
-        // const ideaTemplates = ideas.map((idea: Idea) =>
-        //     this.checkShowIdeaInRoom(idea, room, userId)
-        //         ? html`<div style="background-color: ${this.getRandomColor()};"><p>${idea.content}  \n <span style="font-size: smaller">(${this.getUserName(idea.memberId, participations)})</span></p></div>`
-        //         : nothing
-        // );
-
-        let realizations = 0;
-        parameters.forEach((p) => {
-            if (p.realizations) {
-                if (p.realizations.length > realizations) {
-                    realizations = p.realizations.length;
-                }
-            }
-        });
-        console.log(`there are a max of ${realizations} realizations`);
-
-        // create header row
-        let rrr:TemplateResult<1>[] = [];
-        let i = 0;
-        for (;i<realizations;i++) {
-            rrr.push(html`
-                <th>Realization ${i+1}</th>`);
-        }
-        const table_header = html`
-            <thead>
-            <tr>
-                <th>Parameter</th>
-                ${rrr}
-                <th> (auto) </th>
-            </tr>
-            </thead>
-        `;
-
-
-        let sp = [...parameters];
-        function compareParameter(a:MBParameter, b:MBParameter) {
-            if (a.paramId > b.paramId) { // we can change that later to alphabetical
-                return(1);
-            } else {
-                return(-1); // equality should not exist
-            }
-        }
-        sp.sort(compareParameter);
-        const parameterrows = sp.map((p: MBParameter) =>
-            html`<tr>
-                <td paramId="${p.paramId}">${p.title}</td>
-                ${this.generateRealizations(p, realizations)}
-            </tr>`
-        );
-
-        rrr = [];
-        i = 0;
-        for (;i<realizations;i++) {
-            rrr.push(html`
-                <td></td>`);
-        }
-        const table_body = html`
-            <tbody>
-            ${parameterrows}
-            <tr>
-                <td style="font-size: 22pt; font-weight: 600;">+</td>
-                ${rrr}
-                <td></td>
-            </tr>
-            </tbody>
-        `;
-
-        const combinationshtml = combinations.map((c : MBCombination) =>
-            html`${c.combinationText}<br>`
-        );
-
-        const component_footer = html`
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                ${Array.from({ length: realizations }).map((_, i) => html`<th>Realization ${i + 1}</th>`)}
+                                <th>(Realization ...)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${parameters
+                                .slice() // Eine Kopie des Arrays erstellen, um Mutabilitätsprobleme zu vermeiden
+                                .sort((a, b) => (a.paramId > b.paramId ? 1 : -1)) // Sortiere Parameter alphabetisch oder numerisch
+                                .map(
+                                    (p) => html`
+                                        <tr>
+                                            <td paramId="${p.paramId}">${p.title}</td>
+                                            ${this.generateRealizations(p, realizations)}
+                                        </tr>
+                                    `
+                                )}
+                            <tr>
+                                <td style="font-size: 22pt; font-weight: 600;">+</td>
+                                ${Array.from({ length: realizations }).map(() => html`<td></td>`)}
+                                <td></td>
+                            </tr>
+                        </tbody>
                     </table>
-                </div>    
-            </div>    
-
+                </div>
+            </div>
+    
             <div style="margin-top: 10vh; display: flex; flex-wrap: wrap; justify-content: space-around">
                 <div id="generateCombinationButton"
                     style="background-color: white; width: 20vw; height: auto; text-align: center; font-family: 'sans-serif'; font-size: 1.1vw; margin-bottom: 20px; border-radius: 10px; cursor: pointer">
                     <h2 style="user-select: none">Save Combination</h2>
                 </div>
             </div>
-
+    
             <div class="folder-box">
                 <div class="folder-tab">
                     Combinations
                 </div>
-
                 <div class="folder-body">
-                    <div class="combinations">${combinationshtml}</div>
+                    <div class="combinations">
+                        <h1>${combinations.map((c) => html`${c.combinationText}<br>`)}</h1>
+                    </div>
                 </div>
             </div>
         `;
-
-        return html`${component_header}
-        ${table_header}
-        ${table_body}
-        ${component_footer}
-        `;
-
+    
+        return component;
     }
+    
+    
 
     connectedCallback() {
         store.pipe(
