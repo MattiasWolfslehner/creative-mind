@@ -5,6 +5,11 @@
 .div_flex {
     display: flex;
     margin: 0%;
+    padding: 0%;
+}
+.bspImg {
+    margin: 0%;
+    padding: 0%;
 }
 #div_main {
     text-align: center;
@@ -39,7 +44,7 @@ li {
 }
 #morpho_img {
     padding-top: 10%;
-    padding-left: 5%;
-    width: 60%;
-    height: 60%;
+    margin: 0%;
+    width: 90%;
+    height: 90%;
 }
