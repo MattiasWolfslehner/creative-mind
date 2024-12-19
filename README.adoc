@@ -22,4 +22,4 @@ Unsere Mission ist es, die Flexibilität und Vielseitigkeit des morphologischen 
 * **Datenbank**: Postgres zur Speicherung von Benutzer- und Projektdaten.  
 
 == 📸 Vorschau
-image:.docs/wireframe/img/Wireframe_MorphologicalBox.png[]
+image:docs/wireframe/img/Wireframe_MorphologicalBox.png
