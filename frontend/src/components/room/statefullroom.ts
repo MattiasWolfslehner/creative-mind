@@ -37,8 +37,16 @@ class StatefullRoom extends HTMLElement {
             `;
     }
 
+    protected static isUUID ( uuid:string ) {
+        let s = "" + uuid;
+        let x = s.match('^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$');
+        return x !== null;
+    }
+
     connectedCallback() {
         router.on('/room/:roomId', ({data}) => {
+            let oldRoomId = this.roomId;
+
             let idxOfSign = data.roomId.indexOf("&");
             if (idxOfSign<0) {
                 idxOfSign = data.roomId.indexOf("?");
@@ -47,12 +55,19 @@ class StatefullRoom extends HTMLElement {
                 idxOfSign = data.roomId.length;
             }
             this.roomId = data.roomId.substring(0,idxOfSign);
+            // check for uuid
+            if (!StatefullRoom.isUUID(this.roomId)) {
+                alert("room id is not correct (uuid)!");
+                this.roomId = oldRoomId;
+                router.navigate("/");
+                return;
+            }
 
             if (store.getValue().thisUserId) {
                 console.log("logged in ... change room");
             } else {
                 console.error("not logged in ... must log in first!");
-                this.roomId = "";
+                this.roomId = oldRoomId;
                 alert("Please log in first!");
                 router.navigate("/");
                 return;
