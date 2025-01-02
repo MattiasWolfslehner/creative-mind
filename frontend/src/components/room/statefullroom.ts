@@ -54,6 +54,8 @@ class StatefullRoom extends HTMLElement {
                 console.error("not logged in ... must log in first!");
                 this.roomId = "";
                 alert("Please log in first!");
+                router.navigate("/");
+                return;
             }
 
             if (this.roomId) {
@@ -62,6 +64,7 @@ class StatefullRoom extends HTMLElement {
                         if (value) {
                             draft.activeRoomId = value.roomId;
                         } else {
+                            alert("Room Not Found!");
                             draft.activeRoomId = '';
                             draft.parameters = [];
                             draft.ideas = [];
