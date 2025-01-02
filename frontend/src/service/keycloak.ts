@@ -109,6 +109,6 @@ class KeycloakService {
 
 
 const keycloakService = new KeycloakService();
-keycloakService.init();
+// call in index => earlier in programm keycloakService.init();
 
 export default keycloakService;
