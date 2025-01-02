@@ -48,21 +48,28 @@ class StatefullRoom extends HTMLElement {
             }
             this.roomId = data.roomId.substring(0,idxOfSign);
 
-            const room: Promise<void | Room> = roomService.getRoom(this.roomId).then(value => {
-                const model = produce(store.getValue(), draft => {
-                    if (value) {
-                        draft.activeRoomId = value.roomId;
-                    }
-                    else {
-                        draft.activeRoomId = '';
-                        draft.parameters = [];
-                        draft.ideas = [];
-                    }
-                });
-                store.next(model);
-            });
+            if (store.getValue().thisUserId) {
+                console.log("logged in ... change room");
+            } else {
+                console.error("not logged in ... must log in first!");
+                this.roomId = "";
+                alert("Please log in first!");
+            }
 
             if (this.roomId) {
+                const room: Promise<void | Room> = roomService.getRoom(this.roomId).then(value => {
+                    const model = produce(store.getValue(), draft => {
+                        if (value) {
+                            draft.activeRoomId = value.roomId;
+                        } else {
+                            draft.activeRoomId = '';
+                            draft.parameters = [];
+                            draft.ideas = [];
+                        }
+                    });
+                    store.next(model);
+                });
+
                 // load ideas for rooms initially
                 const ideas = ideaService.getIdeasByRoomId(this.roomId);
                 const p = morphoService.getParameterForRoom(this.roomId);
