@@ -7,6 +7,7 @@ import ideaService from "../../service/idea-service";
 import participationService from "../../service/participation-service";
 import mbparameterService from "../../service/morpho-service";
 import morphoService from "../../service/morpho-service";
+import {MBRealization} from "../../model/mbrealization";
 
 class RoomManagerSocketService extends HTMLElement {
 
@@ -14,7 +15,7 @@ class RoomManagerSocketService extends HTMLElement {
     protected userId: string | null = null;
     protected socket: WebSocket | null = null;
 
-    protected socketStatus: string = "not created";
+    protected socketStatus: string [] = [];
 
     // private returnString() {
     //     return document.createRange().createContextualFragment(`${this.messages}`);
@@ -36,14 +37,14 @@ class RoomManagerSocketService extends HTMLElement {
             case "room_started":
             case "room_changed": // new response_type when admin changes desc/name
             case "room_notification": {
-                this.socketStatus = `got room nfctn (${message.response_type}): "${message.message}"`;
+                this.socketStatus.push(`Info (${message.response_type.toString().replace("_", " ")}): "${message.message}"`);
                 const y = participationService.getParticipantsInRoom(null);
                 const x = roomService.getRoom(null);
                 this.refresh();
                 break;
             }
             case "get_remaining_room_time": { // timer fired (can be pushed into model)
-                this.socketStatus = `got room timer: "${message.remaining}"`;
+                this.socketStatus.push(`timer: "${message.remaining}"`);
                 let remaining : number = message.remaining;
                 const model = produce(store.getValue(), draft => {
                     draft.remaining = remaining;
@@ -54,8 +55,8 @@ class RoomManagerSocketService extends HTMLElement {
                 break;
             }
             case "new_ideas_in_room": { // notification from backend about new "idea"
-                //console.log("new_ideas_in_room");
-                this.socketStatus = 'new ideas';
+                console.log("new_ideas_in_room");
+                //this.socketStatus = 'new ideas';
                 const model = store.getValue()
                 if (model.activeRoomId) {
                     try {
@@ -140,7 +141,7 @@ class RoomManagerSocketService extends HTMLElement {
         if (this.socket && this.socket.readyState === WebSocket.OPEN) {
             this.socket.close();
             console.log("===> CLOSED EXISTING <<<");
-            this.socketStatus = "not created";
+            //this.socketStatus.push("not created");
         }
 
         this.socket = null;
@@ -152,13 +153,13 @@ class RoomManagerSocketService extends HTMLElement {
             // create websocket url
             let url = `ws://localhost:8080/rooms/join/${this.roomId}/${this.userId}`;
             this.socket = new WebSocket(url);
-            this.socketStatus = "created";
+            //this.socketStatus.push("created");
             this.refresh();
 
             this.socket.onopen = function (event: Event) {
                 event.preventDefault();
                 //console.log('WebSocket connection opened:', event);
-                roomChatContext.socketStatus = "opened";
+                roomChatContext.socketStatus.push("Connected to server!");
                 // Wait for the updateComplete promise to resolve
                 roomChatContext.refresh();
             };
@@ -168,14 +169,14 @@ class RoomManagerSocketService extends HTMLElement {
             this.socket.onclose = function (event: Event) {
                 event.preventDefault();
                 //console.log('WebSocket connection closed:', event);
-                roomChatContext.socketStatus = "closed";
+                roomChatContext.socketStatus.push("Connection to Server closed!");
                 roomChatContext.refresh();
             };
 
             this.socket.onerror = function (error: Event) {
                 error.preventDefault();
                 console.error('WebSocket error:', error);
-                roomChatContext.socketStatus = "error";
+                roomChatContext.socketStatus.push("Error in connection to Server!");
                 roomChatContext.refresh();
             };
         }
@@ -217,10 +218,61 @@ class RoomManagerSocketService extends HTMLElement {
 
     template() {
         return html`
-      <div>
-        <!--<p>Socket-Status ${this.socketStatus}</p>-->
+
+            <style>
+                .popupmessage {
+                    position: absolute;
+                    top: 5vh;
+                    right: 2vw;
+                    width: 25vw;
+                    height: fit-content;
+                    background-color: white;
+                    border-radius: 5px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    display: ${(this.socketStatus.length > 0)?"block":"none"};
+                    z-index: 10;
+                }
+
+                .popupmessage::after {
+                    content: "";
+                    position: absolute;
+                    top: -10px;
+                    right: 10%;
+                    transform: translateX(-50%);
+                    border-width: 10px;
+                    border-style: solid;
+                    border-color: transparent transparent white transparent;
+                }
+
+                .popupmessage-content {
+                    display: table;
+                    align-items: left;
+                    justify-content: space-between;
+                    height: 100%;
+                    padding: 10px;
+                    box-sizing: border-box;
+                }
+                
+            </style>
+            
+            
+      <div class="popupmessage" id="popupmessage1" @click="${() => {this.clearMessages();}}">
+          <div class="popupmessage-content">
+              ${
+                    this.socketStatus.map(
+                        (m:string) => html`<div>${m}</div><br>`
+                    )
+                }
+          </div>
       </div>
     `;
+    }
+
+    protected clearMessages() {
+        while(this.socketStatus.length>0) { // empty messages
+            this.socketStatus.pop();
+        }
+        this.refresh();
     }
 }
 
