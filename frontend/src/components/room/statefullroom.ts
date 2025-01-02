@@ -9,6 +9,7 @@ import "../brainstorming/brainstorming"
 import "../morphologicalbox/morphologicalbox"
 import {distinctUntilChanged, map} from "rxjs";
 import morphoService from "../../service/morpho-service";
+import keycloakService from "../../service/keycloak";
 
 
 class StatefullRoom extends HTMLElement {
@@ -63,36 +64,40 @@ class StatefullRoom extends HTMLElement {
                 return;
             }
 
-            if (store.getValue().thisUserId) {
-                console.log("logged in ... change room");
-            } else {
-                console.error("not logged in ... must log in first!");
-                this.roomId = oldRoomId;
-                alert("Please log in first!");
-                router.navigate("/");
-                return;
-            }
+            // call api only when logged in
+            keycloakService.init().then(() => {
 
-            if (this.roomId) {
-                const room: Promise<void | Room> = roomService.getRoom(this.roomId).then(value => {
-                    const model = produce(store.getValue(), draft => {
-                        if (value) {
-                            draft.activeRoomId = value.roomId;
-                        } else {
-                            alert("Room Not Found!");
-                            draft.activeRoomId = '';
-                            draft.parameters = [];
-                            draft.ideas = [];
-                        }
+                if (store.getValue().thisUserId) {
+                    console.log("logged in ... change room");
+                } else {
+                    console.error("not logged in ... must log in first!");
+                    this.roomId = oldRoomId;
+                    alert("Please log in first!");
+                    router.navigate("/");
+                    return;
+                }
+
+                if (this.roomId) {
+                    const room: Promise<void | Room> = roomService.getRoom(this.roomId).then(value => {
+                        const model = produce(store.getValue(), draft => {
+                            if (value) {
+                                draft.activeRoomId = value.roomId;
+                            } else {
+                                alert("Room Not Found!");
+                                draft.activeRoomId = '';
+                                draft.parameters = [];
+                                draft.ideas = [];
+                            }
+                        });
+                        store.next(model);
                     });
-                    store.next(model);
-                });
 
-                // load ideas for rooms initially
-                const ideas = ideaService.getIdeasByRoomId(this.roomId);
-                const p = morphoService.getParameterForRoom(this.roomId);
-                const c = morphoService.getCombinationsForRoom(this.roomId);
-            }
+                    // load ideas for rooms initially
+                    const ideas = ideaService.getIdeasByRoomId(this.roomId);
+                    const p = morphoService.getParameterForRoom(this.roomId);
+                    const c = morphoService.getCombinationsForRoom(this.roomId);
+                }
+            });
         });
 
 
