@@ -67,7 +67,7 @@ class StatefullRoom extends HTMLElement {
             // call api only when logged in
             keycloakService.init().then(() => {
 
-                if (store.getValue().thisUserId) {
+                if (localStorage.getItem("token")) {
                     console.log("logged in ... change room");
                 } else {
                     console.error("not logged in ... must log in first!");
