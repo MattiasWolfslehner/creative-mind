@@ -37,7 +37,8 @@ class RoomManagerSocketService extends HTMLElement {
             case "room_started":
             case "room_changed": // new response_type when admin changes desc/name
             case "room_notification": {
-                this.socketStatus.push(`Info (${message.response_type.toString().replace("_", " ")}): "${message.message}"`);
+                // (${message.response_type.toString().replace("_", " ")})
+                this.socketStatus.push(`${message.response_type.toString().replace("room_", "")}: "${message.message}"`);
                 const y = participationService.getParticipantsInRoom(null);
                 const x = roomService.getRoom(null);
                 this.refresh();
