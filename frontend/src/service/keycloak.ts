@@ -13,15 +13,21 @@ class KeycloakService {
         clientId: 'frontend'
     });
 
+    private initiated: boolean = false;
+
     public async init () {
-        try {
-            const authenticated = await KeycloakService.keycloak.init({enableLogging: true, onLoad: 'check-sso'});
-            console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
-            if (authenticated) {
-                await this.login(); // get user data NOT do login!!!!
+        if (!this.initiated) {
+            this.initiated = true;
+            try {
+                const authenticated = await KeycloakService.keycloak.init({enableLogging: true, onLoad: 'check-sso'});
+                console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
+                if (authenticated) {
+                    await this.login(); // get user data NOT do login!!!!
+                }
+            } catch (error) {
+                console.error('Failed to initialize adapter: ', error);
+                this.initiated = false;
             }
-        } catch (error) {
-            console.error('Failed to initialize adapter: ', error);
         }
     }
 
