@@ -28,9 +28,7 @@ image:./docs/wireframe/img/Wireframe_MorphologicalBox.png[]
 
 1. Mit der virtuellen Maschine verbinden: 
 
-  ```
   ssh cm
-  ``` 
 
 2. Minikube starten: 
 
