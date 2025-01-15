@@ -23,3 +23,21 @@ Unsere Mission ist es, die Flexibilität und Vielseitigkeit des morphologischen 
 
 == 📸 Vorschau
 image:./docs/wireframe/img/Wireframe_MorphologicalBox.png[]
+
+== 🚀 Projekt starten
+
+1. Mit der virtuellen Maschine verbinden:  
+2. Minikube starten:  
+3. Datenbank starten und Port weiterleiten (5432:5432):  
+Navigiere in den Ordner `/backend/k8s` und führe aus:  
+4. Backend starten:  
+Navigiere in den Ordner `/backend` und führe aus:  
+5. Frontend vorbereiten (optional):  
+Navigiere in den Ordner `/frontend` und führe aus:  
+6. Frontend starten:  
+Navigiere in den Ordner `/frontend` und führe aus:  
+7. Keycloak-Zugang:  
+Besuche die Website und melde dich an. Die Anmeldedaten sind:  
+* Benutzername: `testMember`  
+* Passwort: `test123`
+
