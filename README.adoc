@@ -64,3 +64,16 @@ Besuche die Website und melde dich an. Die Anmeldedaten sind:
 * Benutzername: `testMember`  
 * Passwort: `test123`
 
+1. Clone the repository:
+
+  ```bash
+  git clone https://github.com/GitChrisHTL/AniMerchShop.git
+  ````
+    
+2. Open the project in WebStorm
+3. Open a terminal (Alt+F12) and run npm install:
+
+  ```bash
+  npm install
+  ````
+
