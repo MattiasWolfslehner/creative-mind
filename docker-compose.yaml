@@ -43,7 +43,7 @@ services:
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=password
-      - KC_HOSTNAME=keycloak
+      - KC_HOSTNAME=localhost
       # localhost
   nginx:
     container_name: www

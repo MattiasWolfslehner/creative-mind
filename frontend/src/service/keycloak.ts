@@ -5,24 +5,30 @@ import {produce} from "immer";
 import roomService from "./room-service";
 import {router} from "../../router";
 
+const keycloak = new Keycloak({
+    url: 'http://localhost:8000',
+    realm: 'cmr',
+    clientId: 'frontend'
+});
 
 class KeycloakService {
-    private static keycloak = new Keycloak({
-        url: 'http://localhost:8000',
-        realm: 'cmr',
-        clientId: 'frontend'
-    });
 
     public async init () {
+        if(!keycloak.token){
+        alert("init")
         try {
-            const authenticated = await KeycloakService.keycloak.init({enableLogging: true, onLoad: 'check-sso'});
+            const authenticated = await keycloak.init({enableLogging: true});
             console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
             if (authenticated) {
-                await this.login(); // get user data NOT do login!!!!
+                alert("Juhu")
             }
         } catch (error) {
             console.error('Failed to initialize adapter: ', error);
         }
+    }else{
+        console.log("already logged in ", keycloak.token);
+        
+    }
     }
 
     public logout() {
@@ -32,7 +38,7 @@ class KeycloakService {
                 draft.thisUserId = '';
             });
             store.next(model);
-            KeycloakService.keycloak.logout().then(()=>{console.log("logout successful!")});
+            keycloak.logout().then(()=>{console.log("logout successful!")});
         } catch (error) {
             console.error('Failed to logout: ', error);
         }
@@ -41,20 +47,20 @@ class KeycloakService {
     public async login() {
 
         try {
-            const authenticated = KeycloakService.keycloak.authenticated;
+            const authenticated =keycloak.authenticated;
                 //await KeycloakService.keycloak.init({enableLogging: true});
             console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
             if (!authenticated) {
-                await KeycloakService.keycloak.login();
+                await keycloak.login();
             }
 
-            localStorage.setItem("token", KeycloakService.keycloak.token);
+            localStorage.setItem("token", keycloak.token);
 
             //senden mit bearer an das Backend
             const headers = new Headers({
                 'Authorization': 'Bearer ' + localStorage.getItem("token")
             });
-            console.log(KeycloakService.keycloak.token);
+            console.log(keycloak.token);
 
             fetch(`${path}/api/users/register`, {
                 method: 'GET',

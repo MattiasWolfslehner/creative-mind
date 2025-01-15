@@ -114,9 +114,9 @@ class AppComponent extends HTMLElement {
                     if (v[0]["id"] === "logoutButton") {
                         const model = store.getValue();
                         if (model.thisUserId) {
-                            keycloakService.logout();
+                            // keycloakService.logout();
                         } else {
-                            keycloakService.login().then(()=>{console.log("logged in!")});
+                           // keycloakService.login().then(()=>{console.log("logged in!")});
                         }
                     }
                     if (v[0]["id"] === "profileImage" || v[0]["id"] === "dropdownMenu") {

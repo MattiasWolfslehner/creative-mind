@@ -150,7 +150,7 @@ class RoomManagerSocketService extends HTMLElement {
             const roomChatContext : RoomManagerSocketService = this; // not to be mistaken with websocket inside
 
             // create websocket url
-            let url = `ws://localhost:8080/rooms/join/${this.roomId}/${this.userId}`;
+            let url = `ws://localhost:8000/rooms/join/${this.roomId}/${this.userId}`;
             this.socket = new WebSocket(url);
             this.socketStatus = "created";
             this.refresh();
