@@ -189,21 +189,27 @@ class RoomService {
         });
 
         try {
-            // TODO: either must catch empty response here or ?!
-            // no 404 when no row found !?
-            const room: Room = await response.json();
+            if (response.ok) {
+                // no 404 when no row found !?
+                const room: Room = await response.json();
 
-            //add room to store
-            const model = produce(store.getValue(), draft => {
-                // delete if there
-                draft.rooms = draft.rooms.filter(r => r.roomId !== roomId);
-                // push new version
-                draft.rooms.push(room);
-            })
+                //add room to store
+                const model = produce(store.getValue(), draft => {
+                    // delete if there
+                    draft.rooms = draft.rooms.filter(r => r.roomId !== roomId);
+                    // push new version
+                    draft.rooms.push(room);
+                })
 
-            store.next(model);
+                store.next(model);
 
-            return room;
+                return room;
+            } else {
+                if (response.status === 404) {
+                    console.log("room not found! 404!")
+                }
+                return null;
+            }
         }
         catch (error) {
             console.log(error);

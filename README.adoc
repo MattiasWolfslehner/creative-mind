@@ -1,30 +1,25 @@
-= Creative Mind
+= Creative Minds 🌟  
+Die digitale Umsetzung des morphologischen Kastens als Webanwendung.  
 
-https://github.com/Stevan06v/creative-mind/actions/workflows/cicd.yml[image:https://github.com/Stevan06v/creative-mind/actions/workflows/cicd.yml/badge.svg[CI/CD
-Pipeline]]
+== 🌐 Über das Projekt  
+Creative Minds ist eine innovative Webanwendung, die es ermöglicht, den morphologischen Kasten – ein bewährtes Kreativitätswerkzeug – digital zu nutzen.  
+Die Plattform bietet eine intuitive Benutzeroberfläche, mit der Nutzer schnell und einfach neue Ideen und Lösungen generieren können.  
 
-Creative Mind is a web app where your new startup idea might be born. +
-Easily brainstorm with others in real time.
+Ob für Produktdesign, Problemlösungen oder strategische Planung – Creative Minds hilft dabei, komplexe Probleme strukturiert zu analysieren und kreative Ansätze zu entwickeln.  
 
+== 🎯 Ziel  
+Unsere Mission ist es, die Flexibilität und Vielseitigkeit des morphologischen Kastens in die digitale Welt zu übertragen, um die Kreativität und Zusammenarbeit in Teams und bei Einzelpersonen zu fördern.  
 
+== 🛠️ Funktionen  
+* **Benutzerfreundliche Oberfläche**: Einfache Erstellung und Bearbeitung von morphologischen Kästen.  
+* **Kollaboration**: Teile und bearbeite deine Kästen gemeinsam mit anderen.
+* **Export & Import**: Sichere und teile Ergebnisse im PDF- oder CSV-Format.  
+* **Account-Speicherung**: Zugriff auf deine Projekte von überall.  
 
-Starten der Website:
-    
+== 🚀 Technologie-Stack  
+* **Frontend**: Webpack für eine dynamische und reaktionsschnelle Benutzeroberfläche.  
+* **Backend**: Leocloud für eine robuste Serverarchitektur.  
+* **Datenbank**: Postgres zur Speicherung von Benutzer- und Projektdaten.  
 
-1.  ssh cm
-2.  minikube start
-3.  im /backend/k8s ordner -> 
-      * ./start-db.sh
-      (macht jetzt auch das Port-Mapping)
-4.  im backend
-      * ./start.sh
-5.  im frontend 
-      * npm install
-      * npm run build
-      * npm start
-
-keycloak auf der website:
-
-    username: testMember
-
-    password: test123
+== 📸 Vorschau
+image:./docs/wireframe/img/Wireframe_MorphologicalBox.png[]

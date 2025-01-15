@@ -5,30 +5,30 @@ import {produce} from "immer";
 import roomService from "./room-service";
 import {router} from "../../router";
 
-const keycloak = new Keycloak({
-    url: 'http://localhost:8000',
-    realm: 'cmr',
-    clientId: 'frontend'
-});
 
 class KeycloakService {
+    private static keycloak = new Keycloak({
+        url: 'http://localhost:8000',
+        realm: 'cmr',
+        clientId: 'frontend'
+    });
+
+    private initiated: boolean = false;
 
     public async init () {
-        if(!keycloak.token){
-        alert("init")
-        try {
-            const authenticated = await keycloak.init({enableLogging: true});
-            console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
-            if (authenticated) {
-                alert("Juhu")
+        if (!this.initiated) {
+            this.initiated = true;
+            try {
+                const authenticated = await KeycloakService.keycloak.init({enableLogging: true, onLoad: 'check-sso'});
+                console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
+                if (authenticated) {
+                    await this.login(); // get user data NOT do login!!!!
+                }
+            } catch (error) {
+                console.error('Failed to initialize adapter: ', error);
+                this.initiated = false;
             }
-        } catch (error) {
-            console.error('Failed to initialize adapter: ', error);
         }
-    }else{
-        console.log("already logged in ", keycloak.token);
-        
-    }
     }
 
     public logout() {
@@ -38,7 +38,7 @@ class KeycloakService {
                 draft.thisUserId = '';
             });
             store.next(model);
-            keycloak.logout().then(()=>{console.log("logout successful!")});
+            KeycloakService.keycloak.logout().then(()=>{console.log("logout successful!")});
         } catch (error) {
             console.error('Failed to logout: ', error);
         }
@@ -47,20 +47,20 @@ class KeycloakService {
     public async login() {
 
         try {
-            const authenticated =keycloak.authenticated;
+            const authenticated = KeycloakService.keycloak.authenticated;
                 //await KeycloakService.keycloak.init({enableLogging: true});
             console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
             if (!authenticated) {
-                await keycloak.login();
+                await KeycloakService.keycloak.login();
             }
 
-            localStorage.setItem("token", keycloak.token);
+            localStorage.setItem("token", KeycloakService.keycloak.token);
 
             //senden mit bearer an das Backend
             const headers = new Headers({
                 'Authorization': 'Bearer ' + localStorage.getItem("token")
             });
-            console.log(keycloak.token);
+            console.log(KeycloakService.keycloak.token);
 
             fetch(`${path}/api/users/register`, {
                 method: 'GET',
@@ -115,6 +115,6 @@ class KeycloakService {
 
 
 const keycloakService = new KeycloakService();
-keycloakService.init();
+// call in index => earlier in programm keycloakService.init();
 
 export default keycloakService;

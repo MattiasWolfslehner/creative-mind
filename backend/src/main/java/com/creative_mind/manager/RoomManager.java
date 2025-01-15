@@ -2,9 +2,11 @@ package com.creative_mind.manager;
 
 import com.creative_mind.exception.CreativeMindException;
 import com.creative_mind.model.Room;
+import com.creative_mind.model.User;
 import com.creative_mind.model.requests.ParticipantionRequest;
 import com.creative_mind.repository.ParticipationRepository;
 import com.creative_mind.repository.RoomRepository;
+import com.creative_mind.repository.UserRepository;
 import io.quarkus.logging.Log;
 import io.vertx.core.Vertx;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,8 +25,13 @@ public class RoomManager {
 
     @Inject
     Vertx vertx;
+
     @Inject
     ParticipationRepository participationRepository;
+
+    @Inject
+    UserRepository userRepository;
+
     @Inject
     RoomRepository roomRepository;
     private Map<UUID, Set<Session>> roomSessions = new ConcurrentHashMap<>();
@@ -121,12 +128,14 @@ public class RoomManager {
         this.participationRepository.addParticipation(participantionRequest);
     }
 
-    public void addSessionToRoom(UUID roomId, Session session){
+    public void addSessionToRoom(UUID roomId, Session session, UUID userId){
         try{
+
+            User user = userRepository.getUserByUUID(userId);
 
             String jsonString = new JSONObject()
                     .put("response_type", "room_notification")
-                    .put("message", String.format("%s joined the Room!", session.getId()))
+                    .put("message", String.format("%s joined the Room!", user.getUserName()))
                     .toString();
 
             roomSessions.computeIfAbsent(roomId, k -> ConcurrentHashMap.newKeySet()).add(session);
@@ -138,7 +147,7 @@ public class RoomManager {
         }
     }
 
-    public void removeSessionFromRoom(UUID roomId, String sessionId){
+    public void removeSessionFromRoom(UUID roomId, String sessionId, UUID userId){
         try{
             roomSessions.computeIfPresent(roomId, (k, v) -> {
                 for (Session iterator : this.roomSessions.get(roomId)) {
@@ -149,9 +158,12 @@ public class RoomManager {
                 }
                 return v.isEmpty() ? null : v; // delete room from list
             });
+
+            User user = userRepository.getUserByUUID(userId);
+
             String jsonString = new JSONObject()
                     .put("response_type", "room_notification")
-                    .put("message", String.format("%s left the Room!", sessionId))
+                    .put("message", String.format("%s left the Room!", user.getUserName()))
                     .toString();
 
             this.broadcastMessageToRoom(roomId, jsonString);

@@ -1,10 +1,12 @@
 import {router} from '../router';
 import {store} from "./model";
 import {produce} from "immer";
-import Keycloak from 'keycloak-js';
+import keycloakService from './service/keycloak';
+
 
 router.resolve();
 
+keycloakService.init();
 
 router.on('/', () => {
     console.log("go home ccc");
@@ -29,21 +31,6 @@ router.on('', () => {
     store.next(model);
 });
 
-const keycloak = new Keycloak({
-    url: 'http://localhost:8000',
-    realm: 'cmr',
-    clientId: 'frontend'
-});
-
-try {
-    const authenticated = await keycloak.init({enableLogging: true, onLoad: "login-required"});
-    console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
-    if (authenticated) {
-        alert(`Juhu ${keycloak.token}`)
-    }
-} catch (error) {
-    console.error('Failed to initialize adapter: ', error);
-}
 
 import "./components/app";
 
