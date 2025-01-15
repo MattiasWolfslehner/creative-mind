@@ -23,3 +23,43 @@ Unsere Mission ist es, die Flexibilität und Vielseitigkeit des morphologischen 
 
 == 📸 Vorschau
 image:./docs/wireframe/img/Wireframe_MorphologicalBox.png[]
+
+== 🚀 Projekt starten
+
+1. Mit der virtuellen Maschine verbinden: 
+
+  ssh cm
+
+2. Keycloak starten:
+
+  sudo systemctl start keycloak-23.0.6
+
+3. Minikube starten: 
+Navigiere in den Ordner `/backend/k8s` und führe aus:  
+
+  minikube start
+
+4. Datenbank starten und Port weiterleiten (5432:5432):  
+
+  bash start-db.sh
+
+5. Backend starten:  
+Navigiere in den Ordner `/backend` und führe aus:  
+
+  ssh start.sh
+
+6. Frontend vorbereiten (optional):  
+Navigiere in den Ordner `/frontend` und führe aus:  
+
+  npm install
+
+7. Frontend starten:  
+Navigiere in den Ordner `/frontend` und führe aus:  
+
+  npm start
+
+8. Keycloak-Zugang:  
+Besuche die Website (localhost:9000) und registriere dich als neuer Nutzer oder melde dich an. Die Anmeldedaten sind:  
+* Benutzername: `testMember`  
+* Passwort: `test123`
+
