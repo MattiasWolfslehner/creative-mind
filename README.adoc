@@ -5,3 +5,26 @@ Pipeline]]
 
 Creative Mind is a web app where your new startup idea might be born. +
 Easily brainstorm with others in real time.
+
+
+
+Starten der Website:
+    
+
+1.  ssh cm
+2.  minikube start
+3.  im /backend/k8s ordner -> 
+      * ./start-db.sh
+      (macht jetzt auch das Port-Mapping)
+4.  im backend
+      * ./start.sh
+5.  im frontend 
+      * npm install
+      * npm run build
+      * npm start
+
+keycloak auf der website:
+
+    username: testMember
+
+    password: test123

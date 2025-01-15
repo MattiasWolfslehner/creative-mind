@@ -5,6 +5,7 @@ import com.creative_mind.model.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -31,13 +32,21 @@ public class UserRepository {
     }
 
     public User getUserByUUID(UUID uuid) {
+        try {
             TypedQuery<User> userQuery = this.entityManager
                     .createNamedQuery(User.GET_USER_BY_USER_ID, User.class);
             userQuery.setParameter("userId", uuid);
             User user = userQuery.getSingleResult();
-            if(user == null){
-                throw new CreativeMindException(String.format("No user with [%s] available!", uuid.toString()));
-            }
             return user;
+        }catch (NoResultException ex){
+            return null;
+        }
+        /*
+            if(user == null){
+                //throw new CreativeMindException(String.format("No user with [%s] available!", uuid.toString()));
+
+            }
+         */
+
     }
 }

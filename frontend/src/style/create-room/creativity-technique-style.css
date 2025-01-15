@@ -1,0 +1,28 @@
+#creativityTechniques {
+    margin-top: 3vh; 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: space-around;
+}
+
+#sixThreeFive {
+    background-color: #8D63D0; 
+    width: 20vw; 
+    height: auto; 
+    text-align: center; 
+    color: white; 
+    font-family: 'sans-serif'; 
+    margin-bottom: 20px; 
+    border-radius: 10px;
+}
+
+#mindMap, #zwickyBox {
+    background-color: rgba(141, 99, 208, 0.4); 
+    width: 20vw; 
+    height: auto; 
+    text-align: center; 
+    color: rgba(255, 255, 255, 0.4); 
+    font-family: 'sans-serif'; 
+    margin-bottom: 20px; 
+    border-radius: 10px
+}

@@ -5,12 +5,13 @@ import com.creative_mind.model.Participation;
 import com.creative_mind.model.Room;
 import com.creative_mind.model.User;
 import com.creative_mind.model.requests.ParticipantionRequest;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +28,23 @@ public class ParticipationRepository {
     public List<Participation> getAllParticipation() {
         return this.entityManager.createNamedQuery(Participation.QUERY_FIND_ALL, Participation.class).getResultList();
     }
+    public Participation getParticipation(Integer userId, Integer roomId ) {
+        TypedQuery<Participation> query = entityManager.createNamedQuery(Participation.QUERY_FIND_ONE, Participation.class);
+
+        return query
+                .setParameter("userId", userId)
+                .setParameter("roomId", roomId)
+                .getSingleResult();
+    }
+
+    public List<Participation> getParticipationForRoom(UUID roomId ) {
+        TypedQuery<Participation> query = entityManager.createNamedQuery(Participation.QUERY_FIND_ONE_ROOM, Participation.class);
+        List<Participation> participations = query
+                .setParameter("roomId", roomId)
+                .getResultList();
+
+        return participations;
+    }
 
     @Transactional
     public void addParticipation(ParticipantionRequest participationRequest) {
@@ -38,6 +56,7 @@ public class ParticipationRepository {
         Participation participation = new Participation(room, member, sessionId);
 
         if (!this.isUserInRoom(member.getId(), room.getId())) {
+            Log.info(String.format("user [%s] added to room [%s]", member.getId(), room.getId()));
             this.entityManager.persist(participation);
         } else {
             throw new CreativeMindException(String.format("User[%s] is already in Room[%s]!", member.getId(), room.getId()));
@@ -51,11 +70,13 @@ public class ParticipationRepository {
         User member = userRepository.getUserByUUID(participationRequest.getMemberId());
         Room room = roomRepository.getRoomByUUID(participationRequest.getRoomId());
 
-        Participation participation = new Participation(room, member, sessionId);
+        Participation participation = getParticipation(member.getId(), room.getId());
 
-        if (this.isUserInRoom(member.getId(), room.getId())) {
+        if (participation != null) {
+            //Participation p = this.entityManager.merge(participation); // recommended with persistance
             this.entityManager.remove(participation);
         } else {
+            Log.error(String.format("could not delete participation User[%s] in Room[%s] ([%s])!", member.getId(), room.getId(), sessionId));
             throw new CreativeMindException(String.format("User[%s] is not in Room[%s]!", member.getId(), room.getId()));
         }
     }

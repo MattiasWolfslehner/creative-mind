@@ -1,0 +1,19 @@
+meta {
+  name: DELETE PARTICIPATION
+  type: http
+  seq: 10
+}
+
+delete {
+  url: http://localhost:8080/api/participations/remove
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "roomType":"brainwritingroom",
+    "roomId": "968a5a10-2dcc-4925-8b1c-58dcbf744efb",
+    "memberId":"e0ccd4cb-295a-48d2-9e8b-b80d5a72bfb0"
+  }
+}

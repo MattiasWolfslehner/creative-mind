@@ -1,14 +1,16 @@
 package com.creative_mind.model.requests;
 
+import com.creative_mind.model.RoomStatus;
+
 public class RoomStateRequest {
-    private boolean roomState;
+    private RoomStatus roomState;
 
 
-    public boolean getRoomState() {
+    public RoomStatus getRoomState() {
         return roomState;
     }
 
-    public void setRoomState(boolean roomState) {
+    public void setRoomState(RoomStatus roomState) {
         this.roomState = roomState;
     }
 }

@@ -1,0 +1,19 @@
+@TOKEN_ENDPOINT={{wellknown.response.body.token_endpoint}}
+@TOKEN={{login.response.body.access_token}}
+###
+
+# @name wellknown
+GET http://localhost:8000/realms/cmr/.well-known/openid-configuration
+Accept: application/json
+
+###
+# @name login
+POST {{TOKEN_ENDPOINT}}
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&client_id=quarkus&client_secret=gstBIjC7fdgagkMfShG2dqNmDITj45C6&username=testmember&password=test123
+
+
+###
+GET http://localhost:8080/api/users/register
+Authorization: Bearer {{TOKEN}}

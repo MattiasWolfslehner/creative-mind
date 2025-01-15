@@ -1,16 +1,14 @@
 import { html, render } from "lit-html"
-import "./text-input"
-import "./idea-list"
+import "../idea-room/text-input"
+import "../idea-room/room-input"
+import "../idea-room/idea-list"
+import "../idea-room/participant-list"
 import ideaService from "../../service/idea-service"
+import roomService from "../../service/room-service"
+import userService from "../../service/user-service"
+import {store} from "../../model";
+import {distinctUntilChanged, map} from "rxjs";
 
-const template = ()=> html`
-<div style="display: flex; justify-content: space-around">
-    <div>
-        <idea-list></idea-list>
-        <text-input></text-input>
-    </div>
-</div>
-`
 
 //attribute change callback
 // html custom events for save
@@ -18,17 +16,36 @@ const template = ()=> html`
 
 class BrainwritingElement extends HTMLElement {
 
+    template (roomId) {
+        return html` 
+            <div>
+                    <room-input></room-input>
+                    <idea-list></idea-list>
+                    <text-input></text-input>
+                    <participant-list></participant-list>
+            </div>
+        `;
+    }
+
     constructor() {
-        super()
-        this.attachShadow({mode:"open"})
-        const todos = ideaService.getIdeasByRoomId("100eafb1-32ca-4725-8d27-88560d0a9628");
+        super();
+        this.attachShadow({mode:"open"});
+        // loads data
+        //const ideas = ideaService.getIdeasByRoomId(this.roomid);
+        //const rooms = roomService.getRooms();
+        const users = userService.getUsers();
     }
 
     connectedCallback() {
-        console.log("connected")
-        render(template(), this.shadowRoot)
+        //const ideas = ideaService.getIdeasByRoomId(this.roomId);
+        //const rooms = roomService.getRooms();
+        const users = userService.getUsers();
+        store.pipe(map( model => model.activeRoomId ), distinctUntilChanged())
+            .subscribe(activeRoomId => {
+                render(this.template(activeRoomId), this.shadowRoot)
+            });
     }
 }
 
 
-customElements.define("brain-writing", BrainwritingElement)
+customElements.define("brainwriting-element", BrainwritingElement)

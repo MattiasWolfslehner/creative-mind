@@ -1,0 +1,21 @@
+#mainBox {
+    display: flex; 
+    justify-content: center; 
+    flex-wrap: wrap;
+}
+
+#smallerBox {
+    width: 65vw; 
+    text-align: center;
+}
+
+#smallerBox h1 {
+    margin-bottom: -0.5vh; 
+    color: white; 
+    font-family: 'sans-serif'
+}
+
+#smallerBox hr {
+    border: 2px solid #8D63D0; 
+    width: 100%;
+}

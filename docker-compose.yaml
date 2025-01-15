@@ -1,0 +1,65 @@
+include:
+  - postgres.yaml
+services:
+  backend:
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    image: ghcr.io/mattiaswolfslehner/backend:latest
+    ports:
+      - 8080:8080
+    healthcheck:
+     test: curl -f http://localhost:8080/q/health
+     start_period: 30s
+     start_interval: 2s
+     retries: 10
+  keycloak:
+    container_name: keycloak
+    image: ghcr.io/mattiaswolfslehner/keycloak:latest
+    command: [ "start-dev",
+               "--db=postgres",
+               "--db-url=jdbc:postgresql://postgres:5432/demo",
+               "--db-username=demo",
+               "--db-password=demo",
+               "--http-enabled=true",
+               "--health-enabled=true",
+               "--metrics-enabled=true",
+               "--import-realm"
+    ]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - 8000:8080
+    healthcheck:
+      test: timeout 10s bash -c ':> /dev/tcp/localhost/8080'
+      interval: 40s
+      timeout: 30s
+      retries: 3
+      start_period: 120s
+      start_interval: 5s
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=password
+      - KC_HOSTNAME=localhost
+      # localhost
+  nginx:
+    container_name: www
+    image: ghcr.io/mattiaswolfslehner/frontend:latest
+    ports:
+      - 9000:80
+    healthcheck:
+      test: curl --fail --head -fsS http://localhost
+      interval: 40s
+      timeout: 30s
+      retries: 2
+      start_period: 10s
+    depends_on:
+      backend:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+volumes:
+  postgres:

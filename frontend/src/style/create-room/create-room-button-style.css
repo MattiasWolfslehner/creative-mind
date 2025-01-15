@@ -1,0 +1,9 @@
+#createRoomButton {
+    background-color: white; 
+    width: 20vw;
+    height: auto; 
+    text-align: center; 
+    font-family: 'sans-serif'; 
+    margin-bottom: 20px; 
+    border-radius: 10px
+}

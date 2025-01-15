@@ -1,11 +1,15 @@
 package com.creative_mind.repository;
 
 import com.creative_mind.exception.CreativeMindException;
+import com.creative_mind.model.MorphologicalRoom;
 import com.creative_mind.model.Room;
+import com.creative_mind.model.RoomStatus;
+import com.creative_mind.model.requests.RoomRequest;
 import com.creative_mind.services.IdeaCsvService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
@@ -33,12 +37,24 @@ public class RoomRepository {
     }
 
     @Transactional
-    public boolean updateRoomState(UUID roomId, boolean state) {
+    public RoomStatus updateRoomState(UUID roomId, RoomStatus state) {
         Room room = this.getRoomByUUID(roomId);
         room.setRoomState(state);
         return room.getRoomState();
     }
 
+    @Transactional
+    public Room updateRoom(UUID roomId, RoomRequest roomRequest) {
+        Room room = this.getRoomByUUID(roomId);
+        boolean changed = false;
+        if (roomRequest.getDescription() != null) {
+            room.setDescription(roomRequest.getDescription());
+        }
+        if (roomRequest.getName() != null) {
+            room.setName(roomRequest.getName());
+        }
+        return (room);
+    }
     public List<Room> getAllRooms() {
         return this.entityManager.createNamedQuery(Room.GET_ALL_ROOMS, Room.class).getResultList();
     }
@@ -54,6 +70,22 @@ public class RoomRepository {
         if(room == null){
             throw new CreativeMindException(String.format("No room with [%s] available!", uuid.toString()));
         }
+        return room;
+    }
+
+    public MorphologicalRoom getMorphoRoomByUUID(UUID morphologicalRoomId) {
+
+        TypedQuery<MorphologicalRoom> roomQuery = this.entityManager
+                .createNamedQuery(MorphologicalRoom.GET_ROOM_BY_ROOM_ID, MorphologicalRoom.class);
+        roomQuery.setParameter("roomId", morphologicalRoomId);
+
+        MorphologicalRoom room;
+        try {
+            room = roomQuery.getSingleResult();
+        } catch (NoResultException e) {
+            throw new CreativeMindException(String.format("No room with [%s] available!", morphologicalRoomId.toString()), e);
+        }
+
         return room;
     }
 

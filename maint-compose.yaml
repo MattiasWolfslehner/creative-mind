@@ -1,0 +1,28 @@
+# This file is for maintainance of keycloak
+include:
+  - postgres.yaml
+services:
+  keycloak:
+    container_name: keycloak
+    image: ghcr.io/mattiaswolfslehner/keycloak:latest
+    command: [ "start-dev",
+               "--db=postgres",
+               "--db-url=jdbc:postgresql://postgres:5432/demo",
+               "--db-username=demo",
+               "--db-password=demo",
+               "--http-enabled=true",
+               "--health-enabled=true",
+               "--metrics-enabled=true",
+               "--import-realm"
+    ]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - 8000:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=password
+      - KC_HOSTNAME=localhost
+volumes:
+  postgres:

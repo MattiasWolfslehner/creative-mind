@@ -1,54 +1,69 @@
 import { produce } from "immer"
 import { Idea, store } from "../model"
+import path from "./service-const"
 
 class IdeaService{
 
-    async getIdeasByRoomId(roomId){
+    async getIdeasByRoomId(roomId : string){
         //fetch
-        const response = await fetch(`http://localhost:8080/api/ideas/${roomId}`)
-        const ideas : Idea[] = await response.json()
-        console.log(ideas)
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+ localStorage.getItem("token")
+        });
+        const response = await fetch(`${path}/api/ideas/${roomId}`, {
+            headers: theHeader
+        });
+        try {
+            const ideas: Idea[] = await response.json();
 
-        const model = produce(store.getValue(), draft => {
-            draft.ideas = ideas
-        })
+            //set roomid as it does not come with the API
+            ideas.forEach((idea) => idea.roomId = roomId);
 
-        store.next(model);
+            const model = produce(store.getValue(), draft => {
+                draft.ideas = ideas;
+            })
+
+            store.next(model);
+        }
+        catch (error) {
+            console.log(error);
+        }
 
     }
     
     async postNewIdea(idea : Idea){
         try{
-        //fetch
-        const response = await fetch('http://localhost:8080/api/ideas',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(idea)
-        });
+            const theHeader = new Headers({
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+ localStorage.getItem("token")
+            });
+            //fetch
 
-        if(response.ok){
-            const responseData = await response.json()
-            console.log("idea has been added successfully: ", responseData);
+            const response = await fetch(`${path}/api/ideas`,{
+                method: 'POST',
+                headers: theHeader,
+                body: JSON.stringify(idea)
+            });
+
+            if(response.ok){
+                const responseData = await response.json();
+                //console.log("idea has been added successfully: ", responseData);
             
-            //add idea to store
-            const model = produce(store.getValue(), draft => {
-                draft.ideas.push(idea);
-            })
+                //add idea to store
+                const model = produce(store.getValue(), draft => {
+                    draft.ideas.push(idea);
+                });
+                store.next(model);
 
-            store.next(model);
-
-        }else{
-            console.error('Error posting idea: ', response.statusText);
-        }
-        }catch(error){
+            }else{
+                console.error('Error posting idea: ', response.statusText);
+            }
+        } catch(error) {
             console.error('Error posting idea: ', error);
-            
         }
     }
 }
 
 
-const ideaService = new IdeaService()
-export default ideaService
+const ideaService = new IdeaService();
+export default ideaService;

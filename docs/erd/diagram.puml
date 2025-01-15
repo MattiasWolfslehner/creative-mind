@@ -1,0 +1,73 @@
+@startuml
+entity Room {
+  * id : Integer
+  * adminId : UUID
+  * description : String
+  * name : String
+  * roomId : UUID
+  * roomState : RoomStatus
+}
+
+entity IdeaRoom {
+}
+
+entity BrainstormingRoom {
+  * maxTimerForRoom : long
+}
+
+entity BrainwritingRoom {
+  * maxTimerForRoom : long
+}
+
+entity MorphologicalRoom {
+
+}
+
+entity Realization {
+* contentId: String
+* content: String
+}
+
+entity Parameter {
+* paramId: Integer
+* title: String
+}
+
+
+entity Idea {
+  * id : Integer
+  * content : String
+}
+
+entity Participation {
+  * id : Integer
+  * sessionId : String
+}
+
+entity User {
+  * id : Integer
+  * userId : UUID
+  * userName : String
+}
+
+entity Combination {
+* combinationId: Integer
+* combinationText: String
+}
+
+Room <|-- MorphologicalRoom
+
+MorphologicalRoom "1" -- "*" Parameter
+Parameter "1" -- "*" Realization
+Room "1" -- "*" Participation
+
+Room  <|--  IdeaRoom
+IdeaRoom <|-- BrainstormingRoom
+IdeaRoom <|-- BrainwritingRoom
+IdeaRoom "1" -- "*" Idea
+Idea "1" -- "*" User
+User "1" -- "*" Participation
+
+MorphologicalRoom "1" -- "*" Combination : generates
+User "1" -- "*" Combination: creates
+@enduml
