@@ -59,8 +59,7 @@ Navigiere in den Ordner `/frontend` und führe aus:
   npm start
 
 8. Keycloak-Zugang:  
-Besuche die Website (localhost:9000) und melde dich an. Die Anmeldedaten sind:  
+Besuche die Website (localhost:9000) und registriere dich als neuer Nutzer oder melde dich an. Die Anmeldedaten sind:  
 * Benutzername: `testMember`  
 * Passwort: `test123`
-Oder registriere dich als neuer Nutzer.
 
