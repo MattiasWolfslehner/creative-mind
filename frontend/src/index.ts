@@ -1,9 +1,12 @@
 import {router} from '../router';
 import {store} from "./model";
 import {produce} from "immer";
+import keycloakService from './service/keycloak';
+
 
 router.resolve();
 
+keycloakService.init();
 
 router.on('/', () => {
     console.log("go home ccc");
@@ -27,6 +30,7 @@ router.on('', () => {
     });
     store.next(model);
 });
+
 
 import "./components/app";
 
