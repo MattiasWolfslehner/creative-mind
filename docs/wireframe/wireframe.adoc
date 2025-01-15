@@ -1,0 +1,31 @@
+= Creative-Mind Wireframe
+Christoph Ursprung
+1.0.0, {docdate}
+//:toc-placement!:  // prevents the generation of the doc at this position, so it can be printed afterwards
+:icons: font
+:sectnums:
+:toc: left
+:experimental:
+
+=== Link zum Wireframe
+https://www.figma.com/file/dM3qG2VB9eYjCiUFSOzOit/Creative-Minds---Wireframe?type=design&node-id=0%3A1&mode=design&t=TQcbbbunzxwIeFKL-1[Wireframe]
+
+=== Wireframes als PNG
+
+Homepage (Login/Join Room)
+image:./img/Wireframe_Home.png[]
+
+Homepage (Register/Create Room)
+image:./img/Wireframe_HomeWhenClickedOnRegister.png[]
+
+6-3-5 Methode bevor Start des Timers als Room Admin (Brainwriting)
+image:./img/Wireframe_Brainwriting_BeforeStartingTheTimerAsTheRoomAdmin.png[]
+
+6-3-5 Methode währrend man als Member wartet (Brainwriting)
+image:./img/Wireframe_Brainwriting_BeforeTheRoomAdminStartsTheTimer.png[]
+
+6-3-5 Methode nach Start des Timers (Brainwriting)
+image:./img/Wireframe_Brainwriting_StartOfTimer.png[]
+
+6-3-5 Methode nachdem die Zeit abgelaufen ist (Brainwriting)
+image:./img/Wireframe_Brainwriting_AfterTheTimeRunOut.png[]

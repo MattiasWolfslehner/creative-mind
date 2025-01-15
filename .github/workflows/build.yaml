@@ -1,0 +1,43 @@
+name: Build Beta Version of qui
+on: [push]
+
+jobs:
+  build:
+    permissions: write-all
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+          cache-dependency-path: 'backend/pom.xml'
+
+      - name: compile
+        working-directory: backend
+        run: mvn -B package
+
+      - name: List files in the repository
+        run: |
+          ls -l ${{ github.workspace }}/backend/target
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+      - name: Upload binaries to release
+        id: upload
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file_glob: true
+          overwrite: true
+          prerelease: true
+          body: "Intermediate Release for Sprint Review"
+          file: backend/target/*-runner.jar
+#         tag: ${{ github.ref }}
+
+      - name: Display url
+        run: |
+          echo "TODO: tell the server that it should download this url:""
+          echo "${{steps.upload.outputs.browser_download_url}}""

@@ -2,10 +2,12 @@
 
 # start the backend
 cd ./backend
-bash ./start.sh &
+./start.sh &
 
 cd ..
 
 # start the fronend
 cd ./frontend
-bash ./start.sh &
+./start.sh &
+
+wait

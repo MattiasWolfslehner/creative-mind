@@ -1,0 +1,77 @@
+body {
+  background-image: url('../assets/FunkyRetro_Background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  header {
+    padding: 0.5rem 1rem;
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: var(--background-color);
+    border-bottom: var(--muted-border-color) 1px solid;
+
+    h1 {
+      margin: 0;
+    }
+  }
+
+  main {
+    min-height: 100vh;
+  }
+
+  footer {
+    padding: 0.5rem 1rem;
+    border-top: var(--muted-border-color) 1px solid;
+  }
+
+  /* helper */
+  .hidden {
+    display: none;
+  }
+
+  /* copy uid button */
+  .button-container {
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+
+    #copy-uuid-button,
+    #copy-room-id-button {
+      background-color: var(--background-color);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+
+      &:hover + #cm-uuid {
+        display: block;
+      }
+
+      &:hover + #room-id {
+        display: block;
+      }
+    }
+
+    #cm-uuid,
+    #room-id {
+      display: none;
+      position: fixed;
+      bottom: 7%;
+      right: 10%;
+      background-color: var(--background-color);
+      padding: 10px;
+      border: 1px solid #fff;
+      border-radius: 5px;
+    }
+
+    #add-idea,
+    .room-join-button,
+    #send-message {
+      background-color: green;
+      padding: 10px;
+      border: 1px solid #fff;
+      border-radius: 5px;
+    }
+  }
+}
