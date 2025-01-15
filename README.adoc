@@ -30,32 +30,37 @@ image:./docs/wireframe/img/Wireframe_MorphologicalBox.png[]
 
   ssh cm
 
-2. Minikube starten: 
+2. Keycloak starten:
+
+  sudo systemctl start keycloak-23.0.6
+
+3. Minikube starten: 
+Navigiere in den Ordner `/backend/k8s` und führe aus:  
 
   minikube start
 
-3. Datenbank starten und Port weiterleiten (5432:5432):  
-Navigiere in den Ordner `/backend/k8s` und führe aus:  
+4. Datenbank starten und Port weiterleiten (5432:5432):  
 
   bash start-db.sh
 
-4. Backend starten:  
+5. Backend starten:  
 Navigiere in den Ordner `/backend` und führe aus:  
 
   ssh start.sh
 
-5. Frontend vorbereiten (optional):  
+6. Frontend vorbereiten (optional):  
 Navigiere in den Ordner `/frontend` und führe aus:  
 
   npm install
 
-6. Frontend starten:  
+7. Frontend starten:  
 Navigiere in den Ordner `/frontend` und führe aus:  
 
   npm start
 
-7. Keycloak-Zugang:  
-Besuche die Website und melde dich an. Die Anmeldedaten sind:  
+8. Keycloak-Zugang:  
+Besuche die Website (localhost:9000) und melde dich an. Die Anmeldedaten sind:  
 * Benutzername: `testMember`  
 * Passwort: `test123`
+Oder registriere dich als neuer Nutzer.
 
