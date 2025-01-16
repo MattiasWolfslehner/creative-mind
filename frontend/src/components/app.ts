@@ -85,7 +85,7 @@ class AppComponent extends HTMLElement {
         }
 
         .logout-image {
-            width: 15%;
+            width: 10%;
             height: auto;
         }
         
