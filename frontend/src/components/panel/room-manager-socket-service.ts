@@ -219,7 +219,6 @@ class RoomManagerSocketService extends HTMLElement {
 
     template() {
         return html`
-
             <style>
                 .popupmessage {
                     position: absolute;
@@ -230,10 +229,23 @@ class RoomManagerSocketService extends HTMLElement {
                     background-color: white;
                     border-radius: 5px;
                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                    display: ${(this.socketStatus.length > 0)?"block":"none"};
                     z-index: 10;
+                    opacity: 0;
+                    transform: translateY(-10px);
+                    transition: opacity 0.5s ease, transform 0.5s ease;
                 }
-
+    
+                .popupmessage.show {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+    
+                .popupmessage.fade-out {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                    transition: opacity 0.5s ease, transform 0.5s ease;
+                }
+    
                 .popupmessage::after {
                     content: "";
                     position: absolute;
@@ -244,7 +256,7 @@ class RoomManagerSocketService extends HTMLElement {
                     border-style: solid;
                     border-color: transparent transparent white transparent;
                 }
-
+    
                 .popupmessage-content {
                     display: table;
                     align-items: left;
@@ -253,28 +265,51 @@ class RoomManagerSocketService extends HTMLElement {
                     padding: 10px;
                     box-sizing: border-box;
                 }
-                
             </style>
-            
-            
-      <div class="popupmessage" id="popupmessage1" @click="${() => {this.clearMessages();}}">
-          <div class="popupmessage-content">
-              ${
-                    this.socketStatus.map(
-                        (m:string) => html`<div>${m}</div><br>`
-                    )
-                }
-          </div>
-      </div>
-    `;
+    
+            <div
+                class="popupmessage"
+                id="popupmessage1"
+                @click="${() => { this.clearMessages(); }}"
+            >
+                <div class="popupmessage-content">
+                    ${
+                        this.socketStatus.map(
+                            (m: string) => html`<div>${m}</div><br>`
+                        )
+                    }
+                </div>
+            </div>
+        `;
     }
-
-    protected clearMessages() {
-        while(this.socketStatus.length>0) { // empty messages
-            this.socketStatus.pop();
+    
+    firstUpdated() {
+        // Call this method to show the popup
+        this.showPopup();
+    }
+    
+    showPopup() {
+        const popup = this.shadowRoot?.getElementById('popupmessage1');
+        if (popup) {
+            // Add the "show" class to make it visible
+            popup.classList.add('show');
+    
+            // Remove the "show" class after a delay and add "fade-out"
+            setTimeout(() => {
+                popup.classList.remove('show');
+                popup.classList.add('fade-out');
+            }, 3000); // Display for 3 seconds
         }
-        this.refresh();
     }
+    
+    clearMessages() {
+        this.socketStatus = []; // Clear messages
+        const popup = this.shadowRoot?.getElementById('popupmessage1');
+        if (popup) {
+            popup.classList.remove('show', 'fade-out'); // Reset classes
+        }
+    }
+    
 }
 
 

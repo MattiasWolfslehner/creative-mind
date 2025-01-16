@@ -1,19 +1,17 @@
-import { html, render } from "lit-html"
+import { html, render } from "lit-html";
 import { distinctUntilChanged, map } from "rxjs";
-import { store } from "../../model/store"
+import { store } from "../../model/store";
 import { Room } from "src/model";
 import { Participation } from "src/model/participation";
+import { QRCode } from "ts-qrcode";
 
 class RoomInfoMenu extends HTMLElement {
-
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
     }
 
-
     template(participations: Participation[], room: Room) {
-
         return html`
             <style>
                 body {
@@ -29,7 +27,6 @@ class RoomInfoMenu extends HTMLElement {
                     color: #fff;
                     text-decoration: none;
                 }
-                
                 #roomInfo {
                     position: absolute;
                     top: 2vw;
@@ -49,7 +46,6 @@ class RoomInfoMenu extends HTMLElement {
                 #roomInfo div {
                     padding: 0 1vw;
                 }
-                
                 #roomMenu {
                     position: absolute;
                     top: 2vw;
@@ -66,12 +62,10 @@ class RoomInfoMenu extends HTMLElement {
                     font-family: 'sans-serif';
                     font-size: 1vw;
                 }
-                
                 .menu-item {
                     display: flex;
                     align-items: center;
                 }
-                
                 .burger-menu {
                     display: flex;
                     flex-direction: column;
@@ -87,7 +81,6 @@ class RoomInfoMenu extends HTMLElement {
                     border-radius: 0.2vw;
                     margin: 2%;
                 }
-                
                 .member-count {
                     width: 4vw;
                     height: 4vw;
@@ -99,7 +92,6 @@ class RoomInfoMenu extends HTMLElement {
                     align-items: center;
                     font-size: 1.2vw;
                 }
-                
                 .share-box {
                     display: flex;
                     align-items: center;
@@ -112,19 +104,16 @@ class RoomInfoMenu extends HTMLElement {
                     box-sizing: border-box;
                     cursor: pointer;
                 }
-                
                 .share-box img {
                     width: 4vw;
                     height: 4vw;
                     border-radius: 0.5vw;
                 }
-                
                 .share-box span {
                     margin-left: 1vw;
                     font-size: 1.5vw;
                     color: #000;
                 }
-                
                 .tooltip {
                     visibility: hidden;
                     width: 13vw;
@@ -136,17 +125,15 @@ class RoomInfoMenu extends HTMLElement {
                     position: absolute;
                     z-index: 1;
                     top: 110%;
-                    left: 50%;
+                    left: 72%;
                     transform: translateX(-50%);
                     opacity: 0;
                     transition: opacity 0.3s;
                 }
-                
                 .share-box:hover .tooltip {
                     visibility: visible;
                     opacity: 1;
                 }
-                
                 .tooltip::after {
                     content: "";
                     position: absolute;
@@ -156,7 +143,7 @@ class RoomInfoMenu extends HTMLElement {
                     border-width: 0.5vw;
                     border-style: solid;
                     border-color: transparent transparent #555 transparent;
-                }            
+                }
             </style>
             
             <div id="roomInfo">
@@ -169,7 +156,7 @@ class RoomInfoMenu extends HTMLElement {
                 <div>
                     <h2 id="roomName">${room ? (room.name ? room.name : "NONAME2") : "NONAME"}</h2>
                 </div>
-            </div>  
+            </div>
             <div id="roomMenu">
                 <div class="menu-item burger-menu">
                     <div></div>
@@ -177,7 +164,7 @@ class RoomInfoMenu extends HTMLElement {
                     <div></div>
                 </div>
                 <div class="menu-item member-count">
-                    ${(participations) ? (participations.length) : 0}
+                    ${participations ? participations.length : 0}
                 </div>
                 <div class="menu-item share-box" @click="${() => this.shareRoom()}">
                     <img src="https://png.pngtree.com/png-vector/20191004/ourmid/pngtree-person-icon-png-image_1788612.jpg" alt="Person Icon">
@@ -185,34 +172,52 @@ class RoomInfoMenu extends HTMLElement {
                     <div class="tooltip">Copy link to clipboard</div>
                 </div>
             </div>
+            <div id="qr-code-container" style="display: flex; justify-content: space-around; width: 80vw; margin: 2vw; text-align: center; margin-top: 30vh; z-index: 100"></div>
         `;
     }
 
     connectedCallback() {
-        store.pipe(map(model => ({
-            ideas: model.ideas,
-            rooms: model.rooms,
-            participations: model.participations,
-            activeRoomId: model.activeRoomId,
-            thisUserId: model.thisUserId
-        })), distinctUntilChanged())
-            .subscribe(reduced_model => {
-                const thisRooms = reduced_model.rooms.filter(
-                    (room) => room.roomId === reduced_model.activeRoomId
-                );
-                let thisRoom: Room = null;
-                thisRoom = thisRooms[0];
+        store.pipe(
+            map(model => ({
+                ideas: model.ideas,
+                rooms: model.rooms,
+                participations: model.participations,
+                activeRoomId: model.activeRoomId,
+                thisUserId: model.thisUserId
+            })),
+            distinctUntilChanged()
+        ).subscribe(reducedModel => {
+            const thisRooms = reducedModel.rooms.filter(
+                room => room.roomId === reducedModel.activeRoomId
+            );
+            const thisRoom: Room = thisRooms.length > 0 ? thisRooms[0] : null;
 
-                render(this.template(reduced_model.participations, thisRoom), this.shadowRoot);
-            });
+            render(this.template(reducedModel.participations, thisRoom), this.shadowRoot!);
+        });
     }
 
     shareRoom() {
-        const currentUrl = window.location.href;
+        const currentUrl: string = window.location.href;
+
         navigator.clipboard.writeText(currentUrl).then(() => {
             alert('Link copied to clipboard!');
+
+            const qrContainer = this.shadowRoot!.getElementById("qr-code-container");
+            if (qrContainer) {
+                qrContainer.innerHTML = "";
+
+                const canvas = document.createElement("canvas");
+                qrContainer.appendChild(canvas);
+
+                const qrCode = new QRCode({
+                    content: currentUrl,
+                    width: 200,
+                    height: 200,
+                    canvasElement: canvas
+                });
+            }
         }).catch(err => {
-            console.error('Failed to copy: ', err);
+            console.error("Failed to copy: ", err);
         });
     }
 }
