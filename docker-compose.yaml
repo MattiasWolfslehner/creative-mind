@@ -7,6 +7,8 @@ services:
         condition: service_healthy
       keycloak:
         condition: service_healthy
+    environment:
+      - QUARKUS_PROFILE=prod
     image: ghcr.io/mattiaswolfslehner/backend:latest
     ports:
       - 8080:8080
@@ -43,7 +45,7 @@ services:
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=password
-      - KC_HOSTNAME=localhost
+      #- KC_HOSTNAME=localhost
       # localhost
   nginx:
     container_name: www

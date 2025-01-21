@@ -2,7 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgres-setup
-
 data:
   setup.sql: |
     DROP database if exists demo;
@@ -16,7 +15,6 @@ data:
       NOREPLICATION
       CONNECTION LIMIT -1
       PASSWORD 'demo';
- 
     CREATE DATABASE demo
         WITH 
         OWNER = demo
@@ -30,12 +28,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgresql-data
-
   annotations:
     nfs.io/storage-path: "postgresql-data"
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   storageClassName: default
   resources:
     requests:
@@ -45,7 +42,6 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: postgres-admin
-
 type: kubernetes.io/basic-auth
 stringData:
   username: demo
@@ -55,7 +51,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
-
   labels:
     component: postgres
 spec:
@@ -77,14 +72,14 @@ spec:
             - containerPort: 5432
               protocol: TCP
               name: postgres
-          readinessProbe:
+          livenessProbe:
             tcpSocket:
               port: 5432
             initialDelaySeconds: 20
             periodSeconds: 5
-          livenessProbe:
-            tcpSocket:
-              port: 5432
+          # livenessProbe:
+          #  exec:
+          #    command: ["pg_isready", "-u", "postgres"]
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data

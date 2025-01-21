@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: keycloak
+  name: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: keycloak
+  template:
+    metadata:
+      labels:
+        run: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: ghcr.io/mattiaswolfslehner/keycloak:latest
+          imagePullPolicy: Always
+          #command: ["/opt/keycloak/bin/kc.sh", "start-dev", "--proxy", "edge", "--features=declarative-user-profile", "--spi-x509cert-lookup-haproxy-trust-proxy-verification=true", "--hostname-admin-url=http://localhost:8000", "--log-level=INFO" ]
+          command: ["/opt/keycloak/bin/kc.sh"]
+          args:
+            - start-dev
+            - --proxy-headers
+            - xforwarded
+            - --hostname
+            - http://localhost:8000
+            - --hostname-admin=http://localhost:8000
+            - --log-level=INFO
+            - --db=postgres
+            - --db-url=jdbc:postgresql://postgres:5432/demo
+            - --db-username=demo
+            - --db-password=demo
+            - --http-enabled=true
+            - --health-enabled=true
+            - --metrics-enabled=true
+            - --import-realm
+          ports:
+            - containerPort: 8080
+              name: http
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 60
+          livenessProbe:
+            httpGet:
+              httpHeaders:
+                - name: Accept
+                  value: application/json
+              path: health/live
+              port: 8080
+            initialDelaySeconds: 180
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: admin
+
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: password
+
+            - name: KC_DB
+              value: postgres
+            - name: KC_DB_USERNAME
+              value: demo
+            - name: KC_DB_PASSWORD
+              value: demo
+            - name: KC_DB_URL_HOST
+              value: postgres
+            - name: KC_DB_URL_DATABASE
+              value: keycloak
+
+            - name: KC_HOSTNAME_URL
+              # change the external URL to https://your.server.com
+              value: http://keycloak:8000
+            - name: KC_HOSTNAME_STRICT
+              value: "false"
+            - name: KC_HOSTNAME_STRICT_HTTPS
+              value: "false"
+            - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KC_HTTP_PORT
+              value: "8080"
+            - name: KC_LOG_LEVEL
+              value: INFO
+            - name: keycloak.profile.feature.upload_scripts
+              value: enabled
+            - name: KC_HEALTH_ENABLED
+              value: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: keycloak
+  name: keycloak
+spec:
+  selector:
+    run: keycloak
+  ports:
+    - name: auth-port
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
