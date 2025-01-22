@@ -1,0 +1,4 @@
+@KEYCLOAK_URL=it200239.cloud.htl-leonding.ac.at/auth
+###
+# @name well known
+GET {{KEYCLOAK_URL}}/realms/cmr/.well-known/openid-configuration

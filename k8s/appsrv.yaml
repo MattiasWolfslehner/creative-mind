@@ -20,6 +20,10 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          env:
+            - name: QUARKUS_OIDC_CREDENTIALS_SECRET
+            #quarkus.oidc.credentials.secret
+              value: "wRxtBeh86wjLAJgifZdFuvxdSfDx6cBB"
           startupProbe:
             httpGet:
               path: /api/q/health
@@ -31,13 +35,13 @@ spec:
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /api/q/health
-              port: 8080
-            timeoutSeconds: 5
-            initialDelaySeconds: 30
-            periodSeconds: 120
+          #livenessProbe:
+            #httpGet:
+           #   path: /api/q/health
+           #   port: 8080
+            #timeoutSeconds: 5
+            #initialDelaySeconds: 30
+            #periodSeconds: 120
       # initContainers:
       #   - name: wait
       #     image: {{ .Values.postgres.image }}
@@ -57,7 +61,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: appsrv
+  name: backend
 spec:
   ports:
     - port: 8080

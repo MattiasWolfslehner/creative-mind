@@ -25,7 +25,7 @@ spec:
             - --proxy-headers
             - xforwarded
             - --hostname
-            - http://localhost:8000
+            - https://it200239.cloud.htl-leonding.ac.at/auth
             - --hostname-admin=http://localhost:8000
             - --log-level=INFO
             - --db=postgres
@@ -43,14 +43,14 @@ spec:
             tcpSocket:
               port: 8080
             initialDelaySeconds: 60
-          livenessProbe:
-            httpGet:
-              httpHeaders:
-                - name: Accept
-                  value: application/json
-              path: health/live
-              port: 8080
-            initialDelaySeconds: 180
+          # livenessProbe:
+            #httpGet:
+           #   httpHeaders:
+            #    - name: Accept
+            #      value: application/json
+            #  path: health/live
+            #  port: 8080
+           # initialDelaySeconds: 180
           env:
             - name: KEYCLOAK_ADMIN
               value: admin
@@ -69,9 +69,9 @@ spec:
             - name: KC_DB_URL_DATABASE
               value: keycloak
 
-            - name: KC_HOSTNAME_URL
+            #- name: KC_HOSTNAME_URL
               # change the external URL to https://your.server.com
-              value: http://keycloak:8000
+             # value: https://it200239.cloud.htl-leonding.ac.at
             - name: KC_HOSTNAME_STRICT
               value: "false"
             - name: KC_HOSTNAME_STRICT_HTTPS
@@ -85,6 +85,8 @@ spec:
             - name: keycloak.profile.feature.upload_scripts
               value: enabled
             - name: KC_HEALTH_ENABLED
+              value: "true"
+            - name: "QUARKUS_HTTP_ACCESS-LOG_ENABLED"
               value: "true"
 ---
 apiVersion: v1
