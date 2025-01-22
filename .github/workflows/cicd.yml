@@ -135,38 +135,6 @@ jobs:
           tags: cre8ivemind/creative-mind-backend:latest
           context: ./backend
 
-  deploy-frontend-to-oci:
-    needs: push-frontend-to-docker-hub
-    runs-on: ubuntu-latest
-    name: Deploying frontend to OCI
-
-    env:
-      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
-      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
-      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
-      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
-      OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
-    steps:
-      - name: Get or create OCIR Repository
-        uses: oracle-actions/get-ocir-repository@v1.2.1
-        id: get-ocir-repository
-        with:
-          name: creative-mind-frontend
-          compartment: ${{ secrets.OCI_COMPARTMENT_OCID }}
-
-      - name: Log into OCIR
-        uses: oracle-actions/login-ocir@v1.2.1
-        id: login-ocir
-        with:
-          auth_token: ${{ secrets.OCI_AUTH_TOKEN }}
-
-      - name: Tag and push the container image
-        id: tag-and-push-image
-        run: |
-          docker pull cre8ivemind/creative-mind-frontend:latest
-          docker tag "cre8ivemind/creative-mind-frontend:latest" "${{ steps.get-ocir-repository.outputs.repo_path }}:latest"
-          docker push "${{ steps.get-ocir-repository.outputs.repo_path }}:latest"
-
   deploy-backend-to-oci:
     needs: push-backend-to-docker-hub
     runs-on: ubuntu-latest
