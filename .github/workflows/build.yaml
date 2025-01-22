@@ -35,7 +35,7 @@ jobs:
           prerelease: true
           body: "Intermediate Release for Sprint Review"
           file: backend/target/*-runner.jar
-#         tag: ${{ github.ref }}
+          tag: snapshot-${{ github.ref }}
 
       - name: Display url
         run: |
