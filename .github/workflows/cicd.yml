@@ -1,9 +1,7 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches:
-      - unstable
+  push
 
 jobs:
   test-and-build-frontend:
