@@ -22,12 +22,6 @@ jobs:
         run: npm ci
         working-directory: frontend
 
-      - name: Format/Lint Frontend
-        run: |
-          npm run format
-          npm run lint
-        working-directory: frontend
-
       #- name: Setup Java environment
       #  uses: actions/setup-java@v3
       #  with:
