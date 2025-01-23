@@ -1,3 +1,2 @@
-
 const path: string = '/auth'
-export default path;
+export default path
