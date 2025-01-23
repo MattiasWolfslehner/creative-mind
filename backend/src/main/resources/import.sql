@@ -1,0 +1,4 @@
+insert into member values (1, '28a9260c-020e-4eb8-b88b-c05066157e50', 'testmember');
+insert into room values (1, '28a9260c-020e-4eb8-b88b-c05066157e50', '1dd490ee-7814-4c0d-9bdb-965836cd4eac', 'Morphological Room', null, 'DEMO Room', 'CREATED');
+insert into mbparameter values (1, 1, 'Parameter 1'), (2, 1, 'Parameter 2'), (3, 1, 'Parameter 3'), (4, 1, 'Parameter 4');
+insert into realization values (1, 1, 'Realization 1'), (2, 1, 'Realization 2'), (3, 1, 'Realization 3'), (4, 2, 'Realization 1'), (5, 2, 'Realization 2'), (6, 3, 'Realization 1'), (7, 3, 'Realization 2'), (8, 3, 'Realization 3'), (9, 4, 'Realization 1');
