@@ -1,4 +1,3 @@
 
-const path: string = 'http://localhost:8000';
-
+const path: string = '/auth'
 export default path;

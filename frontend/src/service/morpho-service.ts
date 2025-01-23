@@ -1,6 +1,5 @@
 import { produce } from "immer"
 import { MBParameter, store } from "../model"
-import path from "./service-const"
 import {MBCombination} from "../model/mbcombination";
 
 class MorphoService {
@@ -12,7 +11,7 @@ class MorphoService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/morpho/${roomId}/parameter`, {
+        const response = await fetch(`api/morpho/${roomId}/parameter`, {
             headers: theHeader
         });
         try {
@@ -42,7 +41,7 @@ class MorphoService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/morpho/${roomId}/combination`, {
+        const response = await fetch(`api/morpho/${roomId}/combination`, {
             headers: theHeader
         });
         try {
@@ -77,13 +76,13 @@ class MorphoService {
         let response;
 
         if (contentId) {
-            response = await fetch(`${path}/api/morpho/realization/${contentId}`, {
+            response = await fetch(`api/morpho/realization/${contentId}`, {
                 method: 'PUT',
                 headers: theHeader,
                 body: tempJson
             });
         } else {
-            response = await fetch(`${path}/api/morpho/realization`, {
+            response = await fetch(`api/morpho/realization`, {
                 method: 'POST',
                 headers: theHeader,
                 body: tempJson
@@ -116,13 +115,13 @@ class MorphoService {
 
         // use overwrite if paramid is there
         if (paramId) {
-            response = await fetch(`${path}/api/morpho/parameter/${paramId}`, {
+            response = await fetch(`api/morpho/parameter/${paramId}`, {
                 method: 'PUT',
                 headers: theHeader,
                 body: tempJson
             });
         } else {
-            response = await fetch(`${path}/api/morpho/parameter`, {
+            response = await fetch(`api/morpho/parameter`, {
                 method: 'POST',
                 headers: theHeader,
                 body: tempJson
@@ -151,7 +150,7 @@ class MorphoService {
             'combinationText': combination
         })
 
-        const response = await fetch(`${path}/api/morpho/combination`, {
+        const response = await fetch(`api/morpho/combination`, {
             method: 'POST',
             headers: theHeader,
             body: tempJson

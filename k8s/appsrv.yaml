@@ -24,12 +24,12 @@ spec:
             - name: QUARKUS_OIDC_CREDENTIALS_SECRET
             #quarkus.oidc.credentials.secret
               value: "wRxtBeh86wjLAJgifZdFuvxdSfDx6cBB"
-          startupProbe:
-            httpGet:
-              path: /api/q/health
-              port: 8080
-            timeoutSeconds: 5
-            initialDelaySeconds: 30
+          #startupProbe:
+          #  httpGet:
+          #    path: /api/q/health
+          #    port: 8080
+          #  timeoutSeconds: 5
+          #  initialDelaySeconds: 30
           readinessProbe:
             tcpSocket:
               port: 8080

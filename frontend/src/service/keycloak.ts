@@ -8,7 +8,7 @@ import {router} from "../../router";
 
 class KeycloakService {
     private static keycloak = new Keycloak({
-        url: 'http://localhost:8000',
+        url: path,
         realm: 'cmr',
         clientId: 'frontend'
     });
@@ -62,7 +62,7 @@ class KeycloakService {
             });
             console.log(KeycloakService.keycloak.token);
 
-            fetch(`${path}/api/users/register`, {
+            fetch(`api/users/register`, {
                 method: 'GET',
                 headers: headers,
             })

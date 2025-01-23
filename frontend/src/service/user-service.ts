@@ -1,6 +1,5 @@
 import { produce } from "immer"
 import { User, store } from "../model"
-import path from "./service-const"
 
 class UserService {
 
@@ -10,7 +9,7 @@ class UserService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer '+ localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/users/list`, {
+        const response = await fetch(`api/users/list`, {
             headers: theHeader
         });
         const users : User[] = await response.json();

@@ -1,6 +1,5 @@
 import { produce } from "immer"
 import { store } from "../model"
-import path from "./service-const"
 import {Participation} from "../model/participation";
 
 class ParticipationService {
@@ -19,7 +18,7 @@ class ParticipationService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer '+ localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/participations/room/${roomId}`, {
+        const response = await fetch(`api/participations/room/${roomId}`, {
             headers: theHeader
         });
 

@@ -1,6 +1,5 @@
 import { produce } from "immer"
 import { Room, store } from "../model"
-import path from "./service-const"
 import "./morpho-service"
 import morphoService from "./morpho-service";
 
@@ -13,7 +12,7 @@ class RoomService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/list`, {
+        const response = await fetch(`api/rooms/list`, {
             headers: theHeader
         });
         const rooms: Room[] = await response.json();
@@ -37,7 +36,7 @@ class RoomService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/create`, {
+        const response = await fetch(`api/rooms/create`, {
             method: 'POST',
             headers: theHeader,
             body: JSON.stringify({
@@ -99,7 +98,7 @@ class RoomService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/updateState/${roomId}`, {
+        const response = await fetch(`api/rooms/updateState/${roomId}`, {
             method: 'PUT',
             headers: theHeader,
             body: JSON.stringify({ roomState: roomState })
@@ -117,7 +116,7 @@ class RoomService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/update/${room.roomId}`, {
+        const response = await fetch(`api/rooms/update/${room.roomId}`, {
             method: 'PUT',
             headers: theHeader,
             body: JSON.stringify({ name: room.name, description: room.description })
@@ -140,7 +139,7 @@ class RoomService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/start/${roomId}`, {
+        const response = await fetch(`api/rooms/start/${roomId}`, {
             method: 'PUT',
             headers: theHeader
         });
@@ -159,7 +158,7 @@ class RoomService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/stop/${roomId}`, {
+        const response = await fetch(`api/rooms/stop/${roomId}`, {
             method: 'PUT',
             headers: theHeader
         });
@@ -183,7 +182,7 @@ class RoomService {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/rooms/get/${roomId}`, {
+        const response = await fetch(`api/rooms/get/${roomId}`, {
             method: 'GET',
             headers: theHeader
         });
