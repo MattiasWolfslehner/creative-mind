@@ -24,6 +24,7 @@ class RoomList extends HTMLElement {
             <p><strong>State:</strong> ${room.roomState}</p>
             <p><strong>Type:</strong> ${room.type}</p>
           </div>
+          <div style="width: 20vw; display: flex; justify-content: space-around">
           ${["OPEN", "CREATED"].includes(room.roomState)
             ? html`
                 <button
@@ -34,6 +35,17 @@ class RoomList extends HTMLElement {
                 </button>
               `
             : ""}
+            ${["OPEN", "CREATED"].includes(room.roomState)
+              ? html`
+                  <button
+                    class="join-button"
+                    @click="${() => this._deleteRoom(room.roomId)}"
+                  >
+                    Delete
+                  </button>
+                `
+              : ""}
+          </div>    
         </div>
       `);
 
@@ -194,6 +206,30 @@ class RoomList extends HTMLElement {
   async _roomJoined(roomId) {
     console.log(`Joining room with room id: ${roomId}`);
     router.navigate(`/room/${roomId}`);
+  }
+
+  async _deleteRoom(roomId) {
+    try {
+        console.log(`Deleting room with room id: ${roomId}`);
+
+        const response = await fetch(`http://localhost:8080/api/rooms/remove/${roomId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+ localStorage.getItem("token")
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete room: ${response.statusText}`);
+        }
+
+        console.log(`Room with ID ${roomId} deleted successfully.`);
+
+        location.reload()
+    } catch (error) {
+        console.error(`Error deleting room: ${error.message}`);
+    }
   }
 }
 
