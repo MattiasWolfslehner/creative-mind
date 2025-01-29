@@ -1,11 +1,11 @@
 package com.creative_mind.repository;
 
 import com.creative_mind.exception.CreativeMindException;
-import com.creative_mind.model.MorphologicalRoom;
-import com.creative_mind.model.Room;
-import com.creative_mind.model.RoomStatus;
+import com.creative_mind.model.*;
+import com.creative_mind.model.requests.ParticipantionRequest;
 import com.creative_mind.model.requests.RoomRequest;
 import com.creative_mind.services.IdeaCsvService;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -94,5 +94,17 @@ public class RoomRepository {
                 .setCsvFilePath(UUID.randomUUID().toString())
                 .createCSVFile(new LinkedList<>(this.ideaRepository.findByRoomId(roomId)))
                 .getCsvFileBytes();
+    }
+
+    @Transactional
+    public void removeRoom(UUID roomId) {
+     Room room = this.getRoomByUUID(roomId);
+
+     if (room != null) {
+         this.entityManager.remove(room);
+     } else {
+         Log.error(String.format("Could not delete room with the id [%s]", roomId));
+         throw new CreativeMindException(String.format("Room with the id [%s] does not exist!", roomId));
+     }
     }
 }

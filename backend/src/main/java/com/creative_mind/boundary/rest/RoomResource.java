@@ -3,6 +3,7 @@ package com.creative_mind.boundary.rest;
 import com.creative_mind.manager.RoomManager;
 import com.creative_mind.model.Room;
 import com.creative_mind.model.RoomStatus;
+import com.creative_mind.model.requests.ParticipantionRequest;
 import com.creative_mind.model.requests.RoomRequest;
 import com.creative_mind.model.requests.RoomStateRequest;
 import com.creative_mind.repository.RoomRepository;
@@ -44,6 +45,22 @@ public class RoomResource {
         room.setAdminId(adminId);
         Room createdRoom = this.roomRepository.createRoom(room);
         return Response.ok(createdRoom).build();
+    }
+
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/remove/{roomId}")
+    public Response removeRoom (@PathParam("roomId") UUID roomId) {
+        try {
+            this.roomRepository.removeRoom(roomId);
+
+            return Response
+                    .ok(roomRepository.getAllRooms())
+                    .build();
+        } catch (NoResultException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     @GET

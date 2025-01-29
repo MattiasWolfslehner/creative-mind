@@ -22,7 +22,6 @@ class AppComponent extends HTMLElement {
             top: 1vh;
             right: 2vw;
             background-color: white;
-            border-radius: 50%;
             width: 6vw;
             height: auto;
             cursor: pointer;
@@ -30,9 +29,9 @@ class AppComponent extends HTMLElement {
         
         .dropdown {
             position: absolute;
-            top: 15vh;
+            top: 8vw;
             right: 2vw;
-            width: 13vw;
+            width: 8vw;
             height: 60px;
             background-color: white;
             border-radius: 5px;
@@ -44,7 +43,7 @@ class AppComponent extends HTMLElement {
         .arrow-up {
             position: absolute;
             top: -1.5vh;
-            right: 1.7vw;
+            right: 2vw;
             width: 0;
             height: 0;
             border-left: 15px solid transparent;
@@ -55,7 +54,7 @@ class AppComponent extends HTMLElement {
         .dropdown::after {
             content: "";
             position: absolute;
-            top: -10px;
+            top: 0vh;
             right: 10%;
             transform: translateX(-50%);
             border-width: 10px;
@@ -85,19 +84,19 @@ class AppComponent extends HTMLElement {
         }
 
         .logout-image {
-            width: 10%;
+            width: 2vw;
             height: auto;
         }
         
     </style>
     
-    <img id="profileImage" alt="Profile (to login/logout)" src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png">
+    <img id="profileImage" alt="Profile (to login/logout)" src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" style="border-radius: 50%">
     
     <div class="dropdown" id="dropdownMenu">
         <div class="arrow-up"></div>
         <div class="dropdown-content">
             <button class="logout-button" id="logoutButton">${(activeUserId)?"Logout":"Login"}</button>
-            <img alt="logout image only" src="https://static-00.iconduck.com/assets.00/logout-icon-2048x2048-libuexip.png" class="logout-image">
+            <!--<img alt="logout image only" src="https://static-00.iconduck.com/assets.00/logout-icon-2048x2048-libuexip.png" class="logout-image">-->
         </div>
     </div>
     

@@ -17,3 +17,8 @@ grant_type=password&client_id=quarkus&client_secret=gstBIjC7fdgagkMfShG2dqNmDITj
 ###
 GET http://localhost:8080/api/users/register
 Authorization: Bearer {{TOKEN}}
+
+###
+DELETE http://localhost:8080/api/rooms/remove/a14a6955-8241-45c1-8163-fc40bf715d27
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
