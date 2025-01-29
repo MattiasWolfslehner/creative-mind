@@ -3,7 +3,7 @@ import { distinctUntilChanged, map } from "rxjs";
 import { store } from "../../model/store";
 import { Room } from "src/model";
 import { Participation } from "src/model/participation";
-import { QRCode } from "ts-qrcode";
+import { toDataURL } from "qrcode";
 
 class RoomInfoMenu extends HTMLElement {
     constructor() {
@@ -39,7 +39,7 @@ class RoomInfoMenu extends HTMLElement {
                     border-radius: 0.5vw;
                     background-color: #8D63D0;
                     padding: 0 1vw;
-                    font-family: 'sans-serif';
+                    font-family: sans-serif;
                     color: white;
                     font-size: 1.1vw;
                 }
@@ -59,7 +59,7 @@ class RoomInfoMenu extends HTMLElement {
                     background-color: #8D63D0;
                     padding: 0 1vw;
                     box-sizing: border-box;
-                    font-family: 'sans-serif';
+                    font-family: sans-serif;
                     font-size: 1vw;
                 }
                 .menu-item {
@@ -103,6 +103,7 @@ class RoomInfoMenu extends HTMLElement {
                     padding: 0 1vw;
                     box-sizing: border-box;
                     cursor: pointer;
+                    position: relative;
                 }
                 .share-box img {
                     width: 4vw;
@@ -125,7 +126,7 @@ class RoomInfoMenu extends HTMLElement {
                     position: absolute;
                     z-index: 1;
                     top: 110%;
-                    left: 72%;
+                    left: 50%;
                     transform: translateX(-50%);
                     opacity: 0;
                     transition: opacity 0.3s;
@@ -144,6 +145,15 @@ class RoomInfoMenu extends HTMLElement {
                     border-style: solid;
                     border-color: transparent transparent #555 transparent;
                 }
+                #qr-canvas {
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 10vw;
+                }
+                #qrCodeImage {
+                    max-width: 100%;
+                    height: auto;
+                }
             </style>
             
             <div id="roomInfo">
@@ -151,10 +161,10 @@ class RoomInfoMenu extends HTMLElement {
                     <a href="#"><h1>Creative Minds</h1></a>
                 </div>
                 <div>
-                    <h2>|<h2>
+                    <h2>|</h2>
                 </div>
                 <div>
-                    <h2 id="roomName">${room ? (room.name ? room.name : "NONAME2") : "NONAME"}</h2>
+                    <h2 id="roomName">${room?.name ?? "NONAME"}</h2>
                 </div>
             </div>
             <div id="roomMenu">
@@ -164,7 +174,7 @@ class RoomInfoMenu extends HTMLElement {
                     <div></div>
                 </div>
                 <div class="menu-item member-count">
-                    ${participations ? participations.length : 0}
+                    ${participations?.length ?? 0}
                 </div>
                 <div class="menu-item share-box" @click="${() => this.shareRoom()}">
                     <img src="https://png.pngtree.com/png-vector/20191004/ourmid/pngtree-person-icon-png-image_1788612.jpg" alt="Person Icon">
@@ -172,54 +182,55 @@ class RoomInfoMenu extends HTMLElement {
                     <div class="tooltip">Copy link to clipboard</div>
                 </div>
             </div>
-            <div id="qr-code-container" style="display: flex; justify-content: space-around; width: 80vw; margin: 2vw; text-align: center; margin-top: 30vh; z-index: 100"></div>
+            <div id="qr-canvas">
+                <img src="" id="qrCodeImage">
+            </div>
         `;
     }
 
     connectedCallback() {
         store.pipe(
             map(model => ({
-                ideas: model.ideas,
-                rooms: model.rooms,
                 participations: model.participations,
+                rooms: model.rooms,
                 activeRoomId: model.activeRoomId,
-                thisUserId: model.thisUserId
             })),
             distinctUntilChanged()
         ).subscribe(reducedModel => {
-            const thisRooms = reducedModel.rooms.filter(
-                room => room.roomId === reducedModel.activeRoomId
-            );
-            const thisRoom: Room = thisRooms.length > 0 ? thisRooms[0] : null;
-
+            const thisRoom = reducedModel.rooms.find(room => room.roomId === reducedModel.activeRoomId) || null;
             render(this.template(reducedModel.participations, thisRoom), this.shadowRoot!);
         });
     }
 
-    shareRoom() {
+    async shareRoom() {
         const currentUrl: string = window.location.href;
-
-        navigator.clipboard.writeText(currentUrl).then(() => {
-            alert('Link copied to clipboard!');
-
-            const qrContainer = this.shadowRoot!.getElementById("qr-code-container");
-            if (qrContainer) {
-                qrContainer.innerHTML = "";
-
-                const canvas = document.createElement("canvas");
-                qrContainer.appendChild(canvas);
-
-                const qrCode = new QRCode({
-                    content: currentUrl,
-                    width: 200,
-                    height: 200,
-                    canvasElement: canvas
-                });
-            }
-        }).catch(err => {
+    
+        try {
+            await navigator.clipboard.writeText(currentUrl);
+            alert("Link copied to clipboard!");
+    
+            toDataURL(currentUrl, (err, dataUrl) => {
+                if (!err) {
+                    const newWindow = window.open("", "_blank", "width=300,height=300");
+                    if (newWindow) {
+                        newWindow.document.write(`
+                            <html>
+                                <head>
+                                    <title>QR Code</title>
+                                </head>
+                                <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+                                    <img src="${dataUrl}" alt="QR Code">
+                                </body>
+                            </html>
+                        `);
+                        newWindow.document.close();
+                    }
+                }
+            });
+        } catch (err) {
             console.error("Failed to copy: ", err);
-        });
-    }
+        }
+    }    
 }
 
 customElements.define("room-info-menu", RoomInfoMenu);
