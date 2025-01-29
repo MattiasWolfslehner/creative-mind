@@ -1,6 +1,5 @@
 import { produce } from "immer"
 import { Idea, store } from "../model"
-import path from "./service-const"
 
 class IdeaService{
 
@@ -10,7 +9,7 @@ class IdeaService{
             'Content-Type': 'application/json',
             'Authorization': 'Bearer '+ localStorage.getItem("token")
         });
-        const response = await fetch(`${path}/api/ideas/${roomId}`, {
+        const response = await fetch(`api/ideas/${roomId}`, {
             headers: theHeader
         });
         try {
@@ -39,7 +38,7 @@ class IdeaService{
             });
             //fetch
 
-            const response = await fetch(`${path}/api/ideas`,{
+            const response = await fetch(`api/ideas`,{
                 method: 'POST',
                 headers: theHeader,
                 body: JSON.stringify(idea)

@@ -67,7 +67,7 @@ class RoomService {
 
         // Create parameters and wait for them to be added to the store
         for (let i = 0; i < dummyParameters.length; i++) {
-            await morphoService.saveParameter(roomId, dummyParameters[i]);
+            await morphoService.saveParameter(dummyParameters[i],roomId);
         }
 
         // Fetch updated parameters from the store after creation
