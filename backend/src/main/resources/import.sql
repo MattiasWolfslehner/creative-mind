@@ -1,4 +1,24 @@
-insert into member values (1, '28a9260c-020e-4eb8-b88b-c05066157e50', 'testmember');
-insert into room values (1, '28a9260c-020e-4eb8-b88b-c05066157e50', '1dd490ee-7814-4c0d-9bdb-965836cd4eac', 'Morphological Room', null, 'DEMO Room', 'CREATED');
-insert into mbparameter values (1, 1, 'Parameter 1'), (2, 1, 'Parameter 2'), (3, 1, 'Parameter 3'), (4, 1, 'Parameter 4');
-insert into realization values (1, 1, 'Realization 1'), (2, 1, 'Realization 2'), (3, 1, 'Realization 3'), (4, 2, 'Realization 1'), (5, 2, 'Realization 2'), (6, 3, 'Realization 1'), (7, 3, 'Realization 2'), (8, 3, 'Realization 3'), (9, 4, 'Realization 1');
+insert into member
+values
+    (nextval('member_seq'), '28a9260c-020e-4eb8-b88b-c05066157e50', 'testmember');
+insert into room
+values
+    (nextval('room_seq'), '28a9260c-020e-4eb8-b88b-c05066157e50', '1dd490ee-7814-4c0d-9bdb-965836cd4eac', 'Morphological Room', null, 'DEMO Room', 'CREATED');
+insert into mbparameter
+values
+    (nextval('mbparameter_seq'), (select id from room where roomid = '28a9260c-020e-4eb8-b88b-c05066157e50'), 'Parameter 1'),
+    (nextval('mbparameter_seq'), (select id from room where roomid = '28a9260c-020e-4eb8-b88b-c05066157e50'), 'Parameter 2'),
+    (nextval('mbparameter_seq'), (select id from room where roomid = '28a9260c-020e-4eb8-b88b-c05066157e50'), 'Parameter 3'),
+    (nextval('mbparameter_seq'), (select id from room where roomid = '28a9260c-020e-4eb8-b88b-c05066157e50'), 'Parameter 4');
+
+insert into realization
+values
+    (nextval('realization_seq'), (SELECT paramid FROM mbparameter where title = 'Parameter 1'), 'Realization 1-1'),
+    (nextval('realization_seq'), (SELECT paramid FROM mbparameter where title = 'Parameter 1'), 'Realization 1-2'),
+    (nextval('realization_seq'), (SELECT paramid FROM mbparameter where title = 'Parameter 1'), 'Realization 1-3'),
+    (nextval('realization_seq'), (SELECT paramid FROM mbparameter where title = 'Parameter 2'), 'Realization 2-1'),
+    (nextval('realization_seq'), (SELECT paramid FROM mbparameter where title = 'Parameter 2'), 'Realization 2-2'),
+    (nextval('realization_seq'), (SELECT paramid FROM mbparameter where title = 'Parameter 3'), 'Realization 3-1'),
+    (nextval('realization_seq'), (SELECT paramid FROM mbparameter where title = 'Parameter 3'), 'Realization 3-2'),
+    (nextval('realization_seq'), (SELECT paramid FROM mbparameter where title = 'Parameter 3'), 'Realization 3-3'),
+    (nextval('realization_seq'), (SELECT paramid FROM mbparameter where title = 'Parameter 4'), 'Realization 4-1');

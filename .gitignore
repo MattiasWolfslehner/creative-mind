@@ -202,3 +202,4 @@ $RECYCLE.BIN/
 
 
 backend/data/ideas/csv/*.csv
+#**/node_modules/**/*
