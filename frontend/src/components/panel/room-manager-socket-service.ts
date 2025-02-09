@@ -14,6 +14,7 @@ class RoomManagerSocketService extends HTMLElement {
     protected roomId: string | null = null;
     protected userId: string | null = null;
     protected socket: WebSocket | null = null;
+    protected timeOutSet: number | null = null;
 
     protected socketStatus: string [] = [];
 
@@ -39,6 +40,7 @@ class RoomManagerSocketService extends HTMLElement {
             case "room_notification": {
                 // (${message.response_type.toString().replace("_", " ")})
                 this.socketStatus.push(`${message.response_type.toString().replace("room_", "")}: "${message.message}"`);
+                this.showPopup();
                 const y = participationService.getParticipantsInRoom(null);
                 const x = roomService.getRoom(null);
                 this.refresh();
@@ -46,6 +48,7 @@ class RoomManagerSocketService extends HTMLElement {
             }
             case "get_remaining_room_time": { // timer fired (can be pushed into model)
                 this.socketStatus.push(`timer: "${message.remaining}"`);
+                this.showPopup();
                 let remaining : number = message.remaining;
                 const model = produce(store.getValue(), draft => {
                     draft.remaining = remaining;
@@ -161,6 +164,7 @@ class RoomManagerSocketService extends HTMLElement {
                 event.preventDefault();
                 //console.log('WebSocket connection opened:', event);
                 roomChatContext.socketStatus.push("Connected to server!");
+                roomChatContext.showPopup();
                 // Wait for the updateComplete promise to resolve
                 roomChatContext.refresh();
             };
@@ -171,6 +175,7 @@ class RoomManagerSocketService extends HTMLElement {
                 event.preventDefault();
                 //console.log('WebSocket connection closed:', event);
                 roomChatContext.socketStatus.push("Connection to Server closed!");
+                roomChatContext.showPopup();
                 roomChatContext.refresh();
             };
 
@@ -178,6 +183,7 @@ class RoomManagerSocketService extends HTMLElement {
                 error.preventDefault();
                 console.error('WebSocket error:', error);
                 roomChatContext.socketStatus.push("Error in connection to Server!");
+                roomChatContext.showPopup();
                 roomChatContext.refresh();
             };
         }
@@ -190,25 +196,7 @@ class RoomManagerSocketService extends HTMLElement {
     refresh() {
         render(this.template(), this.shadowRoot);
     }
-    // not needed
-    // dispatch the received button click as a "join-the-room" event
-    // private async _sendMessage() {
-    //     let message: string = '';
-    //     if (this.shadowRoot) {
-    //         const ttt = this.shadowRoot.getElementById(
-    //             'message-text',
-    //         ) as HTMLInputElement;
-    //         message = ttt.value.trim();
-    //         ttt.value = ''; // reset input
-    //     }
-    //     if (message.length > 0) {
-    //         this.sendMessageToServer(message);
-    //         // and delete message from input
-    //     } else {
-    //         console.log('nothing to send! ...' + message);
-    //         //this.sendMessageToServer("nothing to send!"); // fake message for test
-    //     }
-    // }
+
     connectedCallback() {
         store.pipe(map( model => [model.activeRoomId, model.thisUserId] ), distinctUntilChanged())
             .subscribe(roomAndUser => {
@@ -273,6 +261,7 @@ class RoomManagerSocketService extends HTMLElement {
                 @click="${() => { this.clearMessages(); }}"
             >
                 <div class="popupmessage-content">
+                    <p>nnnn</p>
                     ${
                         this.socketStatus.map(
                             (m: string) => html`<div>${m}</div><br>`
@@ -282,22 +271,26 @@ class RoomManagerSocketService extends HTMLElement {
             </div>
         `;
     }
-    
-    firstUpdated() {
-        // Call this method to show the popup
-        this.showPopup();
-    }
+
+
     
     showPopup() {
         const popup = this.shadowRoot?.getElementById('popupmessage1');
         if (popup) {
             // Add the "show" class to make it visible
             popup.classList.add('show');
-    
+
+            // first clear last timeout
+            if (this.timeOutSet) {
+                window.clearTimeout(this.timeOutSet);
+            }
+
+            let callerThis = this;
             // Remove the "show" class after a delay and add "fade-out"
-            setTimeout(() => {
+            this.timeOutSet = window.setTimeout(() => {
                 popup.classList.remove('show');
                 popup.classList.add('fade-out');
+                callerThis.timeOutSet = null;
             }, 3000); // Display for 3 seconds
         }
     }
