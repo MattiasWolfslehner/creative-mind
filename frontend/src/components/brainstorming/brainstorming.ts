@@ -15,8 +15,12 @@ import {distinctUntilChanged, map} from "rxjs";
 class BrainstormingElement extends HTMLElement {
 
     template (roomId:string) {
-        return html` 
-            <div>
+        return html`
+            <div style="margin-top: 20vh">
+                <div style="width: 70vw; margin-left: 2vw; ">
+                    <h2>Brainstorming Room</h2>
+                    <p>You will see the ideas of the others, no matter what state the room is in!</p>
+                </div>
                     <room-input></room-input>
                     <idea-list></idea-list>
                     <text-input></text-input>

@@ -26,7 +26,7 @@ class RoomInputElement extends HTMLElement {
                 flex-wrap: wrap;
                 align-items: center;
                 width: 100%;
-                margin-top: 10vh;
+                margin-top: 0vh;
             }
             .styled-input {
                 width: 100%;
@@ -75,7 +75,7 @@ class RoomInputElement extends HTMLElement {
                 <div style="background-color: grey;
                         width: 15vw; height: 60px; text-align: center; margin-bottom: 20px;
                         font-family: 'sans-serif'; border-radius: 10px;">
-                    <h2>Remaining: ${remaining?remaining:"not started"}</h2>
+                    <h2>Remaining: ${remaining?`${remaining} seconds`:"not started"}</h2>
                 </div>
                 <div @click= "${() => this.onButtonClick()}" .hidden="${!isAdmin}" 
                      style="background-color: ${(isAdmin?"white":"grey")}; 

@@ -98,22 +98,22 @@ class IdeaList extends HTMLElement {
             </style>
             
             <room-info-menu></room-info-menu>
-            <div style="margin-left: 35vw; margin-top: 1vh; display: flex; flex-wrap: wrap">
+            <div style="margin-left: 35vw; margin-top: 0vh; display: flex; flex-wrap: wrap">
                 <div @click="${() => this.onStartRoom()}" .hidden="${adminId!=userId || (this.roomState === 'STARTED' || this.roomState === 'INVALID')}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
-                    font-family: 'sans-serif'; margin-top: 3vh; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+                    font-family: 'sans-serif'; margin-top: 1vh; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                     <h2>Start</h2>
                 </div>
                 
                 <div @click="${() => this.onStopRoom()}" .hidden="${adminId!=userId || this.roomState !== 'STARTED'}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
-                    font-family: 'sans-serif'; margin-top: 3vh; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+                    font-family: 'sans-serif'; margin-top: 1vh; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                     <h2>Stop</h2>
                 </div>
                 
                 <div @click="${() => {router.navigate("/");} }" .hidden="${this.roomState==="STARTED"}"
                      style="background-color: white; width: 15vw; height: auto; text-align: center;
-                    font-family: 'sans-serif'; margin-top: 3vh; margin-left: 10px; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
+                    font-family: 'sans-serif'; margin-top: 1vh; margin-left: 10px; margin-bottom: 20px; border-radius: 10px; cursor:pointer">
                     <h2>Leave</h2>
                 </div>
             </div>
