@@ -24,6 +24,18 @@ image:./img/Wireframe_Brainstorming.png[]
 Morphological Box (Raum mit Parameter und Realizations)
 image:./img/Wireframe_MorphologicalBox.png[]
 
+Morphological Box (Raum bevor man Realizations ausgewählt hat)
+image:./img/Wireframe_MorphologicalBox_BeforeSelectingRealizations.png[]
+
+Morphological Box (Raum nachdem man Realizations ausgewählt hat)
+image:./img/Wireframe_MorphologicalBox_AfterSelectingRealizations.png[]
+
+Morphological Box Share per QR (Raumeinladung durch QRCode)
+image:./img/Wireframe_MorphologicalBox_SharePerQR.png[]
+
+Room List (Liste aller Räume)
+image:./img/Wireframe_RoomList.png[]
+
 6-3-5 Methode bevor Start des Timers als Room Admin (Brainwriting)
 image:./img/Wireframe_Brainwriting_BeforeStartingTheTimerAsTheRoomAdmin.png[]
 
