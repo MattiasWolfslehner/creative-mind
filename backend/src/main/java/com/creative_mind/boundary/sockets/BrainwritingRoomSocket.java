@@ -15,7 +15,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
-@ServerEndpoint("/rooms/join/{roomId}/{userId}")
+@ServerEndpoint("/api/ws/{roomId}/{userId}")
 public class BrainwritingRoomSocket {
 
     @Inject

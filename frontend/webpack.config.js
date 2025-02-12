@@ -21,6 +21,7 @@ const config = {
             verbose: true
         },
     },
+    devtool: "cheap-source-map",
     plugins: [
         new HtmlWebpackPlugin({
             template: 'index.html',

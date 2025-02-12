@@ -152,14 +152,17 @@ class RoomManagerSocketService extends HTMLElement {
             const roomChatContext : RoomManagerSocketService = this; // not to be mistaken with websocket inside
 
             // create websocket url
-            let url = `ws://it200239.cloud.htl-leonding.ac.at/api/rooms/join/${this.roomId}/${this.userId}`;
+            let url = `wss://it200239.cloud.htl-leonding.ac.at/api/ws/${this.roomId}/${this.userId}`;
             this.socket = new WebSocket(url);
             //this.socketStatus.push("created");
+        
+            console.log("Socket connected: ", this.socket);
+            
             this.refresh();
 
             this.socket.onopen = function (event: Event) {
                 event.preventDefault();
-                //console.log('WebSocket connection opened:', event);
+                console.log('WebSocket connection opened:', event);
                 roomChatContext.socketStatus.push("Connected to server!");
                 // Wait for the updateComplete promise to resolve
                 roomChatContext.refresh();
@@ -210,7 +213,9 @@ class RoomManagerSocketService extends HTMLElement {
     //     }
     // }
     connectedCallback() {
-        store.pipe(map( model => [model.activeRoomId, model.thisUserId] ), distinctUntilChanged())
+        store.pipe(
+            map( model => [model.activeRoomId, model.thisUserId] ), 
+            distinctUntilChanged())
             .subscribe(roomAndUser => {
                 const x = this.setUserAndRoom(roomAndUser[0], roomAndUser[1]);
                 render(this.template(), this.shadowRoot);
