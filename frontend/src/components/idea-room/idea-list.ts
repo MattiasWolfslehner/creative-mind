@@ -1,6 +1,6 @@
 import { html, render, nothing } from "lit-html";
 import { store } from "../../model/store";
-import { Idea, Model, Room } from "src/model";
+import {Idea, Model, Room, User} from "src/model";
 import roomService from "../../service/room-service";
 import ideaService from "../../service/idea-service";
 import {distinctUntilChanged, map} from "rxjs";
@@ -40,9 +40,9 @@ class IdeaList extends HTMLElement {
         return false;
     }
 
-    getRandomColor() {
+    getRandomColor(i:number) {
         const colors = ["#F06568", "#FFE76A", "#7EEDE5"];
-        return colors[Math.floor(Math.random() * colors.length)];
+        return colors[i % 3];
     }
 
     getUserName(userId, participations: Participation[]) {
@@ -54,9 +54,14 @@ class IdeaList extends HTMLElement {
     }
 
     template(ideas: Idea[], participations: Participation[], room: Room, userId: string) {
+        const users = store.getValue().users;
+        function getIndexOfUser(memberId:string):number {
+            const isMemberWithId = (user:User) => user.userId===memberId;
+            return users.findIndex(isMemberWithId);
+        }
         const ideaTemplates = ideas.map((idea: Idea) =>
             this.checkShowIdeaInRoom(idea, room, userId)
-                ? html`<div style="background-color: ${this.getRandomColor()};"><p>${idea.content}  \n <span style="font-size: smaller">(${this.getUserName(idea.memberId, participations)})</span></p></div>`
+                ? html`<div style="background-color: ${this.getRandomColor(getIndexOfUser(idea.memberId))};"><p>${idea.content}  \n <span style="font-size: smaller">(${this.getUserName(idea.memberId, participations)})</span></p></div>`
                 : nothing
         );
 
