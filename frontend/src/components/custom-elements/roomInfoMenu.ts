@@ -148,7 +148,7 @@ class RoomInfoMenu extends HTMLElement {
                 #qr-canvas {
                     display: flex;
                     justify-content: center;
-                    margin-top: 10vw;
+                    margin-top: 0; /* takes up too much space */
                 }
                 #qrCodeImage {
                     max-width: 100%;
