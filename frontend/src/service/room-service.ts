@@ -47,19 +47,23 @@ class RoomService {
             })
         });
 
-        const room: Room = await response.json();
+        if (response.ok) {
+            const room: Room = await response.json();
 
-        //add room to store
-        const model = produce(store.getValue(), draft => {
-            draft.rooms.push(room);
-        })
-        store.next(model);
-        console.log(room);
+            //add room to store
+            const model = produce(store.getValue(), draft => {
+                draft.rooms.push(room);
+            })
+            store.next(model);
+            console.log(room);
 
-        if (roomType == 'morphologicalroom') {
-            this.saveDummyParameters(room.roomId);
+            if (roomType == 'morphologicalroom') {
+                this.saveDummyParameters(room.roomId);
+            }
+            return room;
         }
-        return room;
+
+        return null;
     }
 
     async saveDummyParameters(roomId: string) {
@@ -105,11 +109,13 @@ class RoomService {
             body: JSON.stringify({ roomState: roomState })
         });
 
-        const room: boolean = await response.json();
+        if (response.ok) {
+            const room: boolean = await response.json();
+            console.log(`Room state changed: ${room}`);
+            return room;
+        }
 
-        console.log(`Room state changed: ${room}`);
-
-        return room;
+        return false;
     }
 
     async updateRoom(room: Room) {
@@ -123,16 +129,20 @@ class RoomService {
             body: JSON.stringify({ name: room.name, description: room.description })
         });
 
-        const updated_room: Room = await response.json();
+        if (response.ok) {
+            const updated_room: Room = await response.json();
 
-        //remove old room and add new room to store
-        const model = produce(store.getValue(), draft => {
-            draft.rooms = draft.rooms.filter(r => r.roomId !== room.roomId);
-            draft.rooms.push(updated_room);
-        })
-        store.next(model);
-        console.log(updated_room);
-        return updated_room;
+            //remove old room and add new room to store
+            const model = produce(store.getValue(), draft => {
+                draft.rooms = draft.rooms.filter(r => r.roomId !== room.roomId);
+                draft.rooms.push(updated_room);
+            })
+            store.next(model);
+            console.log(updated_room);
+            return updated_room;
+        }
+
+        return null;
     }
 
     async startRoom(roomId: string) {
@@ -145,13 +155,13 @@ class RoomService {
             headers: theHeader
         });
 
-        const room: boolean = await response.json();
-
+        if (response.ok) {
+            const room: boolean = await response.json();
+        }
         //console.log(`Room started: ${room}`);
         // fetch new status
         const x = this.getRoom(roomId);
-
-        return room;
+        return x!==null;
     }
 
     async stopRoom(roomId: string) {
@@ -164,13 +174,15 @@ class RoomService {
             headers: theHeader
         });
 
-        const room: boolean = await response.json();
+        if (response.ok) {
+            const room: boolean = await response.json();
 
-        //console.log(`Room stopped: ${room}`);
-        // fetch new status
+            //console.log(`Room stopped: ${room}`);
+            // fetch new status
+        }
+
         const x = this.getRoom(roomId);
-
-        return room;
+        return x!==null;
     }
 
 

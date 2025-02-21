@@ -14,6 +14,7 @@ router.on('/', () => {
         draft.isRoomList = false;
         draft.activeRoomId = "";
         draft.ideas = [];
+        draft.rooms = [];
         draft.parameters = [];
         draft.combinations = [];
     });
@@ -24,6 +25,7 @@ router.on('', () => {
     const model = produce(store.getValue(), draft => {
         draft.isRoomList = false;
         draft.activeRoomId = "";
+        draft.rooms = [];
         draft.ideas = [];
         draft.parameters = [];
         draft.combinations = [];

@@ -14,6 +14,7 @@ class RoomManagerSocketService extends HTMLElement {
     protected roomId: string | null = null;
     protected userId: string | null = null;
     protected socket: WebSocket | null = null;
+    protected timeOutSet: number | null = null;
 
     protected socketStatus: string [] = [];
 
@@ -28,6 +29,7 @@ class RoomManagerSocketService extends HTMLElement {
     //     }
     // }
 
+
     private async _handleWebSocketMessage(event: MessageEvent) {
         event.preventDefault();
         const message = JSON.parse(event.data);
@@ -35,17 +37,26 @@ class RoomManagerSocketService extends HTMLElement {
         switch (message.response_type) {
             case "room_closed":
             case "room_started":
+                message.message = ""; // clear noisy roomid messages
             case "room_changed": // new response_type when admin changes desc/name
             case "room_notification": {
+                console.log(`${message.response_type}: "${message.message}"`);
+                function capitalize(s)
+                {
+                    return String(s[0]).toUpperCase() + String(s).slice(1);
+                }
                 // (${message.response_type.toString().replace("_", " ")})
-                this.socketStatus.push(`${message.response_type.toString().replace("room_", "")}: "${message.message}"`);
+                let response_type = capitalize(message.response_type.toString().replace("_notification", "").replace("_", " "));
+                this.socketStatus.push(`${response_type}${(message.message==="")?"":(': "'+message.message+'"')}`);
+                this.showPopup();
                 const y = participationService.getParticipantsInRoom(null);
                 const x = roomService.getRoom(null);
                 this.refresh();
                 break;
             }
             case "get_remaining_room_time": { // timer fired (can be pushed into model)
-                this.socketStatus.push(`timer: "${message.remaining}"`);
+                //this.socketStatus.push(`timer: "${message.remaining}"`);
+                //this.showPopup();
                 let remaining : number = message.remaining;
                 const model = produce(store.getValue(), draft => {
                     draft.remaining = remaining;
@@ -161,6 +172,7 @@ class RoomManagerSocketService extends HTMLElement {
                 event.preventDefault();
                 //console.log('WebSocket connection opened:', event);
                 roomChatContext.socketStatus.push("Connected to server!");
+                roomChatContext.showPopup();
                 // Wait for the updateComplete promise to resolve
                 roomChatContext.refresh();
             };
@@ -171,6 +183,7 @@ class RoomManagerSocketService extends HTMLElement {
                 event.preventDefault();
                 //console.log('WebSocket connection closed:', event);
                 roomChatContext.socketStatus.push("Connection to Server closed!");
+                roomChatContext.showPopup();
                 roomChatContext.refresh();
             };
 
@@ -178,6 +191,7 @@ class RoomManagerSocketService extends HTMLElement {
                 error.preventDefault();
                 console.error('WebSocket error:', error);
                 roomChatContext.socketStatus.push("Error in connection to Server!");
+                roomChatContext.showPopup();
                 roomChatContext.refresh();
             };
         }
@@ -190,29 +204,17 @@ class RoomManagerSocketService extends HTMLElement {
     refresh() {
         render(this.template(), this.shadowRoot);
     }
-    // not needed
-    // dispatch the received button click as a "join-the-room" event
-    // private async _sendMessage() {
-    //     let message: string = '';
-    //     if (this.shadowRoot) {
-    //         const ttt = this.shadowRoot.getElementById(
-    //             'message-text',
-    //         ) as HTMLInputElement;
-    //         message = ttt.value.trim();
-    //         ttt.value = ''; // reset input
-    //     }
-    //     if (message.length > 0) {
-    //         this.sendMessageToServer(message);
-    //         // and delete message from input
-    //     } else {
-    //         console.log('nothing to send! ...' + message);
-    //         //this.sendMessageToServer("nothing to send!"); // fake message for test
-    //     }
-    // }
+
     connectedCallback() {
-        store.pipe(map( model => [model.activeRoomId, model.thisUserId] ), distinctUntilChanged())
+        store.pipe(map( model => ({roomId : model.activeRoomId, userId : model.thisUserId}) ), distinctUntilChanged())
             .subscribe(roomAndUser => {
-                const x = this.setUserAndRoom(roomAndUser[0], roomAndUser[1]);
+                if (this.roomId !== roomAndUser.roomId) {
+                    // clear messages in new room
+                    console.log(`clear now room:${this.roomId} instead:${roomAndUser.roomId}`);
+                    this.socketStatus = [];
+                }
+                // now register user/room and create socket
+                const x = this.setUserAndRoom(roomAndUser.roomId, roomAndUser.userId);
                 render(this.template(), this.shadowRoot);
             });
     }
@@ -282,27 +284,36 @@ class RoomManagerSocketService extends HTMLElement {
             </div>
         `;
     }
-    
-    firstUpdated() {
-        // Call this method to show the popup
-        this.showPopup();
-    }
+
+
     
     showPopup() {
         const popup = this.shadowRoot?.getElementById('popupmessage1');
         if (popup) {
             // Add the "show" class to make it visible
+            popup.classList.remove('fade-out');
             popup.classList.add('show');
-    
+
+            // first clear last timeout
+            if (this.timeOutSet) {
+                window.clearTimeout(this.timeOutSet);
+            }
+
+            let callerThis = this;
             // Remove the "show" class after a delay and add "fade-out"
-            setTimeout(() => {
+            this.timeOutSet = window.setTimeout(() => {
                 popup.classList.remove('show');
-                popup.classList.add('fade-out');
-            }, 3000); // Display for 3 seconds
+                //popup.classList.add('fade-out');
+                callerThis.timeOutSet = null;
+            }, 5000); // Display for 3 seconds
         }
     }
     
     clearMessages() {
+        // first clear last timeout
+        if (this.timeOutSet) {
+            window.clearTimeout(this.timeOutSet);
+        }
         this.socketStatus = []; // Clear messages
         const popup = this.shadowRoot?.getElementById('popupmessage1');
         if (popup) {

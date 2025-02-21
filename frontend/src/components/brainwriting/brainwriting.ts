@@ -18,7 +18,11 @@ class BrainwritingElement extends HTMLElement {
 
     template (roomId) {
         return html` 
-            <div>
+            <div style="margin-top: 20vh">
+                <div style="width: 70vw; margin-left: 2vw; ">
+                    <h2>6-3-5 - Brainwriting Room</h2>
+                    <p>You will not see the ideas of others as long as room is started, as soon as room ended you can read them.</p>
+                </div>
                     <room-input></room-input>
                     <idea-list></idea-list>
                     <text-input></text-input>
