@@ -112,7 +112,7 @@ public class RoomManager {
             }
             this.broadcastMessageToRoom(roomId, jsonString);
 
-            roomSessions.remove(roomId);
+            // does indeed clear all sockets ! dont do that roomSessions.remove(roomId);
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
