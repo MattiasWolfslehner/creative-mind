@@ -145,13 +145,13 @@ class RoomService {
             headers: theHeader
         });
 
-        const room: boolean = await response.json();
-
+        if (response.ok) {
+            const room: boolean = await response.json();
+        }
         //console.log(`Room started: ${room}`);
         // fetch new status
         const x = this.getRoom(roomId);
-
-        return room;
+        return x!==null;
     }
 
     async stopRoom(roomId: string) {
@@ -164,13 +164,15 @@ class RoomService {
             headers: theHeader
         });
 
-        const room: boolean = await response.json();
+        if (response.ok) {
+            const room: boolean = await response.json();
 
-        //console.log(`Room stopped: ${room}`);
-        // fetch new status
+            //console.log(`Room stopped: ${room}`);
+            // fetch new status
+        }
+
         const x = this.getRoom(roomId);
-
-        return room;
+        return x!==null;
     }
 
 
