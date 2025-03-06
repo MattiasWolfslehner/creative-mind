@@ -152,7 +152,12 @@ class RoomManagerSocketService extends HTMLElement {
             const roomChatContext : RoomManagerSocketService = this; // not to be mistaken with websocket inside
 
             // create websocket url
-            let url = `wss://it200239.cloud.htl-leonding.ac.at/api/ws/${this.roomId}/${this.userId}`;
+            //abfrage ws (bei local) wss (im deployment) path href
+            console.log("window location: ", window.location.href);
+            
+  
+            let url = `/api/ws/${this.roomId}/${this.userId}`
+        
             this.socket = new WebSocket(url);
             //this.socketStatus.push("created");
         
@@ -284,3 +289,7 @@ class RoomManagerSocketService extends HTMLElement {
 
 
 customElements.define("idea-socket-service", RoomManagerSocketService)
+
+function isHttpPrefix(): boolean {
+    return window.location.protocol === "http:";
+  }
