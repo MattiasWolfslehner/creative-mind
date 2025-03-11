@@ -39,7 +39,6 @@ class RoomInfoMenu extends HTMLElement {
                     border-radius: 0.5vw;
                     background-color: #8D63D0;
                     padding: 0 1vw;
-                    font-family: sans-serif;
                     color: white;
                     font-size: 1.1vw;
                 }
@@ -59,7 +58,6 @@ class RoomInfoMenu extends HTMLElement {
                     background-color: #8D63D0;
                     padding: 0 1vw;
                     box-sizing: border-box;
-                    font-family: sans-serif;
                     font-size: 1vw;
                 }
                 .menu-item {
@@ -154,6 +152,53 @@ class RoomInfoMenu extends HTMLElement {
                     max-width: 100%;
                     height: auto;
                 }
+
+                .burger-menu {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                    width: 4vw;
+                    height: 2vw;
+                    cursor: pointer;
+                    transition: 0.3s;
+                }
+
+                .burger-menu div {
+                    width: 100%;
+                    height: 0.5vw;
+                    background-color: #fff;
+                    border-radius: 0.2vw;
+                    transition: 0.3s;
+                }
+
+                .burger-menu.active div:nth-child(1) {
+                    transform: translateY(0.75vw) rotate(45deg);
+                }
+
+                .burger-menu.active div:nth-child(2) {
+                    opacity: 0;
+                }
+
+                .burger-menu.active div:nth-child(3) {
+                    transform: translateY(-0.75vw) rotate(-45deg);
+                }
+
+                #submenu {
+                    display: none;
+                    position: absolute;
+                    top: 8vw;
+                    left: 35vw;
+                    background: #8D63D0;
+                    padding: 1vw;
+                    border-radius: 0.5vw;
+                    color: white;
+                    font-size: 1vw;
+                    box-shadow: 0 0.2vw 0.4vw rgba(0, 0, 0, 0.2);
+                }
+
+                #submenu.active {
+                    display: block;
+                }
             </style>
             
             <div id="roomInfo">
@@ -168,7 +213,7 @@ class RoomInfoMenu extends HTMLElement {
                 </div>
             </div>
             <div id="roomMenu">
-                <div class="menu-item burger-menu">
+                <div class="menu-item burger-menu" @click="${() => this.toggleMenu()}">
                     <div></div>
                     <div></div>
                     <div></div>
@@ -185,6 +230,13 @@ class RoomInfoMenu extends HTMLElement {
             <div id="qr-canvas">
                 <img src="" id="qrCodeImage">
             </div>
+            </div>
+
+            <div id="submenu">
+                <p>Option 1</p>
+                <p>Option 2</p>
+                <p>Option 3</p>
+            </div>
         `;
     }
 
@@ -198,8 +250,18 @@ class RoomInfoMenu extends HTMLElement {
             distinctUntilChanged()
         ).subscribe(reducedModel => {
             const thisRoom = reducedModel.rooms.find(room => room.roomId === reducedModel.activeRoomId) || null;
-            render(this.template(reducedModel.participations, thisRoom), this.shadowRoot!);
+            render(this.template(reducedModel.participations, thisRoom), this.shadowRoot);
         });
+    }
+
+    toggleMenu() {
+        const burger = this.shadowRoot.querySelector(".burger-menu");
+        const submenu = this.shadowRoot.querySelector("#submenu");
+
+        if (burger && submenu) {
+            burger.classList.toggle("active");
+            submenu.classList.toggle("active");
+        }
     }
 
     async shareRoom() {
