@@ -1,5 +1,4 @@
 import Keycloak from "keycloak-js";
-import path from "./service-const";
 import {Room, store, User} from "../model";
 import {produce} from "immer";
 import roomService from "./room-service";
@@ -8,7 +7,7 @@ import {router} from "../../router";
 
 class KeycloakService {
     private static keycloak = new Keycloak({
-        url: path,
+        url: 'https://it200239.cloud.htl-leonding.ac.at',
         realm: 'cmr',
         clientId: 'frontend'
     });
