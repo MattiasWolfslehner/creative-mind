@@ -1,9 +1,10 @@
 import { html, render } from "lit-html";
 import { distinctUntilChanged, map } from "rxjs";
 import { store } from "../../model/store";
-import { Room } from "src/model";
+import { Room, User } from "src/model";
 import { Participation } from "src/model/participation";
 import { toDataURL } from "qrcode";
+import userService from "../../service/user-service";
 
 class RoomInfoMenu extends HTMLElement {
     constructor() {
@@ -184,16 +185,27 @@ class RoomInfoMenu extends HTMLElement {
                 }
 
                 #submenu {
-                    display: none;
-                    position: absolute;
-                    top: 8vw;
-                    left: 35vw;
-                    background: #8D63D0;
-                    padding: 1vw;
-                    border-radius: 0.5vw;
-                    color: white;
-                    font-size: 1vw;
-                    box-shadow: 0 0.2vw 0.4vw rgba(0, 0, 0, 0.2);
+                display: none;
+                position: absolute;
+                top: 9vw;
+                left: 35vw;
+                background: #8D63D0;
+                padding: 1vw;
+                border-radius: 0.5vw;
+                color: white;
+                font-size: 1vw;
+                box-shadow: 0 0.2vw 0.4vw rgba(0, 0, 0, 0.2);
+                text-align: center;
+                }
+
+                #submenu::before {
+                content: "";
+                position: absolute;
+                top: -0.5vw; /* Pfeil oberhalb des Menüs */
+                left: 2.3vw;
+                border-left: 0.6vw solid transparent;
+                border-right: 0.6vw solid transparent;
+                border-bottom: 0.6vw solid #8D63D0; /* Pfeil in der Menüfarbe */
                 }
 
                 #submenu.active {
@@ -233,9 +245,17 @@ class RoomInfoMenu extends HTMLElement {
             </div>
 
             <div id="submenu">
-                <p>Option 1</p>
-                <p>Option 2</p>
-                <p>Option 3</p>
+                <div class="menu-item share-box" @click="${() => this.showMembers()}">
+                    <img src="https://static.vecteezy.com/system/resources/previews/006/692/135/non_2x/list-icon-template-black-color-editable-list-icon-symbol-flat-sign-isolated-on-white-background-simple-logo-illustration-for-graphic-and-web-design-free-vector.jpg" alt="List Icon">
+                    <span>Members</span>
+                    <div class="tooltip">Show member list</div>
+                </div>
+                <br>
+                <div class="menu-item share-box" @click="${() => this.shareRoom()}">
+                    <img src="https://www.svgrepo.com/show/357723/export.svg" alt="Export Icon">
+                    <span>Export</span>
+                    <div class="tooltip">Export as xlsx</div>
+                </div>
             </div>
         `;
     }
@@ -293,6 +313,20 @@ class RoomInfoMenu extends HTMLElement {
             console.error("Failed to copy: ", err);
         }
     }    
+
+
+    showMembers() {
+
+    }
+    /*showMembers() {
+        const model = store.getValue();
+        const x = userService.getUsers();
+        const model = produce(store.getValue(), draft => {
+            draft.isRoomList = true;
+            draft.activeRoomId = "";
+        });
+        store.next(model);
+    }*/
 }
 
 customElements.define("room-info-menu", RoomInfoMenu);

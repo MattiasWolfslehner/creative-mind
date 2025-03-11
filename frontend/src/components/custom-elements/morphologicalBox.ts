@@ -267,15 +267,15 @@ class MorphologicalBox extends HTMLElement {
                 }
                 
                 .selected-1 {
-                    background-color: #F06568;
+                    background-color: rgba(0, 0, 0, 0.5); //#F06568
                 }
                 
                 .selected-2 {
-                    background-color: #FFE76A;
+                    background-color: rgba(0, 0, 0, 0.5); //#FFE76A
                 }
                 
                 .selected-3 {
-                    background-color: #7EEDE5;
+                    background-color: rgba(0, 0, 0, 0.5); //#7EEDE5
                 }
     
                 .placeholder {

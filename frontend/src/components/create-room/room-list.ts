@@ -45,12 +45,12 @@ class RoomList extends HTMLElement {
                   </button>
                 `
               : ""}
-          </div>    
+          </div>
         </div>
       `);
 
     return html`
-    <style>  
+    <style>
         h1 {
             font-size: 2em;
             color: #333;
@@ -65,7 +65,7 @@ class RoomList extends HTMLElement {
             gap: 2vw;
             justify-content: center;
         }
-    
+
         .room-card {
             position: relative;
             background-color: #7eede5;
@@ -79,7 +79,7 @@ class RoomList extends HTMLElement {
             text-align: left;
             transform: rotate(-1deg);
         }
-    
+
         .room-card:nth-child(3n + 1) {
             background-color: #f06568;
         }
@@ -87,7 +87,7 @@ class RoomList extends HTMLElement {
         .room-card:nth-child(3n + 2) {
             background-color: #ffe76a;
         }
-    
+
         .room-card::before {
             content: '';
             position: absolute;
@@ -100,16 +100,16 @@ class RoomList extends HTMLElement {
             border-radius: 50%;
             box-shadow: 0 0.2vw 0.5vw rgba(0, 0, 0, 0.3);
         }
-    
+
         .room-info p {
             margin: 0.5em 0;
             color: #333;
         }
-    
+
         .room-info strong {
             color: #000;
         }
-    
+
         .join-button {
             background-color: #333;
             color: white;
@@ -121,11 +121,11 @@ class RoomList extends HTMLElement {
             align-self: center;
             transition: background-color 0.3s ease;
         }
-    
+
         .join-button:hover {
             background-color: #555;
         }
-    
+
         #showRoomButton {
             background-color: #fff;
             font-size: 1.2em;
@@ -137,7 +137,7 @@ class RoomList extends HTMLElement {
             border-radius: 0.5vw;
             width: fit-content;
         }
-    
+
         #showRoomButton:hover {
             background-color: #eee;
         }
@@ -149,23 +149,23 @@ class RoomList extends HTMLElement {
           justify-content: center;
           flex-wrap: wrap;
         }
-    
+
         @media (max-width: 768px) {
             .room-card {
                 width: 80vw;
                 transform: rotate(0deg); /* Remove rotation on smaller screens */
             }
-        
+
             .join-button {
                 font-size: 0.9em;
             }
-        
+
             h1 {
                 font-size: 1.5em;
             }
         }
   </style>
-  
+
 
     <h1 style="margin-top: 6vw; margin-bottom: -0.5vw; color: white; font-family: 'sans-serif';">Room List</h1>
     <hr style="border: 2px solid #8D63D0; width: 65vw;">
