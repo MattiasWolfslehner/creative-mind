@@ -6,6 +6,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -29,6 +30,13 @@ public class UserResource {
     @Path("/list")
     public Response listUsers() {
         return Response.ok(userRepository.getAllUsers()).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/list/{roomId}")
+    public Response listUsersFromRoom(@PathParam("roomId") UUID roomId) {
+        return Response.ok(userRepository.getUsersFromRoom(roomId)).build();
     }
 
     @GET

@@ -21,6 +21,18 @@ public class UserRepository {
         return this.entityManager.createNamedQuery(User.GET_ALL_USERS, User.class).getResultList();
     }
 
+    public List<User> getUsersFromRoom(UUID roomId) {
+        try {
+            TypedQuery<User> userQuery = this.entityManager
+                    .createNamedQuery(User.GET_USERS_FROM_ROOM, User.class);
+            userQuery.setParameter("roomId", roomId);
+            List<User> userList = userQuery.getResultList();
+            return userList;
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
+
     @Transactional
     public User createUser(User user) {
         try {
