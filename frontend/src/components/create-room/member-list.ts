@@ -127,7 +127,7 @@ class MemberList extends HTMLElement {
         const backButton = this.shadowRoot.getElementById("backButton");
         if (backButton) {
             backButton.addEventListener("click", () => {
-                this.style.display = "none"; // Versteckt die Komponente
+                this.style.display = "none";
             });
         }
     }

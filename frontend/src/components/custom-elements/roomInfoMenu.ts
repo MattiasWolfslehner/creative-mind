@@ -7,6 +7,8 @@ import { Participation } from "src/model/participation";
 import { toDataURL } from "qrcode";
 import userService from "../../service/user-service";
 import "../create-room/member-list"
+import * as XLSX from 'xlsx';
+import MorphologicalBox from "./morphologicalBox"
 
 class RoomInfoMenu extends HTMLElement {
     isMemberListVisible = false;
@@ -254,7 +256,7 @@ class RoomInfoMenu extends HTMLElement {
                     <div class="tooltip">Show member list</div>
                 </div>
                 <br>
-                <div class="menu-item share-box" @click="${() => this.shareRoom()}">
+                <div class="menu-item share-box" @click="${() => this.exportAsExcel()}">
                     <img src="https://www.svgrepo.com/show/357723/export.svg" alt="Export Icon">
                     <span>Export</span>
                     <div class="tooltip">Export as xlsx</div>
@@ -343,6 +345,35 @@ class RoomInfoMenu extends HTMLElement {
         } catch (error) {
             console.error("Error fetching users: ", error);
         }
+    }
+
+    async exportAsExcel() {
+        const morphoBox = document.querySelector("morphological-box") as any;
+
+        if (!morphoBox) {
+            console.error("MorphologicalBox nicht gefunden!");
+            return;
+        }
+
+        if (typeof morphoBox.getMorphologicalTableData !== "function") {
+            console.error("Die Methode getMorphologicalTableData() existiert nicht auf MorphologicalBox!");
+            return;
+        }
+
+        const tableData = morphoBox.getMorphologicalTableData();
+
+        if (!tableData || tableData.rows.length === 0) {
+            console.error("Keine Daten zum Exportieren!");
+            return;
+        }
+
+        const data = [tableData.headers, ...tableData.rows];
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.aoa_to_sheet(data);
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Morphological Box");
+
+        XLSX.writeFile(workbook, "MorphologicalBox.xlsx");
     }
 }
 

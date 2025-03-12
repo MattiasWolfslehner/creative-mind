@@ -5,7 +5,7 @@ import morphoService from "../../service/morpho-service";
 import {MBRealization} from "../../model/mbrealization";
 import {MBCombination} from "../../model/mbcombination";
 
-class MorphologicalBox extends HTMLElement {
+export class MorphologicalBox extends HTMLElement {
     isListenerAdded: boolean;
     parametersSaved: boolean;
 
@@ -392,6 +392,25 @@ class MorphologicalBox extends HTMLElement {
             this.isListenerAdded = true;
         }
     }
+
+    getMorphologicalTableData(): { headers: string[], rows: string[][] } {
+        const table = this.shadowRoot?.querySelector("table");
+        if (!table) {
+            console.error("Tabelle nicht gefunden!");
+            return { headers: [], rows: [] };
+        }
+
+        const headers = Array.from(table.querySelectorAll("thead th")).map(th => th.textContent?.trim() || "");
+
+        const rows = Array.from(table.querySelectorAll("tbody tr"))
+            .slice(0, -1) // Letzte Zeile mit "+" ignorieren
+            .map(row =>
+                Array.from(row.querySelectorAll("td")).map(cell => cell.textContent?.trim() || "")
+            );
+
+        return { headers, rows };
+    }
 }
 
 customElements.define("morphological-box", MorphologicalBox);
+export default MorphologicalBox
