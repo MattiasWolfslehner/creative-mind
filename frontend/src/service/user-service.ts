@@ -23,6 +23,24 @@ class UserService {
         store.next(model);
 
     }
+
+        async getUsersFromRoom(roomId: string): Promise<User[]> {
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+        });
+
+        const response = await fetch(`${path}/api/users/list/${roomId}`, { headers: theHeader });
+
+        if (!response.ok) {
+            console.error("Error fetching users:", response.statusText);
+            return [];
+        }
+
+        const users: User[] = await response.json();
+        return users;
+    }
+
 }
 
 

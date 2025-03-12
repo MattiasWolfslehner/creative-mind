@@ -1,6 +1,6 @@
 import { html, render } from "lit-html";
 import { store } from "../../model/store";
-import { Model } from "src/model";
+import { Model, User } from "src/model";
 import { distinctUntilChanged, map } from "rxjs";
 
 class MemberList extends HTMLElement {
@@ -11,13 +11,12 @@ class MemberList extends HTMLElement {
 
     template(users) {
         const userTemplates = users.map(
-            (user, index) => html`
+            (user) => html`
             <div class="member-card">
-            <p><strong>ID:</strong> ${user.userId}</p>
-            <p><strong>Name:</strong> ${user.userName}</p>
+                <p><strong>ID:</strong> ${user.userId}</p>
+                <p><strong>Name:</strong> ${user.userName}</p>
             </div>
-            `,
-        );
+        `);
 
         return html`
         <style>
@@ -77,20 +76,20 @@ class MemberList extends HTMLElement {
         }
 
         #backButton {
-        background-color: #fff;
-        font-size: 1.2em;
-        padding: 1em 2em;
-        margin: 2vw auto;
-        text-align: center;
-        cursor: pointer;
-        border: none;
-        border-radius: 0.5vw;
-        width: fit-content;
-        display: block;
+            background-color: #fff;
+            font-size: 1.2em;
+            padding: 1em 2em;
+            margin: 2vw auto;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            border-radius: 0.5vw;
+            width: fit-content;
+            display: block;
         }
 
         #backButton:hover {
-        background-color: #eee;
+            background-color: #eee;
         }
 
         @media (max-width: 768px) {
@@ -105,32 +104,34 @@ class MemberList extends HTMLElement {
         }
         </style>
 
-        <h1
-        style="margin-top: 6vw; margin-bottom: -0.5vw; color: white; font-family: 'sans-serif';"
-        >
-        Member List
+        <h1 style="margin-top: 6vw; margin-bottom: -0.5vw; color: white; font-family: 'sans-serif';">
+            Member List
         </h1>
         <hr style="border: 2px solid #8D63D0; width: 65vw;" />
         <div class="member-list-container">${userTemplates}</div>
-        <button id="backButton">Back to Homepage</button>
+        <button id="backButton">Collapse Member List</button>
         `;
     }
 
     connectedCallback() {
-        store.subscribe(model => {
-            //console.log(model);
-            render(this.template(model), this.shadowRoot);
+        store.pipe(
+            map((model) => model.users),
+            distinctUntilChanged()
+        ).subscribe(users => {
+            render(this.template(users), this.shadowRoot);
+            this.addClickEventListeners();
         });
-        this.addClickEventListeners();
     }
 
     addClickEventListeners() {
-        this.shadowRoot
-        .getElementById("backButton")
-        .addEventListener("click", () => {
-            const model = store.getValue();
-        });
+        const backButton = this.shadowRoot.getElementById("backButton");
+        if (backButton) {
+            backButton.addEventListener("click", () => {
+                this.style.display = "none"; // Versteckt die Komponente
+            });
+        }
     }
 }
 
 customElements.define("member-list", MemberList);
+export default MemberList;

@@ -1,12 +1,15 @@
 import { html, render } from "lit-html";
 import { distinctUntilChanged, map } from "rxjs";
 import { store } from "../../model/store";
+import {produce} from "immer";
 import { Room, User } from "src/model";
 import { Participation } from "src/model/participation";
 import { toDataURL } from "qrcode";
 import userService from "../../service/user-service";
+import "../create-room/member-list"
 
 class RoomInfoMenu extends HTMLElement {
+    isMemberListVisible = false;
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
@@ -245,7 +248,7 @@ class RoomInfoMenu extends HTMLElement {
             </div>
 
             <div id="submenu">
-                <div class="menu-item share-box" @click="${() => this.showMembers()}">
+                <div class="menu-item share-box" @click="${() => { this.showMembers(); this.toggleMenu()}}">
                     <img src="https://static.vecteezy.com/system/resources/previews/006/692/135/non_2x/list-icon-template-black-color-editable-list-icon-symbol-flat-sign-isolated-on-white-background-simple-logo-illustration-for-graphic-and-web-design-free-vector.jpg" alt="List Icon">
                     <span>Members</span>
                     <div class="tooltip">Show member list</div>
@@ -257,6 +260,8 @@ class RoomInfoMenu extends HTMLElement {
                     <div class="tooltip">Export as xlsx</div>
                 </div>
             </div>
+            <br><br>
+            ${this.isMemberListVisible ? html`<member-list></member-list>` : ""}
         `;
     }
 
@@ -315,18 +320,30 @@ class RoomInfoMenu extends HTMLElement {
     }    
 
 
-    showMembers() {
-
-    }
-    /*showMembers() {
+    async showMembers() {
         const model = store.getValue();
-        const x = userService.getUsers();
-        const model = produce(store.getValue(), draft => {
-            draft.isRoomList = true;
-            draft.activeRoomId = "";
-        });
-        store.next(model);
-    }*/
+        const activeRoomId = model.activeRoomId;
+
+        if (!activeRoomId) {
+            console.warn("No active room selected.");
+            return;
+        }
+
+        try {
+            const users = await userService.getUsersFromRoom(activeRoomId);
+
+            const updatedModel = produce(store.getValue(), draft => {
+                draft.users = users;
+            });
+
+            store.next(updatedModel);
+
+            this.isMemberListVisible = true;
+            render(this.template(model.participations, model.rooms.find(room => room.roomId === activeRoomId)), this.shadowRoot);
+        } catch (error) {
+            console.error("Error fetching users: ", error);
+        }
+    }
 }
 
 customElements.define("room-info-menu", RoomInfoMenu);
