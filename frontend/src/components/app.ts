@@ -19,7 +19,7 @@ class AppComponent extends HTMLElement {
     <style>
         #profileImage, .logout-image {
             position: absolute;
-            top: 1vh;
+            top: 2vw;
             right: 2vw;
             background-color: white;
             width: 6vw;
@@ -29,7 +29,7 @@ class AppComponent extends HTMLElement {
         
         .dropdown {
             position: absolute;
-            top: 8vw;
+            top: 9vw;
             right: 2vw;
             width: 8vw;
             height: 60px;
@@ -88,6 +88,49 @@ class AppComponent extends HTMLElement {
             height: auto;
         }
         
+        footer {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .footer-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: #63b3ed;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-text {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        #contactBox {
+            display: block;
+            align-items: left;
+        }
     </style>
     
     <img id="profileImage" alt="Profile (to login/logout)" src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" style="border-radius: 50%">
@@ -101,6 +144,25 @@ class AppComponent extends HTMLElement {
     </div>
     
     <panel-component></panel-component>
+
+    <footer>
+        <div>
+            <img src="https://i.ibb.co/Fh3qZHS/Creative-Minds-Logo-Dark.webp" alt="Creative Minds Logo" class="footer-logo">
+            <div class="footer-links">
+                <a href="#">File an Issue</a>
+                <a href="#">Get Help</a>
+                <a href="#">Discuss Source Code</a>
+            </div>
+            <div class="footer-text">
+                &copy; 2024-2025 Creative Minds. All rights reserved.
+            </div>
+        </div>
+        <div id="contactBox">
+            <h1>Contact Us</h1>
+            <p>4060 Leonding</p>
+            <p>Limesstraße 12-14</p>
+        </div>
+    </footer>
 `);
     }
 

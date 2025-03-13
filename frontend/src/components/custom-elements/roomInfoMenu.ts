@@ -8,13 +8,15 @@ import { toDataURL } from "qrcode";
 import userService from "../../service/user-service";
 import "../create-room/member-list"
 import * as XLSX from 'xlsx';
-import MorphologicalBox from "./morphologicalBox"
+import { getMorphologicalTableData } from "./morphologicalBox";
 
 class RoomInfoMenu extends HTMLElement {
     isMemberListVisible = false;
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
+        const tableData = getMorphologicalTableData();
+        console.log("Das sind die Daten: "+tableData);
     }
 
     template(participations: Participation[], room: Room) {
@@ -326,11 +328,6 @@ class RoomInfoMenu extends HTMLElement {
         const model = store.getValue();
         const activeRoomId = model.activeRoomId;
 
-        if (!activeRoomId) {
-            console.warn("No active room selected.");
-            return;
-        }
-
         try {
             const users = await userService.getUsersFromRoom(activeRoomId);
 
@@ -348,7 +345,11 @@ class RoomInfoMenu extends HTMLElement {
     }
 
     async exportAsExcel() {
-        const morphoBox = document.querySelector("morphological-box") as any;
+        const morphoBoxElement = document.querySelector("morphological-box") as any;
+        const morphoBox = morphoBoxElement?.shadowRoot?.querySelector("morphological-box");
+
+        const tableData2 = getMorphologicalTableData();
+        console.log("Das sind die Daten: "+tableData2);
 
         if (!morphoBox) {
             console.error("MorphologicalBox nicht gefunden!");
