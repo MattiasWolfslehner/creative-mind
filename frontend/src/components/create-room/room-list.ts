@@ -25,7 +25,7 @@ class RoomList extends HTMLElement {
             <p><strong>Type:</strong> ${room.type}</p>
           </div>
           <div style="width: 20vw; display: flex; justify-content: space-around">
-          ${["OPEN", "CREATED"].includes(room.roomState)
+          ${["OPEN", "CREATED", "STARTED", "STOPPED"].includes(room.roomState)
             ? html`
                 <button
                   class="join-button"
@@ -35,16 +35,14 @@ class RoomList extends HTMLElement {
                 </button>
               `
             : ""}
-            ${["OPEN", "CREATED"].includes(room.roomState)
-              ? html`
+            ${html`
                   <button
                     class="join-button"
                     @click="${() => this._deleteRoom(room.roomId)}"
                   >
                     Delete
                   </button>
-                `
-              : ""}
+                `}
           </div>
         </div>
       `);
