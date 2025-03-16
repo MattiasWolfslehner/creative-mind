@@ -122,25 +122,69 @@ class CreateRoomElement extends HTMLElement {
             <h2 style="user-select: none">Show My Rooms</h2>
         </div>
     </div>
-    <div style="background-color: rgba(0, 0, 0, 0.5);padding:20px; border-radius: 10px; margin: 2vw">
+    <div id="morphologicalroom-info" class="technique-container-info" 
+         style="background-color: rgba(0, 0, 0, 0.5);padding:20px; border-radius: 10px; margin: 2vw">
         <h2 style="margin-bottom: -0.5vh; color: white; font-family: 'sans-serif'"> Der Morphologische Kasten (Zwicky Box)</h2>
         <p style="color: white; font-family: 'sans-serif'; font-size: 1.2rem">
-        Der Morphologische Kasten ist eine Kreativitäts- und Problemlösungstechnik, 
-        die von Fritz Zwicky entwickelt wurde. Sie dient dazu, komplexe Probleme systematisch zu analysieren und kreative Lösungen zu finden. Die Methode basiert darauf, 
-        ein Problem in seine wesentlichen Parameter oder Dimensionen zu zerlegen und für jede Dimension mögliche Ausprägungen oder Optionen festzulegen. Diese Parameter und 
-        ihre Ausprägungen werden in einer tabellenartigen Struktur, dem sogenannten Morphologischen Kasten, dargestellt.
-        <br><br>
-        Durch das systematische Kombinieren der verschiedenen Ausprägungen lassen sich viele verschiedene Lösungsmöglichkeiten erzeugen, 
-        die man sonst vielleicht übersehen würde. Der Morphologische Kasten eignet sich besonders gut für Situationen, in denen es keine eindeutige Lösung gibt und kreative Ansätze gefragt sind, 
-        wie z.B. in der Produktentwicklung, im Design oder bei der strategischen Planung.
-        <br><br>
-        Der Vorteil des Morphologischen Kastens liegt darin, 
-        dass er durch die visuelle und strukturierte Darstellung hilft, den Lösungsraum umfassend zu erkunden. 
-        Teams können gemeinsam Parameter festlegen und unterschiedliche Kombinationen bewerten, 
-        was zu innovativen und vielfältigen Lösungsansätzen führt.
+            Der Morphologische Kasten ist eine Kreativitäts- und Problemlösungstechnik,
+            die von Fritz Zwicky entwickelt wurde. Sie dient dazu, <b>komplexe Probleme systematisch zu analysieren</b> und kreative Lösungen zu finden. Die Methode basiert darauf,
+            ein Problem in seine wesentlichen Parameter oder Dimensionen zu zerlegen und für jede Dimension mögliche Ausprägungen oder Optionen festzulegen. Diese Parameter und
+            ihre Ausprägungen werden in einer tabellenartigen Struktur, dem sogenannten Morphologischen Kasten, dargestellt.
+            <br><br>
+            Durch das systematische Kombinieren der verschiedenen Ausprägungen lassen sich viele verschiedene Lösungsmöglichkeiten erzeugen,
+            die man sonst vielleicht übersehen würde. Der Morphologische Kasten eignet sich besonders gut für Situationen, in denen es keine eindeutige Lösung gibt und kreative Ansätze gefragt sind,
+            wie z.B. in der Produktentwicklung, im Design oder bei der strategischen Planung.
+            <br><br>
+            Der Vorteil des Morphologischen Kastens liegt darin,
+            dass er durch die visuelle und strukturierte Darstellung hilft, den Lösungsraum umfassend zu erkunden.
+            Teams können gemeinsam Parameter festlegen und unterschiedliche Kombinationen bewerten,
+            was zu innovativen und vielfältigen Lösungsansätzen führt.
         </p>
     </div>
-`);
+
+    <div id="brainstormingroom-info" class="technique-container-info" hidden="true"
+         style="background-color: rgba(0, 0, 0, 0.5);padding:20px; border-radius: 10px; margin: 2vw">
+        <h2 style="margin-bottom: -0.5vh; color: white; font-family: 'sans-serif'"> Das Brainstorming</h2>
+        <p style="color: white; font-family: 'sans-serif'; font-size: 1.2rem">
+            Brainstorming ist eine kreative Technik, die darauf abzielt, in <b>kurzer Zeit eine Vielzahl von 
+            Ideen</b> zu einem bestimmten Thema oder Problem zu sammeln. Dabei wird die Gruppe ermutigt, 
+            alle Gedanken, die ihr in den Sinn kommen, ohne Einschränkungen oder Bewertungen zu äußern. 
+            <br><br>
+            Der Fokus liegt auf <b>freiem, ungehindertem Denken</b>, wobei jeder Vorschlag, ob unkonventionell 
+            oder banal, als wertvoll angesehen wird. Dieser unzensierte Ideenaustausch fördert die 
+            Entfaltung von kreativen Lösungen und neuen Perspektiven.
+            <br><br>
+            Erst im Anschluss an die Brainstorming-Phase werden die gesammelten Ideen bewertet und 
+            nach ihrer Relevanz, Machbarkeit und Kreativität sortiert. Dabei können einzelne Ansätze 
+            kombiniert oder weiterentwickelt werden, um die besten Lösungen zu identifizieren. 
+            <br><br>
+            Brainstorming ist eine vielseitige Methode, die nicht nur in Unternehmen zur Problemlösung 
+            eingesetzt wird, sondern auch in der Produktentwicklung, im Marketing oder in der kreativen 
+            Arbeit allgemein.
+        </p>
+    </div>
+
+    <div id="brainwritingroom-info" class="technique-container-info" hidden="true"
+         style="background-color: rgba(0, 0, 0, 0.5);padding:20px; border-radius: 10px; margin: 2vw">
+        <h2 style="margin-bottom: -0.5vh; color: white; font-family: 'sans-serif'"> Die 6-3-5 Methode</h2>
+        <p style="color: white; font-family: 'sans-serif'; font-size: 1.2rem">
+            Die Methode 6-3-5 ist eine Kreativitätstechnik zur Ideenfindung und -entwicklung, die oft in
+            Gruppen verwendet wird. Der Name setzt sich aus den Zahlen 6, 3 und 5 zusammen,
+            welche folgende Bedeutung haben:
+            <br><br>
+            <b>6 Teilnehmer</b> – Es gibt 6 Personen in der Gruppe.
+            <br><br>
+            <b>3 Ideen</b> – Jeder Teilnehmer schreibt in einer festgelegten Zeit 3 Ideen auf.
+            <br><br>
+            <b>5 Minuten.</b>
+            <br><br>
+            Das Ziel der Methode ist es, durch die Kombination und Weiterentwicklung von Ideen eine
+            breite Auswahl an kreativen Lösungen zu erzeugen. Die Methode fördert Teamarbeit und
+            schnelle Ideenproduktion, da jeder Teilnehmer nicht nur seine eigenen, sondern auch die
+            Ideen der anderen weiterentwickeln kann.
+        </p>
+    </div>
+   `);
     }
 
     connectedCallback() {
@@ -162,14 +206,23 @@ class CreateRoomElement extends HTMLElement {
     
     private addClickEventListeners(): void {
         const techniqueContainers = this.shadowRoot.querySelectorAll('.technique-container');
+        const techniqueContainerInfos = this.shadowRoot.querySelectorAll('.technique-container-info');
         techniqueContainers.forEach(container => {
             container.addEventListener('click', () => {
+                console.log(container.id + "-info");
                 techniqueContainers.forEach(tc => {
                     tc.classList.remove('active', 'inactive');
                 });
+                techniqueContainerInfos.forEach(tci => {
+                    if (tci.id === container.id + "-info") {
+                        tci.removeAttribute("hidden");
+                    } else {
+                        tci.setAttribute("hidden", "true");
+                    }
+                });
     
                 container.classList.add('active');
-    
+
                 techniqueContainers.forEach(tc => {
                     if (tc !== container) {
                         tc.classList.add('inactive');
