@@ -16,7 +16,7 @@ const template = (isInRoom : boolean, isRoomList : boolean)=> html`
             color: white;
             font-family: 'sans-serif';
             cursor: pointer;
-        }
+        } 
     </style>
 
     <!--<h1 id="homeButtonId" @click="${() => {router.navigate("/");}}">Creative Minds</h1>-->
@@ -24,7 +24,7 @@ const template = (isInRoom : boolean, isRoomList : boolean)=> html`
         <create-room ?hidden = ${(isInRoom || isRoomList)} ></create-room>
         <room-list ?hidden = ${(isInRoom || !isRoomList)} ></room-list>
         <state-full-room ?hidden = ${!isInRoom} ></state-full-room>
-        <idea-socket-service></idea-socket-service>
+        <room-manager-socket-service></room-manager-socket-service>
     </div>
 `;
 

@@ -280,12 +280,13 @@ class RoomManagerSocketService extends HTMLElement {
         `;
     }
 
-    private pushMessage(message) {
+    private pushMessage(message : string) {
         this.socketStatus.push(message);
+        this.refresh(); // needs the refresh to show deleted/updated messages from outside
         this.showPopup();
     }
 
-    public static pushOneMessage(message) {
+    public static pushOneMessage(message : string) {
         if (RoomManagerSocketService.socketService) {
             RoomManagerSocketService.socketService.pushMessage(message);
         }
@@ -309,7 +310,7 @@ class RoomManagerSocketService extends HTMLElement {
                 popup.classList.remove('show');
                 //popup.classList.add('fade-out');
                 callerThis.timeOutSet = null;
-            }, 5000); // Display for 3 seconds
+            }, 5000); // Display for 5 seconds
         }
     }
     
@@ -328,5 +329,5 @@ class RoomManagerSocketService extends HTMLElement {
 }
 
 
-customElements.define("idea-socket-service", RoomManagerSocketService)
+customElements.define("room-manager-socket-service", RoomManagerSocketService)
 export default RoomManagerSocketService;
