@@ -2,6 +2,7 @@ import { produce } from "immer"
 import { store } from "../model"
 import path from "./service-const"
 import {Participation} from "../model/participation";
+import RoomManagerSocketService from "../components/panel/room-manager-socket-service";
 
 class ParticipationService {
 
@@ -24,14 +25,20 @@ class ParticipationService {
         });
 
         try {
-            const participations: Participation[] = await response.json();
-            //console.log(participations);
+            if (response.ok) {
+                const participations: Participation[] = await response.json();
+                //console.log(participations);
 
-            const model = produce(store.getValue(), draft => {
-                draft.participations = participations;
-            })
+                const model = produce(store.getValue(), draft => {
+                    draft.participations = participations;
+                })
 
-            store.next(model);
+                store.next(model);
+            }
+            else {
+                RoomManagerSocketService.pushOneMessage("Could not connect to Server (Participants)!");
+            }
+
         } catch (error) {
             console.log(error);
         }

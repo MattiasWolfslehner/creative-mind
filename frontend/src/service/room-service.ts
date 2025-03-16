@@ -3,6 +3,7 @@ import { Room, store } from "../model"
 import path from "./service-const"
 import "./morpho-service"
 import morphoService from "./morpho-service";
+import RoomManagerSocketService from "../components/panel/room-manager-socket-service";
 
 class RoomService {
 
@@ -16,20 +17,27 @@ class RoomService {
         const response = await fetch(`${path}/api/rooms/list`, {
             headers: theHeader
         });
-        const rooms: Room[] = await response.json();
-        //console.log(rooms);
 
-        /* LIST GIVES NO type value => call indiv get
-        const model = produce(store.getValue(), draft => {
-            draft.rooms = rooms;
-        });
+        if (response.ok) {
+            const rooms: Room[] = await response.json();
+            //console.log(rooms);
 
-        store.next(model);
-        */
+            /* LIST GIVES NO type value => call indiv get
+            const model = produce(store.getValue(), draft => {
+                draft.rooms = rooms;
+            });
 
-        rooms.forEach((aRoom) => {
-            this.getRoom(aRoom.roomId); // force fetch type!
-        });
+            store.next(model);
+            */
+
+            rooms.forEach((aRoom) => {
+                this.getRoom(aRoom.roomId); // force fetch type!
+            });
+        }
+        else {
+            RoomManagerSocketService.pushOneMessage("Could not connect to Server (Rooms)!")
+        }
+
     }
 
     async createRoom(roomType: string, roomName: string, description: string | null): Promise<Room> {
@@ -61,6 +69,9 @@ class RoomService {
                 this.saveDummyParameters(room.roomId);
             }
             return room;
+        }
+        else {
+            RoomManagerSocketService.pushOneMessage("Could not connect to Server (Rooms)!")
         }
 
         return null;
@@ -114,6 +125,9 @@ class RoomService {
             console.log(`Room state changed: ${room}`);
             return room;
         }
+        else {
+            RoomManagerSocketService.pushOneMessage("Could not connect to Server (Rooms)!")
+        }
 
         return false;
     }
@@ -141,6 +155,9 @@ class RoomService {
             console.log(updated_room);
             return updated_room;
         }
+        else {
+            RoomManagerSocketService.pushOneMessage("Could not connect to Server (Rooms)!")
+        }
 
         return null;
     }
@@ -157,6 +174,9 @@ class RoomService {
 
         if (response.ok) {
             const room: boolean = await response.json();
+        }
+        else {
+            RoomManagerSocketService.pushOneMessage("Could not connect to Server (Rooms)!")
         }
         //console.log(`Room started: ${room}`);
         // fetch new status
@@ -179,6 +199,9 @@ class RoomService {
 
             //console.log(`Room stopped: ${room}`);
             // fetch new status
+        }
+        else {
+            RoomManagerSocketService.pushOneMessage("Could not connect to Server (Rooms)!")
         }
 
         const x = this.getRoom(roomId);
@@ -219,6 +242,7 @@ class RoomService {
             } else {
                 if (response.status === 404) {
                     console.log("room not found! 404!")
+                    RoomManagerSocketService.pushOneMessage("Room not found!")
                 }
                 return null;
             }

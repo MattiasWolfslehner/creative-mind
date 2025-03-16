@@ -16,6 +16,8 @@ class RoomManagerSocketService extends HTMLElement {
     protected socket: WebSocket | null = null;
     protected timeOutSet: number | null = null;
 
+    protected static socketService: RoomManagerSocketService | null = null;
+
     protected socketStatus: string [] = [];
 
     // private returnString() {
@@ -47,16 +49,13 @@ class RoomManagerSocketService extends HTMLElement {
                 }
                 // (${message.response_type.toString().replace("_", " ")})
                 let response_type = capitalize(message.response_type.toString().replace("_notification", "").replace("_", " "));
-                this.socketStatus.push(`${response_type}${(message.message==="")?"":(': "'+message.message+'"')}`);
-                this.showPopup();
+                this.pushMessage(`${response_type}${(message.message==="")?"":(': "'+message.message+'"')}`);
                 const y = participationService.getParticipantsInRoom(null);
                 const x = roomService.getRoom(null);
                 this.refresh();
                 break;
             }
             case "get_remaining_room_time": { // timer fired (can be pushed into model)
-                //this.socketStatus.push(`timer: "${message.remaining}"`);
-                //this.showPopup();
                 let remaining : number = message.remaining;
                 const model = produce(store.getValue(), draft => {
                     draft.remaining = remaining;
@@ -108,6 +107,7 @@ class RoomManagerSocketService extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
+        RoomManagerSocketService.socketService = this;
     }
 
     
@@ -153,7 +153,6 @@ class RoomManagerSocketService extends HTMLElement {
         if (this.socket && this.socket.readyState === WebSocket.OPEN) {
             this.socket.close();
             console.log("===> CLOSED EXISTING <<<");
-            //this.socketStatus.push("not created");
         }
 
         this.socket = null;
@@ -165,14 +164,12 @@ class RoomManagerSocketService extends HTMLElement {
             // create websocket url
             let url = `ws://localhost:8080/rooms/join/${this.roomId}/${this.userId}`;
             this.socket = new WebSocket(url);
-            //this.socketStatus.push("created");
             this.refresh();
 
             this.socket.onopen = function (event: Event) {
                 event.preventDefault();
                 //console.log('WebSocket connection opened:', event);
-                roomChatContext.socketStatus.push("Connected to server!");
-                roomChatContext.showPopup();
+                roomChatContext.pushMessage("Connected to server!");
                 // Wait for the updateComplete promise to resolve
                 roomChatContext.refresh();
             };
@@ -182,16 +179,14 @@ class RoomManagerSocketService extends HTMLElement {
             this.socket.onclose = function (event: Event) {
                 event.preventDefault();
                 //console.log('WebSocket connection closed:', event);
-                roomChatContext.socketStatus.push("Connection to Server closed!");
-                roomChatContext.showPopup();
+                roomChatContext.pushMessage("Connection to Server closed!");
                 roomChatContext.refresh();
             };
 
             this.socket.onerror = function (error: Event) {
                 error.preventDefault();
                 console.error('WebSocket error:', error);
-                roomChatContext.socketStatus.push("Error in connection to Server!");
-                roomChatContext.showPopup();
+                roomChatContext.pushMessage("Error in connection to Server!");
                 roomChatContext.refresh();
             };
         }
@@ -285,7 +280,16 @@ class RoomManagerSocketService extends HTMLElement {
         `;
     }
 
+    private pushMessage(message) {
+        this.socketStatus.push(message);
+        this.showPopup();
+    }
 
+    public static pushOneMessage(message) {
+        if (RoomManagerSocketService.socketService) {
+            RoomManagerSocketService.socketService.pushMessage(message);
+        }
+    }
     
     showPopup() {
         const popup = this.shadowRoot?.getElementById('popupmessage1');
@@ -325,3 +329,4 @@ class RoomManagerSocketService extends HTMLElement {
 
 
 customElements.define("idea-socket-service", RoomManagerSocketService)
+export default RoomManagerSocketService;

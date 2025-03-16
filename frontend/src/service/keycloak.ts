@@ -4,6 +4,7 @@ import {Room, store, User} from "../model";
 import {produce} from "immer";
 import roomService from "./room-service";
 import {router} from "../../router";
+import RoomManagerSocketService from "../components/panel/room-manager-socket-service";
 
 
 class KeycloakService {
@@ -40,6 +41,7 @@ class KeycloakService {
             store.next(model);
             KeycloakService.keycloak.logout().then(()=>{console.log("logout successful!")});
         } catch (error) {
+            RoomManagerSocketService.pushOneMessage(`Failed to logout: ${error}`);
             console.error('Failed to logout: ', error);
         }
     }
@@ -104,10 +106,12 @@ class KeycloakService {
                     }
                 })
                 .catch(error => {
+                    RoomManagerSocketService.pushOneMessage(`Failed to login: ${error}`);
                     console.error('Error communicating with Quarkus backend:', error);
                 });
 
         } catch (error) {
+            RoomManagerSocketService.pushOneMessage(`Failed to login: ${error}`);
             console.error('Failed to initialize adapter: ', error);
         }
     }

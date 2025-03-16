@@ -1,6 +1,7 @@
 import { produce } from "immer"
 import { User, store } from "../model"
 import path from "./service-const"
+import RoomManagerSocketService from "../components/panel/room-manager-socket-service";
 
 class UserService {
 
@@ -13,14 +14,19 @@ class UserService {
         const response = await fetch(`${path}/api/users/list`, {
             headers: theHeader
         });
-        const users : User[] = await response.json();
-        //console.log(users);
+        if (response.ok) {
+            const users: User[] = await response.json();
+            //console.log(users);
 
-        const model = produce(store.getValue(), draft => {
-            draft.users = users;
-        })
+            const model = produce(store.getValue(), draft => {
+                draft.users = users;
+            })
 
-        store.next(model);
+            store.next(model);
+        }
+        else {
+            RoomManagerSocketService.pushOneMessage("Could not connect to Server (Users)!")
+        }
 
     }
 
@@ -33,6 +39,7 @@ class UserService {
         const response = await fetch(`${path}/api/users/list/${roomId}`, { headers: theHeader });
 
         if (!response.ok) {
+            RoomManagerSocketService.pushOneMessage("Could not connect to Server (Users)!")
             console.error("Error fetching users:", response.statusText);
             return [];
         }

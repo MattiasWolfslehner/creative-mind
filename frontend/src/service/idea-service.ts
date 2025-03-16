@@ -1,6 +1,7 @@
 import { produce } from "immer"
 import { Idea, store } from "../model"
 import path from "./service-const"
+import RoomManagerSocketService from "../components/panel/room-manager-socket-service";
 
 class IdeaService{
 
@@ -14,16 +15,21 @@ class IdeaService{
             headers: theHeader
         });
         try {
-            const ideas: Idea[] = await response.json();
+            if (response.ok) {
+                const ideas: Idea[] = await response.json();
 
-            //set roomid as it does not come with the API
-            ideas.forEach((idea) => idea.roomId = roomId);
+                //set roomid as it does not come with the API
+                ideas.forEach((idea) => idea.roomId = roomId);
 
-            const model = produce(store.getValue(), draft => {
-                draft.ideas = ideas;
-            })
+                const model = produce(store.getValue(), draft => {
+                    draft.ideas = ideas;
+                })
 
-            store.next(model);
+                store.next(model);
+            }
+            else {
+                RoomManagerSocketService.pushOneMessage("Could not connect to Server (Ideas)!");
+            }
         }
         catch (error) {
             console.log(error);
@@ -55,9 +61,11 @@ class IdeaService{
                 });
                 store.next(model);
 
-            }else{
-                console.error('Error posting idea: ', response.statusText);
             }
+            else {
+                RoomManagerSocketService.pushOneMessage("Could not send to Server (Ideas)!");
+            }
+
         } catch(error) {
             console.error('Error posting idea: ', error);
         }

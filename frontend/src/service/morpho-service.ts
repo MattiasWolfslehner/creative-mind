@@ -2,6 +2,7 @@ import { produce } from "immer"
 import { MBParameter, store } from "../model"
 import path from "./service-const"
 import {MBCombination} from "../model/mbcombination";
+import RoomManagerSocketService from "../components/panel/room-manager-socket-service";
 
 class MorphoService {
     async getParameterForRoom(roomId: string) {
@@ -16,15 +17,21 @@ class MorphoService {
             headers: theHeader
         });
         try {
-            const parameters: MBParameter[] = await response.json();
-            // console.log("parameters here");
-            // console.log(parameters);
+            if (response.ok) {
+                const parameters: MBParameter[] = await response.json();
+                // console.log("parameters here");
+                // console.log(parameters);
 
-            const model = produce(store.getValue(), draft => {
-                draft.parameters = parameters;
-            });
+                const model = produce(store.getValue(), draft => {
+                    draft.parameters = parameters;
+                });
 
-            store.next(model);
+                store.next(model);
+            }
+            else {
+                RoomManagerSocketService.pushOneMessage("Could not connect to Server (Parameters)!");
+            }
+
         }
         catch (error) {
             console.log(`error in getParameterForRoom for ${roomId}`);
@@ -46,15 +53,21 @@ class MorphoService {
             headers: theHeader
         });
         try {
-            const combinations: MBCombination[] = await response.json();
-            // console.log("combinations here");
-            // console.log(combinations);
+            if (response.ok) {
+                const combinations: MBCombination[] = await response.json();
+                // console.log("combinations here");
+                // console.log(combinations);
 
-            const model = produce(store.getValue(), draft => {
-                draft.combinations = combinations;
-            });
+                const model = produce(store.getValue(), draft => {
+                    draft.combinations = combinations;
+                });
 
-            store.next(model);
+                store.next(model);
+            }
+            else {
+                RoomManagerSocketService.pushOneMessage("Could not connect to Server (Combinations)!");
+            }
+
         }
         catch (error) {
             console.log(`error in getParameterForRoom for ${roomId}`);
@@ -93,9 +106,10 @@ class MorphoService {
         try {
             if (response.ok) {
                 console.log('Realization successfully sent to backend.');
-            } else {
-                console.error('Failed to send realization to backend.');
+            }  else {
+                RoomManagerSocketService.pushOneMessage("Could not save Realization to Server!");
             }
+
         } catch (error) {
             console.error('Error while sending realization to backend:', error);
         }
@@ -131,9 +145,10 @@ class MorphoService {
         try {
             if (response.ok) {
                 console.log('Parameter successfully sent to backend.');
-            } else {
-                console.error('Failed to send parameter to backend.');
+            }  else {
+                RoomManagerSocketService.pushOneMessage("Could not save Parameter to Server!");
             }
+
         } catch (error) {
             console.error('Error while sending parameter to backend:', error);
         }
@@ -160,8 +175,8 @@ class MorphoService {
         try {
             if (response.ok) {
                 console.log('Combination successfully sent to backend.');
-            } else {
-                console.error('Failed to send combination to backend.');
+            }  else {
+                RoomManagerSocketService.pushOneMessage("Could not save Combination at Server!");
             }
         } catch (error) {
             console.error('Error while sending combination to backend:', error);
