@@ -5,6 +5,8 @@ import { produce } from "immer";
 import roomService from "../../service/room-service";
 import { router } from "../../../router";
 import { distinctUntilChanged, map } from "rxjs";
+import RoomManagerSocketService from "../panel/room-manager-socket-service";
+import RoomService from "../../service/room-service";
 
 class RoomList extends HTMLElement {
   constructor() {
@@ -201,12 +203,13 @@ class RoomList extends HTMLElement {
     });
   }
 
-  async _roomJoined(roomId) {
+  async _roomJoined(roomId : string) {
     console.log(`Joining room with room id: ${roomId}`);
     router.navigate(`/room/${roomId}`);
   }
 
-  async _deleteRoom(roomId) {
+  /* sollte eigentlich in room-service sein! */
+  async _deleteRoom(roomId : string) {
     try {
         console.log(`Deleting room with room id: ${roomId}`);
 
@@ -219,12 +222,22 @@ class RoomList extends HTMLElement {
         });
 
         if (!response.ok) {
-            throw new Error(`Failed to delete room: ${response.statusText}`);
+            console.log(`Failed to delete room: ${response.statusText}`);
+            RoomManagerSocketService.pushOneMessage(`Failed to delete room: ${response.statusText}`);
+            return;
         }
+        else {
+            RoomManagerSocketService.pushOneMessage(`Room with ID ${roomId} deleted successfully.`);
+            console.log(`Room with ID ${roomId} deleted successfully.`);
 
-        console.log(`Room with ID ${roomId} deleted successfully.`);
-
-        location.reload()
+            // the removal of a room is not considered yet
+            // remove room from store
+            const model = produce(store.getValue(), draft => {
+                // filter out if there
+                draft.rooms = draft.rooms.filter(r => r.roomId !== roomId);
+            });
+            store.next(model); // triggers refresh
+        }
     } catch (error) {
         console.error(`Error deleting room: ${error.message}`);
     }
