@@ -50,9 +50,9 @@ class RoomManagerSocketService extends HTMLElement {
                 // (${message.response_type.toString().replace("_", " ")})
                 let response_type = capitalize(message.response_type.toString().replace("_notification", "").replace("_", " "));
                 this.pushMessage(`${response_type}${(message.message==="")?"":(': "'+message.message+'"')}`);
-                const y = participationService.getParticipantsInRoom(null);
-                const x = roomService.getRoom(null);
-                this.refresh();
+                const y = participationService.getParticipantsInRoom(null); // load the participants of room
+                const x = roomService.getRoom(null); // load this room to update
+                this.refresh(); // show popup
                 break;
             }
             case "get_remaining_room_time": { // timer fired (can be pushed into model)
@@ -60,23 +60,23 @@ class RoomManagerSocketService extends HTMLElement {
                 const model = produce(store.getValue(), draft => {
                     draft.remaining = remaining;
                 });
-                store.next(model);
-                //const x = roomService.getRoom(null);
+                store.next(model); // update the SSOT
                 this.refresh();
                 break;
             }
             case "new_ideas_in_room": { // notification from backend about new "idea"
                 console.log("new_ideas_in_room");
-                //this.socketStatus = 'new ideas';
                 const model = store.getValue()
                 if (model.activeRoomId) {
                     try {
                         const room = model.rooms.filter(room => room.roomId === this.roomId)[0];
                         if (room.type === "morphologicalroom") {
+                            // get updates for morpho
                             const z = morphoService.getParameterForRoom(this.roomId);
                             const y = morphoService.getCombinationsForRoom(this.roomId);
                         }
                         else {
+                            // get updates for brain*rooms
                             const x = ideaService.getIdeasByRoomId(this.roomId);
                         }
                     }
@@ -90,7 +90,7 @@ class RoomManagerSocketService extends HTMLElement {
             }
             default: {
                 console.log('Received default message:', message);
-                //add idea to store
+                //add idea to store .. this was once a kind of chat function
                 const model = produce(store.getValue(), draft => {
                     const idea: Idea = {
                         roomId: draft.activeRoomId,

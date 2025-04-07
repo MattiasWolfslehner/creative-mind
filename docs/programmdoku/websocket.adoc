@@ -1,0 +1,167 @@
+= Die Websockets
+
+Die Kommunikation eines Frontend mit dem Backend wäre mit REST-API ausreichend, wenn die Aktualisierungen eines Frontends die Anzeige der anderen nicht betreffen würden. Das Konzept der Ideenentwicklung ist aber fast gleichzusetzen mit einem Chat-Programm. Jede Eingabe eines Benutzers in einem Raum soll sofort oder zumindest zeitnah auch den anderen Benutzern im Raum angezeigt werden. Das braucht aber eine Möglichkeit die Frontends der anderen (möglicherweise nicht mal anwesenden) Benutzer zu "benachrichtigen". Das ist also ein Retourkanal in der Kommunikation zwischen Backend und Frontend.
+
+Wir haben dazu einen Retour-Kanal mit Websockets gewählt. Dieser Kanal baut sich auf sobald ein Benutzer einen Raum "betritt". Der Beitritt erfolgt durch:
+
+. Anlage eines Raumes
+. Aufruf eines Raumes aus der Raum-Liste
+. Aufruf eines Raumes mit Hilfe eines Links (geschickt oder der eigene)
+
+
+Ab diesem Aufruf ist die Verbindung zum Backend immer aufrecht. Dieser Websocket erfährt nun aufgrund des zugewiesenen Raumes (`roomId`), wenn irgendjemand etwas im Raum "verändert". Sei es nur die _Raum-Beschreibung_ oder aber auch eine _neue Idee_, ein _neuer Parameter_ oder eine _neue Realisation_ oder eine _neue Kombination_. Auch der _Zutritt oder Austritt von Benutzern_ wird so "verteilt".
+
+== Im Backend
+
+=== RoomManager
+
+Die Schaltzentrale, wenn es um die Verteilung von Informationen zu Räumen geht. Einerseits wird der Raum-Start und -Stop hier gehandhabt und damit der Timer gestartet. Andererseits werden hier Nachrichten von den Änderungen aller Frontends in einem Raum verteilt.
+
+Zentrales Element hierzu bildet die Tabelle Participants (siehe xref:datenbank.adoc[Datenbank]). Dort werden alle aktiven Nutzer im Raum vermerkt. Diese werden auch in der Map `roomSessions` mit dem Key `roomId` abgelegt. Dadurch können rasch alle relevanten Sessions gefunden werden, an die Nachrichten verteilt werden sollen.
+
+Es werden JSON Objecte mit
+
+ {
+    "response_type": string,
+    "remaining": number,
+    "message": string,
+    "roomId": string
+ }
+
+Nicht alle ResponseTypes enthalten alle Teile der Nachricht:
+
+* "*get_remaining_room_time*": Enthält nur "remaining" als Restzeit
+* "*room_started*": Raum wurde gestartet, es kann losgehen, die Eingabeelemente in den Brain*Rooms sind damit aktiviert.
+* "*room_closed*": Raum wurde geschlossen (Timeout oder Admin), keine Eingabe mehr möglich.
+* "*room_notification*": Allgemeine Informationen zum Raum (User betritt oder verlässt den Raum)
+* "*new_ideas_in_room*": genau das was es sagt, bitte die Ideen aktualisieren.
+* mit `broadcastMessageToRoom` könnten auch beliebige andere Nachrichten versandt werden.
+
+=== BrainwritingRoomSocket
+
+Heißt aufgrund der ersten Räume noch so, sollte aber in RoomManagerSocket verändert werden. Er implementiert den Verbindungspfad `/rooms/join/\{roomId\}/\{userId\}`  um einen Nutzer `userId` im Raum `roomId` anzumelden (`onOpen`). Dadurch wird ein Participant hinzugefügt (vorher gelöscht, falls nötig) und damit weiß der RoomManager über den neuen User im Raum Bescheid.
+
+Der Socket wird entweder regulär geschlossen (`onClose`) oder mit einer Fehlerbedingung beendet (`onError`). Das war es auch schon. Die Verteilung der Nachrichten findet im RoomManager statt.
+
+=== Update in den Boundaries
+
+Am Beispiel einer neuen Idee kann schön gesehen werden, wie dieser Verteilungsmechanismus verwendet wird:
+
+ @POST
+ @Produces(MediaType.APPLICATION_JSON)
+ @Consumes(MediaType.APPLICATION_JSON)
+ public Response addIdea(IdeaRequest ideaRequest) {
+     // create idea and ...
+     Idea idea = this.ideaRepository.addIdea(ideaRequest);
+ ----->>>>>
+     // broadcast news to others.
+     roomManager.newsForAllSessions(ideaRequest.getRoomId());
+ <<<<<-----
+     return Response.ok(idea).build();
+ }
+
+Alle Räume, auch der neue Morphologische Kasten (`MorphoResource`) verwendet diese Funktion in exakt der selben Weise:
+
+            // broadcast news to others.
+            roomManager.newsForAllSessions(parameterRequest.getRoomId());
+
+== Im Frontend
+
+Im Frontend gibt es eine Komponente kombiniert mit einem Service. Hier wurde der Socket mit Hilfe der SSOT-Technik so aufgebaut, dass, wenn immer ein Raum betreten wird (`activeRoomId` wird gesetzt), die Verbindung zum Backend in den entsprechenden Raum aufgebaut wird. Dadurch wird die Korrektheit der Funktion aller Komponenten gewährleistet.
+
+Gleichzeitig implementiert sie auch eine Toast Funktionalität. Also die Information eines Benutzers über Vorkommnisse (eingeblendet), welche sich nach einiger Zeit (derzeit 3 Sekunden) wieder ausblendet und zuerst nur vom Socket ("Benutzer hat den Raum betreten/verlassen", etc.) benutzt, aber nun auch von anderen Komponenten verwendet wird (siehe function `pushOneMessage`)
+
+=== RoomManagerSocketService
+
+
+In _handleWebSocketMessage werden die Informationen vom Backend verarbeitet und über die SSOT bzw. die notwendigen Updates in den Services verarbeitet.
+
+Die Basisfunktionen sind hier:
+
+ switch (message.response_type) {
+            case "room_closed":
+            case "room_started":
+                message.message = ""; // clear noisy roomid messages not needed
+            case "room_changed": // new response_type when admin changes desc/name
+            case "room_notification": {
+                ...
+                this.pushMessage(`${response_type}${(message.message==="")?"":(': "'+message.message+'"')}`); // send to toast
+                const y = participationService.getParticipantsInRoom(null); // load the participants of room
+                const x = roomService.getRoom(null); // load this room to update
+                this.refresh(); // show popup
+                break;
+            }
+            case "get_remaining_room_time": { // timer fired (can be pushed into model)
+                let remaining : number = message.remaining;
+                const model = produce(store.getValue(), draft => {
+                    draft.remaining = remaining;
+                });
+                store.next(model); // update the SSOT
+                this.refresh();
+                break;
+            }
+            case "new_ideas_in_room": { // notification from backend about new "idea"
+                console.log("new_ideas_in_room");
+                //this.socketStatus = 'new ideas';
+                const model = store.getValue()
+                if (model.activeRoomId) {
+                    try {
+                        const room = model.rooms.filter(room => room.roomId === this.roomId)[0];
+                        if (room.type === "morphologicalroom") {
+                            // get updates for morpho
+                            const z = morphoService.getParameterForRoom(this.roomId);
+                            const y = morphoService.getCombinationsForRoom(this.roomId);
+                        }
+                        else {
+                            // get updates for brain*rooms
+                            const x = ideaService.getIdeasByRoomId(this.roomId);
+                        }
+                    }
+                    catch(error) {
+                        console.log(error);
+                        console.log("error while new ideas in sockets")
+                    }
+                }
+                this.refresh();
+                break;
+            }
+            default: {
+                console.log('Received default message:', message);
+                //add idea to store .. this was once a kind of chat function
+                const model = produce(store.getValue(), draft => {
+                    const idea: Idea = {
+                        roomId: draft.activeRoomId,
+                        memberId: "other User",
+                        content: message.message
+                    }
+                    draft.ideas.push(idea);
+                });
+                store.next(model);
+            }
+
+
+Durch die Verteilung der Aktualisierungen über die SSOT braucht *kein Element aktiv* aktualisiert werden. Jedes Element bekommt seine Aktualsierungen, wenn es diese richtig subscribed.
+
+Am Beispiel der Idea-List ist das gut sichtbar. Es werden nur noch die Ideen (`model.ideas`), die Räume (`model.rooms`), die Participants (`model.participations`), der aktive Raum (der `model.activeRoomId`, wenn er verlassen wird, wird alles zurückgesetzt) und der aktive User (`model.thisUserId`) "überwacht":
+
+        store.pipe(map(model => ({
+            ideas: model.ideas,
+            rooms: model.rooms,
+            participations: model.participations,
+            activeRoomId: model.activeRoomId,
+            thisUserId: model.thisUserId
+        })),distinctUntilChanged())
+            .subscribe(reduced_model => {
+            const thisRooms = reduced_model.rooms.filter(
+                (room) => room.roomId === reduced_model.activeRoomId
+            );
+            let thisRoom: Room = null;
+            if (thisRooms.length == 1) {
+                this.roomState = thisRooms[0].roomState;
+                thisRoom = thisRooms[0];
+            } else {
+                this.roomState = "INVALID";
+            }
+
+            render(this.template(reduced_model.ideas, reduced_model.participations, thisRoom, reduced_model.thisUserId), this.shadowRoot);
+        });
