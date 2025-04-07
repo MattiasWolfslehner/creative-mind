@@ -139,11 +139,24 @@ image::participant-list.png[]
 Besteht aus mehreren Stufen:
 
 * morphologicalbox-element enthält die bereits verwendete
-    ** *Room-Input* Komponente und
+    ** *Room-Info-Menu* Komponente und
     ** die eigentliche *morphological-box*
 
-* morphological-box enthält
+* morphological-box enthält die eigentliche Implementierung
 
+In einer Tabelle werden die Ideen über Parameter und Realisierungen eingeteilt, dann kann man in jedem Parameter jeweils eine Realisierung auswählen und mit `Save Combination` diese Kombination ins Backend speichern. Die Kombinationen sind die eigentlichen Ideen. (siehe auch das Konzept des Morphologischen Kastens unter https://de.wikipedia.org/wiki/Morphologische_Analyse_(Kreativit%C3%A4tstechnik%29 )
+
+image::morpho-box-element.png[]
+
+Abgespeicherte Kombinationen (hier leider mit Wiederholung) sehen dann so aus.
+
+image::combinations.png[]
+
+=== Room-Info-Menu
+
+Beinhaltet eine Implementierung eines Hamburger-Menüs.
+
+image::room-info-menu.png[]
 
 === Room-Manager-Socket
 
