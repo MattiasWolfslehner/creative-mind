@@ -21,17 +21,93 @@ Wir verwenden Lit als Basis (component base class) unseres Frontends. Siehe hier
 
 === App
 
+Beinhaltet das Logo und den Login/Logout-Mechanismus. Das Panel liegt dann eine Ebene darunter.
+
 === Panel
 
-=== RoomList
+Ist die Umschalte-Zentrale des Frontend und beinhaltet:
 
-=== StatefullRoom
+* Create-Room
+* Room-List
+* Stateful-Room
+* Room-Manager-Socket
 
-=== BrainwritingRoom
+=== Create-Room
 
-=== BrainstormingRoom
+Main Page um einen Raum anzulegen. Enthält auch die Beschreibungen zu den verschiedenen Methoden.
 
-=== MorphologicalRoom
+==== Creativity-Technique
+
+=== Room-List
+
+Zeigt die Liste der Räume des Benutzers an (also nur Räume, die der Nutzer angelegt hat).
+
+=== Stateful-Room
+
+Wenn man einen Raum betritt (über einen Link, die Anlage eines Raumes oder über die Auswahl eines Raumes in der Roomlist), dann wird der Stateful-Room aktiv. In dem Raum wird zwischen den Raumtypen umgeschaltet und die zuständige Komponente je nach Typ aktiviert:
+
+* Brainwriting
+* Brainstorming
+* Morphological
+
+Hier der wichtigste Codeteil:
+
+ template (roomType:string, roomId:string, userId:string) {
+     return html ` <!-- Room ${roomId} User ${userId} -->
+         ${(roomType === "brainwritingroom") ?
+         html ` <brainwriting-element></brainwriting-element>` : nothing }
+         ${(roomType === "brainstormingroom") ?
+         html ` <brainstorming-element></brainstorming-element>` : nothing }
+         ${(roomType === "morphologicalroom") ?
+         html ` <morphologicalbox-element></morphologicalbox-element>` : nothing }
+         ${(roomType === "otherroom") ? html `
+             <p>otherroom</p>
+         ` : nothing }
+         ${(roomType) ? nothing :
+         html `
+             <p>NO ROOM Found</p>
+             `}
+         `;
+ }
+
+
+=== Brainwriting-Room
+
+Implementierung der Methode 6-3-5 im Frontend. Es werden während der Raum startet nur die eigenen Ideen gezeigt. Keine anderen. Erst wenn der Raum stoppt, kann man die Ideen sehen.
+
+Verwendet den Room-Input zur Eingabe von Namen und/oder Beschreibung des Raums.
+Verwendet die Idea-List für die Ideensammlung.
+
+=== Brainstorming-Room
+
+Implementierung der Brainstorming-Methode im Frontend. Es werden immer alle Ideen aller beteiligten Benutzer gezeigt.
+
+Verwendet die Idea-List für die Ideensammlung.
+
+=== Room-Input
+
+Veränderung (wenn Ersteller bzw. Admin) bzw. nur Anzeige von Raum-Informationen (Name, Beschreibung).
+
+=== Idea-List
+
+Anzeige der (sichtbaren) Ideen im Raum.
+
+=== Text-Input
+
+Eingabe von neuen Ideen in den Raum (nur wenn erlaubt, aktiver Raum, Limits).
+
+=== Participant-List
+
+Liste der aktiven Nutzer im Raum.
+
+=== Morphological-Room
+
+=== Room-Manager-Socket
+
+Hat zwei Aufgaben:
+
+. Kommunikation mit dem `Websocket` (siehe xref:websocket.adoc[Websocket]), wenn in einem Raum
+. Toast-Messages bei Socket oder auch anderen Meldungen des Frontend (können durch `pushOneMessage` von anderen Komponenten "gepusht" werden)
 
 == Das Model
 
