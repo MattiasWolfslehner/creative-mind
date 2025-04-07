@@ -1,0 +1,107 @@
+= Das Frontend
+
+Das Frontend wird funktional im xref:../wireframe/wireframe.adoc[Wireframe] beschrieben. Die einzelnen Ansichten und Typen sind dort zu finden.
+
+
+Die Funktionalität der xref:./websocket.adoc[Websockets] ist ebenfalls nicht hier sondern in der genannten Beschreibung zu finden.
+
+
+== Die Struktur
+
+=== SSOT (Single Source Of Truth)
+
+Wir implementieren das SSOT-Konzept im Frontend mit dem `BehaviorSubject` von `rxjs` (siehe https://rxjs.dev/api/index/class/BehaviorSubject).
+
+Verteilung von Veränderungen mit `produce` von `immer`.
+
+
+=== Lit (lightweight web components)
+
+Wir verwenden Lit als Basis (component base class) unseres Frontends. Siehe hierzu vor allem folgende Dokumentation: https://lit.dev/docs/
+
+=== App
+
+=== Panel
+
+=== RoomList
+
+=== StatefullRoom
+
+=== BrainwritingRoom
+
+=== BrainstormingRoom
+
+=== MorphologicalRoom
+
+== Das Model
+
+Alle Klassen der Entitäten des Backend wurden als interfaces implementiert.
+
+Das SSOT Model enthält folgende Informationen
+
+ export interface Model {
+    readonly ideas: Idea[],
+    readonly rooms: Room[],
+    readonly users: User[],
+    readonly participations: Participation[],
+    readonly activeRoomId : string,
+    readonly thisUserId : string,
+    readonly isRoomList : boolean,
+    readonly parameters: MBParameter[],
+    readonly combinations: MBCombination[],
+    readonly remaining : number | null
+ }
+
+Sobald ein User angemeldet ist wird seine UserId in thisUserId eingetragen. Das System weiß, dass der Login erfolgt ist. Solange weder isRoomList noch `activeRoomId` gesetzt ist, befindet sich der User in der Anmelde/Raumanlage-Maske.
+
+Sobald der Benutzer in die RoomList wechselt, ist `isRoomList` auf `true`, es kann keine `activeRoomId` gesetzt sein.
+
+Sobald der User in einen Raum wechselt (durch Anlage, Link oder Auswahl aus der Liste) wird `isRoomList` auf `false` gesetzt und die `roomId` in `activeRoomId` gesetzt.
+
+Alle Räume werden in `rooms` geladen. Alle Ideen eines Raums (falls es ein IdeaRoom also Brain*Room ist) werden in die `ideas` geladen.
+
+== Die Services
+
+=== idea-service
+
+Erzeugung und Abrufen von Ideen in den Ideen-Räumen (Brain*Rooms). Kommunikation mit der REST-API vom Backend unter `/api/ideas`.
+
+
+=== keycloak
+
+Initialisierung der Verbindung zu Keycloak beim Aufruf, danach das Handling von Login bzw. Logout eines Users. Das Token wird hier generiert und in den Store/Model (SSOT) gelegt.
+
+=== morpho-service
+
+Kommuniziert mit dem REST-API vom Backend für den morphologischen Raum (`/api/morpho`) insbesondere:
+
+
+* `/api/morpho/parameter`: für die Erstellung und Änderung von Parametern (Zeilen)
+* `/api/morpho/realization`: für die Erstellung und Änderung von Realisationen (Feldern)
+* `/api/morpho/combination`: für die Erstellung von Kombinationen
+
+=== participation-service
+
+Kommuniziert mit dem REST-API vom Backend für die Participations. (`/api/participations/room/\{id\}`) vor allem um die anderen Teilnehmer in einem Raum abzufragen.
+
+=== room-service
+
+Kommuniziert mit dem REST-API vom Backend für die Räume (`/api/rooms`):
+
+* createRoom: einen Raum erzeugen (POST auf `/api/rooms/create`)
+* updateRoom: einen Raum verändern (vor allem die Beschreibung oder den Namen, PUT auf `/api/rooms/update/\{roomId\}`)
+* startRoom: startet die zeitabhängigen IdeaRooms (Brain*Room) um den RoomManager im Backend zu starten und die Eingabe von Ideen zu ermöglichen (PUT auf `/api/rooms/start/\{roomId\}`)
+* stopRoom: stoppt den Raum vorzeitig (Beendet die Ideeneingabe, PUT auf `/api/rooms/stop/\{roomId\}`)
+* getRoom: Raum lesen
+* deleteRoom: derzeit noch nicht ins Service gewandert (noch in der RoomList implementiert!)
+
+=== service-const
+
+Konstanten für die Services:
+
+* `path`: Adresse des Backend (dev: localhost, prod: am server)
+
+
+=== user-service
+
+Anlage und Abrufen von User-Informationen teilweise von Keycloak weitergegeben.

@@ -40,4 +40,7 @@ Eine Idee (`content`) eines Benutzers (`userId`) in einem IdeaRoom (`roomId`). O
 
 == Participation
 
-Um zu verwalten, welche User (`userId`) sich **gerade** in einem Raum (`roomId`) gibt es die Participation Tabelle. Diese wird durch die WebSocket-Verbindung erzeugt und so
+Um zu verwalten, welche User (`userId`) sich **gerade** in einem Raum (`roomId`) gibt es die Participation Tabelle. Diese wird durch die WebSocket-Verbindung erzeugt und somit verwaltet, welche Benutzer gerade in welchen Räumen sind. Diese Participations werden auch für die Methode 6-3-5 benötigt, welche eine minimale Anzahl von Benutzern definiert (OFFEN).
+Die ebenfalls gespeicherte `sessionId` für die Session wird nur intern benötigt.
+
+== MorphologicalRoom
