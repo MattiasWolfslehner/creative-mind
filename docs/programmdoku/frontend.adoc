@@ -34,13 +34,21 @@ Ist die Umschalte-Zentrale des Frontend und beinhaltet:
 
 === Create-Room
 
-Main Page um einen Raum anzulegen. Enthält auch die Beschreibungen zu den verschiedenen Methoden.
+Main Page um einen Raum anzulegen. Enthält auch
+
+image::create-room.png[]
 
 ==== Creativity-Technique
+Beschreibungen und Umschaltung zu den verschiedenen Methoden.
+Eingabe eines Raumnames und die Möglichkeit zum Anlegen (Create) oder zum Wechsel in die Room-List.
+
+
 
 === Room-List
 
 Zeigt die Liste der Räume des Benutzers an (also nur Räume, die der Nutzer angelegt hat).
+
+image::roomlist.png[]
 
 === Stateful-Room
 
@@ -71,36 +79,71 @@ Hier der wichtigste Codeteil:
  }
 
 
-=== Brainwriting-Room
+=== Brainwriting-Element
 
 Implementierung der Methode 6-3-5 im Frontend. Es werden während der Raum startet nur die eigenen Ideen gezeigt. Keine anderen. Erst wenn der Raum stoppt, kann man die Ideen sehen.
 
-Verwendet den Room-Input zur Eingabe von Namen und/oder Beschreibung des Raums.
-Verwendet die Idea-List für die Ideensammlung.
+Komponenten:
 
-=== Brainstorming-Room
+* Verwendet den *Room-Input* zur Eingabe von Namen und/oder Beschreibung des Raums.
+* Verwendet die *Idea-List* für die Ideensammlung.
+* Verwendet den *Text-Input* für die Eingabe von neuen Ideen.
+* Verwendet die *Participant-List* zur Anzeige der User im Raum.
+
+image::brainwritingroom.png[]
+
+
+=== Brainstorming-Element
 
 Implementierung der Brainstorming-Methode im Frontend. Es werden immer alle Ideen aller beteiligten Benutzer gezeigt.
 
-Verwendet die Idea-List für die Ideensammlung.
+Komponenten:
+
+* Verwendet den *Room-Input* zur Eingabe von Namen und/oder Beschreibung des Raums.
+* Verwendet die *Idea-List* für die Ideensammlung.
+* Verwendet den *Text-Input* für die Eingabe von neuen Ideen.
+* Verwendet die *Participant-List* zur Anzeige der User im Raum.
+
+image::brainstormingroom.png[]
 
 === Room-Input
 
 Veränderung (wenn Ersteller bzw. Admin) bzw. nur Anzeige von Raum-Informationen (Name, Beschreibung).
 
+image::room-input.png[]
+
+Enthält auch die Bedienelemente zum Start bzw. Stop des Raum-Countdowns und die Informationen zur Restzeit.
+
+image::room-input-buttons.png[]
+
 === Idea-List
 
 Anzeige der (sichtbaren) Ideen im Raum.
+
+image::idea-list.png[]
 
 === Text-Input
 
 Eingabe von neuen Ideen in den Raum (nur wenn erlaubt, aktiver Raum, Limits).
 
+image::text-input.png[]
+
 === Participant-List
 
 Liste der aktiven Nutzer im Raum.
 
-=== Morphological-Room
+image::participant-list.png[]
+
+=== Morphological-Element
+
+Besteht aus mehreren Stufen:
+
+* morphologicalbox-element enthält die bereits verwendete
+    ** *Room-Input* Komponente und
+    ** die eigentliche *morphological-box*
+
+* morphological-box enthält
+
 
 === Room-Manager-Socket
 
