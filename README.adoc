@@ -20,6 +20,8 @@ Unsere Mission ist es, die Flexibilität und Vielseitigkeit des morphologischen 
 * **Frontend**: Webpack für eine dynamische und reaktionsschnelle Benutzeroberfläche.  
 * **Backend**: Leocloud für eine robuste Serverarchitektur.  
 * **Datenbank**: Postgres zur Speicherung von Benutzer- und Projektdaten.  
+* **Websockets**: Websockets zur Kommunikation zwischen Frontend und Backend um Änderungen anderer zu aktualisieren
+
 
 == 📸 Vorschau
 image:./docs/wireframe/img/Wireframe_MorphologicalBox.png[]

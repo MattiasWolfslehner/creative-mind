@@ -1,0 +1,21 @@
+@startuml
+database Postgres {
+
+}
+
+component Backend {
+}
+
+component Keycloak {
+}
+
+component Frontend {
+}
+
+Postgres <|--|> Backend : Data (Persistance)
+Keycloak <|--|> Backend : authentication
+Keycloak <|--|> Frontend : authentication
+Backend <|-- Frontend : REST
+Backend --|> Frontend : WebSocket
+
+@enduml
