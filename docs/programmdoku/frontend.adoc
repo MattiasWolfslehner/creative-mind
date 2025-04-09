@@ -172,7 +172,7 @@ image::member-list.png[]
 
 Beim Klick auf Share wird der Link in die Zwischenablage kopiert
 
-image::room-share.png[]
+image::share-room.png[]
 
 === Room-Manager-Socket
 
