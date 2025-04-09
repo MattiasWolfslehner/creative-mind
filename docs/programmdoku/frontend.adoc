@@ -148,7 +148,15 @@ In einer Tabelle werden die Ideen über Parameter und Realisierungen eingeteilt,
 
 image::morpho-box-element.png[]
 
-Abgespeicherte Kombinationen (hier leider mit Wiederholung) sehen dann so aus.
+Bearbeitung einer Realisationen
+
+image::realization-editing.png[]
+
+Auswahl der Realisationen zur Abspeicherung der Kombination
+
+image::realization-choosing.png[]
+
+Abgespeicherte Kombinationen sehen dann so aus.
 
 image::combinations.png[]
 
@@ -157,6 +165,14 @@ image::combinations.png[]
 Beinhaltet eine Implementierung eines Hamburger-Menüs.
 
 image::room-info-menu.png[]
+
+Beim Klick auf Members werden die Mitglieder des Raumes angezeigt
+
+image::member-list.png[]
+
+Beim Klick auf Share wird der Link in die Zwischenablage kopiert
+
+image::room-share.png[]
 
 === Room-Manager-Socket
 
