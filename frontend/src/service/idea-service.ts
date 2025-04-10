@@ -1,77 +1,80 @@
-import { produce } from "immer"
-import { Idea, store } from "../model"
-import path from "./service-const"
-import RoomManagerSocketService from "../components/panel/room-manager-socket-service";
+// Imports
+import { produce } from "immer"; // For immutably updating the state
+import { Idea, store } from "../model"; // Shared state and data types
+import path from "./service-const"; // API base path
+import RoomManagerSocketService from "../components/panel/room-manager-socket-service"; // Service for user-facing messages
 
-class IdeaService{
-
-    async getIdeasByRoomId(roomId : string){
-        //fetch
+class IdeaService {
+    /**
+     * Fetch all ideas for a given room from the backend,
+     * assign the roomId (not included in API response),
+     * and update the store.
+     */
+    async getIdeasByRoomId(roomId: string) {
         const theHeader = new Headers({
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+ localStorage.getItem("token")
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
         });
+
         const response = await fetch(`${path}/api/ideas/${roomId}`, {
             headers: theHeader
         });
+
         try {
             if (response.ok) {
                 const ideas: Idea[] = await response.json();
 
-                //set roomid as it does not come with the API
+                // Since the API response doesn't include roomId, set it manually
                 ideas.forEach((idea) => idea.roomId = roomId);
 
+                // Update the global store with the fetched ideas
                 const model = produce(store.getValue(), draft => {
                     draft.ideas = ideas;
-                })
+                });
 
                 store.next(model);
-            }
-            else {
+            } else {
                 RoomManagerSocketService.pushOneMessage("Could not connect to Server (Ideas)!");
             }
+        } catch (error) {
+            console.error('Error fetching ideas:', error);
         }
-        catch (error) {
-            console.log(error);
-        }
-
     }
-    
-    async postNewIdea(idea : Idea){
-        try{
-            const theHeader = new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+ localStorage.getItem("token")
-            });
-            //fetch
 
-            const response = await fetch(`${path}/api/ideas`,{
+
+    // Post a new idea to the server and update the store upon success.
+    async postNewIdea(idea: Idea) {
+        const theHeader = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem("token")
+        });
+
+        try {
+            const response = await fetch(`${path}/api/ideas`, {
                 method: 'POST',
                 headers: theHeader,
                 body: JSON.stringify(idea)
             });
 
-            if(response.ok){
+            if (response.ok) {
                 const responseData = await response.json();
-                //console.log("idea has been added successfully: ", responseData);
-            
-                //add idea to store
+                // console.log("Idea successfully added:", responseData);
+
+                // Add new idea to store optimistically
                 const model = produce(store.getValue(), draft => {
                     draft.ideas.push(idea);
                 });
-                store.next(model);
 
-            }
-            else {
+                store.next(model);
+            } else {
                 RoomManagerSocketService.pushOneMessage("Could not send to Server (Ideas)!");
             }
-
-        } catch(error) {
-            console.error('Error posting idea: ', error);
+        } catch (error) {
+            console.error('Error posting idea:', error);
         }
     }
 }
 
-
+// Export an instance of the service to be used in other parts of the application
 const ideaService = new IdeaService();
 export default ideaService;
